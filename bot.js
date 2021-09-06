@@ -99,13 +99,13 @@ updateDateBase = async () => {
 client.on('message', async (message) => {
 
     if (message.author.bot) return;
-
-    await getDataBase();
     
     message.channel.fetch().then(channel => { 
 
         if (channel.parent.name != 'ADMIN' && channel.name != DATABASE_CHANNEL_NAME) {
 
+            await getDataBase();
+            
             let dataBaseUser = DATABASE.users.find(user => user.id == message.author.id);
 
             if (!dataBaseUser) {
@@ -128,15 +128,8 @@ client.on('message', async (message) => {
                 dataBaseUser.lastTextChannelDate =  moment().format('DD/MM/YYYY HH:mm:ss');
             }
 
-
             updateDateBase();
-
-           
-
-      
         }
-
-
 
         //DATABASE_CHANNEL.send(message.author.username + " en el canal "+channel.name+" escribio: " + message.content);
 
@@ -201,40 +194,3 @@ const app = express();
 app.listen(PORT, () => {
     console.log(`App is running on port ${ PORT }`);
 });
-
-
-
-/*
-
-//if (message.author.username != AUTHOR_NAME) return;
-        message.channel.fetch().then(channel => { 
-            if (channel.name == INPUT_CHANNEL_NAME) {
-                try {
-                    if (message.content) {
-                        const splittedMessage = message.content.split("\n");
-                        if (splittedMessage.length > 0) {
-                            if (splittedMessage.length == 11) {
-                                const steamNameRaw = splittedMessage[1].split(":")[1].trim();
-                                const scumNameRaw = splittedMessage[2].split(":")[1].trim();
-                                const steamIdRaw = splittedMessage[5].split(":")[1].trim();
-                    
-                                const outPutMessage = "```" + moment().format('DD/MM/yyyy') + ';' + steamNameRaw + ';' + scumNameRaw + ';' + steamIdRaw + "```";
-                              //  outPutChannel.send(outPutMessage);
-                            } else {
-                                const steamNameRaw = splittedMessage[0].split(":")[1].trim();
-                                const scumNameRaw = splittedMessage[1].split(":")[1].trim();
-                                const steamIdRaw = splittedMessage[4].split(":")[1].trim();
-                    
-                                const outPutMessage = "```" + moment().format('DD/MM/yyyy') + ';' + steamNameRaw + ';' + scumNameRaw + ';' + steamIdRaw + "```";
-                             //   outPutChannel.send(outPutMessage);
-                            }
-                        }
-                    }
-                } catch(error) {
-                    console.log(error);
-                }
-            }
-        });
-
-*/
-
