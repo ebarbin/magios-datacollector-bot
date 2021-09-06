@@ -18,14 +18,15 @@ let DATABASE = {users:[]};
 
 client.login(process.env.DISCORD_BOT_TOKEN);
 
-client.once('ready', () => { 
+client.once('ready', async () => { 
     DATABASE_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === DATABASE_CHANNEL_NAME);
     REPORT_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === REPORT_CHANNEL_NAME);
-    DATABASE = getDataBase();
+
+    await getDataBase();
     console.log('Discord bot is connected.')     
 });
 
-client.on('voiceStateUpdate', (oldMember, newMember) => {
+client.on('voiceStateUpdate', async (oldMember, newMember) => {
 
     try {
 
@@ -48,6 +49,8 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
             if (oldMember.channel.parent.name == 'ADMIN') return;
         }
         
+        await getDataBase();
+
         let dataBaseUser = DATABASE.users.find(user => user.id == joinUser.id);
 
         if (!dataBaseUser) {
@@ -94,14 +97,12 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
 
 
 getDataBase = async () => { 
-    let result; 
     await DATABASE_CHANNEL.messages.fetch({ limit: 1 }).then(messages => {
         if (messages.size > 0) {
             let lastMessage = messages.first();
-            result = JSON.parse(lastMessage.content);
+            DATABASE = JSON.parse(lastMessage.content);
         }
     }).catch();
-    return result;
 }
 
 
@@ -109,13 +110,13 @@ updateDateBase = () => {
     DATABASE_CHANNEL.send(JSON.stringify(DATABASE));
 }
 
-client.on('message', (message) => {
+client.on('message', async (message) => {
 
     try {
     
         if (message.author.bot) return;
 
-        DATABASE = getDataBase();
+        await getDataBase();
 
         message.channel.fetch().then(channel => { 
 
