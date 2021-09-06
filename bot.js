@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
-const { Client, Intents } = require('discord.js');
+const { Client, Intents, MessageEmbed } = require('discord.js');
+
 const moment = require('moment');
 
 const client = new Client({
@@ -8,8 +9,10 @@ const client = new Client({
 });
 
 const DATABASE_CHANNEL_NAME = 'database';
+const REPORT_CHANNEL_NAME = 'report';
 
 let DATABASE_CHANNEL;
+let REPORT_CHANNEL;
 
 let DATABASE = {users:[]};
 
@@ -17,79 +20,88 @@ client.login(process.env.DISCORD_BOT_TOKEN);
 
 client.once('ready', () => { 
     DATABASE_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === DATABASE_CHANNEL_NAME);
-    console.log('Discord bot is connected.') 
+    REPORT_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === REPORT_CHANNEL_NAME);
+    DATABASE = getDataBase();
+    console.log('Discord bot is connected.')     
 });
 
-client.on('voiceStateUpdate', async (oldMember, newMember) => {   
+client.on('voiceStateUpdate', (oldMember, newMember) => {
 
-    let join = true;
-    let joinUser = null;
-    let channelName = null;
+    try {
 
-    if (newMember.channel) {
-        join = true;
-        joinUser = newMember.member.user;
-        channelName = newMember.channel.name;
+        let join = true;
+        let joinUser = null;
+        let channelName = null;
 
-        if (newMember.channel.parent.name == 'ADMIN') return;
+        if (newMember.channel) {
+            join = true;
+            joinUser = newMember.member.user;
+            channelName = newMember.channel.name;
 
-    } else {
-        join = false;
-        joinUser = oldMember.member.user;
-        channelName = oldMember.channel.name;
-        
-        if (oldMember.channel.parent.name == 'ADMIN') return;
-    }
+            if (newMember.channel.parent.name == 'ADMIN') return;
 
-    await getDataBase();
-
-    let dataBaseUser = DATABASE.users.find(user => user.id == joinUser.id);
-
-    if (!dataBaseUser) {
-        
-        let newUser = {
-            id: joinUser.id,
-            username: joinUser.username,
-            voiceChannelTotalTime: 0,
-            joinVoiceChannelCount: 0,
-            lastVoiceChannelAccessDate: null,
-            lastVoiceChannelName: null,
-            lastTextChannelName: null,
-            lastTextChannelDate: null
-        };
-
-        if (join) {
-            newUser.joinVoiceChannelCount = 1;
-            newUser.lastVoiceChannelAccessDate = moment().format('DD/MM/YYYY HH:mm:ss')
-            newUser.lastVoiceChannelName = channelName;
-        }
-
-        DATABASE.users.push(newUser);
-
-    } else {
-
-        if (join) {
-            dataBaseUser.joinVoiceChannelCount++;
-            dataBaseUser.lastVoiceChannelAccessDate = moment().format('DD/MM/YYYY HH:mm:ss');
-            dataBaseUser.lastVoiceChannelName = channelName;
         } else {
-            const now = moment();
-            const lastVoiceChannelAccessDate = moment(dataBaseUser.lastVoiceChannelAccessDate, 'DD/MM/YYYY HH:mm:ss');
-            dataBaseUser.voiceChannelTotalTime = dataBaseUser.voiceChannelTotalTime + now.diff(lastVoiceChannelAccessDate, 'seconds');
+            join = false;
+            joinUser = oldMember.member.user;
+            channelName = oldMember.channel.name;
+            
+            if (oldMember.channel.parent.name == 'ADMIN') return;
         }
-    }
+        
+        let dataBaseUser = DATABASE.users.find(user => user.id == joinUser.id);
 
-    updateDateBase();
+        if (!dataBaseUser) {
+            
+            let newUser = {
+                id: joinUser.id,
+                username: joinUser.username,
+                voiceChannelTotalTime: 0,
+                joinVoiceChannelCount: 0,
+                msgChannelCount: 0,
+                lastVoiceChannelAccessDate: null,
+                lastVoiceChannelName: null,
+                lastTextChannelName: null,
+                lastTextChannelDate: null
+            };
+
+            if (join) {
+                newUser.joinVoiceChannelCount = 1;
+                newUser.lastVoiceChannelAccessDate = moment().format('DD/MM/YYYY HH:mm:ss')
+                newUser.lastVoiceChannelName = channelName;
+            }
+
+            DATABASE.users.push(newUser);
+
+        } else {
+
+            if (join) {
+                dataBaseUser.joinVoiceChannelCount = parseInt(dataBaseUser.joinVoiceChannelCount) + 1
+                dataBaseUser.lastVoiceChannelAccessDate = moment().format('DD/MM/YYYY HH:mm:ss');
+                dataBaseUser.lastVoiceChannelName = channelName;
+            } else {
+                const now = moment(new Date(), 'DD/MM/YYYY HH:mm:ss');
+                const lastVoiceChannelAccessDate = moment(dataBaseUser.lastVoiceChannelAccessDate, 'DD/MM/YYYY HH:mm:ss');
+                dataBaseUser.voiceChannelTotalTime = dataBaseUser.voiceChannelTotalTime + now.diff(lastVoiceChannelAccessDate, 'seconds');
+            }
+        }
+
+        updateDateBase();
+
+    } catch(e) {
+        console.log('Error '+ e);
+    }
  });
 
 
-getDataBase = async () => {
+getDataBase = async () => { 
+    let result; 
     await DATABASE_CHANNEL.messages.fetch({ limit: 1 }).then(messages => {
         if (messages.size > 0) {
             let lastMessage = messages.first();
-            DATABASE = JSON.parse(lastMessage.content);
+            result = JSON.parse(lastMessage.content);
         }
-    })
+    }).catch();
+    return result;
 }
 
 
@@ -99,40 +111,130 @@ updateDateBase = () => {
 
 client.on('message', (message) => {
 
-    if (message.author.bot) return;
+    try {
     
-    message.channel.fetch().then(async channel => { 
+        if (message.author.bot) return;
 
-        if (channel.parent.name != 'ADMIN' && channel.name != DATABASE_CHANNEL_NAME) {
+        DATABASE = getDataBase();
 
-            await getDataBase();
+        message.channel.fetch().then(channel => { 
 
-            let dataBaseUser = DATABASE.users.find(user => user.id == message.author.id);
+            if (channel.parent.name != 'ADMIN' && channel.name != DATABASE_CHANNEL_NAME) {
 
-            if (!dataBaseUser) {
+                let dataBaseUser = DATABASE.users.find(user => user.id == message.author.id);
 
-                let newUser = {
-                    id: message.author.id,
-                    username: message.author.username,
-                    voiceChannelTotalTime: 0,
-                    joinVoiceChannelCount: 0,
-                    lastVoiceChannelAccessDate: null,
-                    lastVoiceChannelName: null,
-                    lastTextChannelName: channel.name,
-                    lastTextChannelDate: moment().format('DD/MM/YYYY HH:mm:ss')
-                };
-        
-                DATABASE.users.push(newUser);
+                if (!dataBaseUser) {
 
-            } else {
-                dataBaseUser.lastTextChannelName = channel.name;
-                dataBaseUser.lastTextChannelDate =  moment().format('DD/MM/YYYY HH:mm:ss');
+                    let newUser = {
+                        id: message.author.id,
+                        username: message.author.username,
+                        voiceChannelTotalTime: 0,
+                        joinVoiceChannelCount: 0,
+                        msgChannelCount: 0,
+                        lastVoiceChannelAccessDate: null,
+                        lastVoiceChannelName: null,
+                        lastTextChannelName: channel.name,
+                        lastTextChannelDate: moment().format('DD/MM/YYYY HH:mm:ss')
+                    };
+            
+                    DATABASE.users.push(newUser);
+
+                } else {
+                    dataBaseUser.msgChannelCount = parseInt(dataBaseUser.msgChannelCount) + 1
+                    dataBaseUser.lastTextChannelName = channel.name;
+                    dataBaseUser.lastTextChannelDate =  moment().format('DD/MM/YYYY HH:mm:ss');
+                }
+
+                updateDateBase();
+
+            } else if (channel.parent.name == 'ADMIN') {
+
+                if (message.content == '!delete') {
+
+                    DATABASE_CHANNEL.messages.fetch().then(ms => { 
+                        ms.forEach(msg => msg.delete() );
+                    }).catch();
+
+                    DATABASE = {users:[]};
+
+                } else if (message.content == '!clear') {
+
+                    REPORT_CHANNEL.messages.fetch().then(ms => { 
+                        ms.forEach(msg => msg.delete() );
+                    }).catch();
+
+                } else if (message.content == '!report') {
+
+                    let embed = new MessageEmbed()
+                    .setTitle('Reporte de actividad')
+                    .setDescription('Reporte buchon magio!')
+                    .setColor('#00830b')
+                    .setTimestamp();
+
+                    DATABASE.users.forEach(user => {
+                        
+                        embed.addFields(
+                                { name: '------------------------------------------', value: 'Usuario: '+ user.username, inline: false },
+                                { name: 'Tiempo en canal audio', value: user.voiceChannelTotalTime || 'Sin datos', inline: true },
+                                { name: 'Cant. ingresos canal audio', value: user.joinVoiceChannelCount || 'Sin datos', inline: true },
+                                { name: 'Ultimo acceso canal audio', value: user.lastVoiceChannelAccess || 'Sin datos', inline: true },
+                                { name: 'Nom. ultimo canal de audio', value: user.lastVoiceChannelName || 'Sin datos', inline: true },
+                                { name: 'Cant. de msg.', value: user.msgChannelCount || 'Sin datos', inline: true },
+                                { name: 'Nom. ultimo canal de texto', value: user.lastVoiceChannelName || 'Sin datos', inline: true },
+                                { name: 'Fecha de ultimo mensaje', value: user.lastTextChannelDate || 'Sin datos', inline: true }
+                            )
+                    })
+                    REPORT_CHANNEL.send(embed)
+                }
+
+                message.delete();
             }
 
-            updateDateBase();
-        }        
-    })
+        }).catch();
+
+    } catch(e) {
+        console.log('Error '+ e);
+    }
 });
+
+/*cron.schedule('* * * * *', async () => {
+    
+    await getDataBase();
+    
+    REPORT_CHANNEL.messages.fetch().then(messages => { 
+
+        messages.forEach(msg => msg.delete());
+
+        if (DATABASE.users.length > 0) {
+
+            let embed = new MessageEmbed()
+                   .setTitle('Reporte de actividad')
+                   .setDescription('Reporte buchon magio!')
+                   .setColor('#00830b')
+                   .setTimestamp();
+
+            DATABASE.users.forEach(user => {
+                
+                embed.addFields(
+                       { name: '------------------------------------------', value: 'Usuario: '+ user.username, inline: false },
+                       { name: 'Tiempo en canal audio', value: user.voiceChannelTotalTime || 'Sin datos', inline: true },
+                       { name: 'Cant. ingresos canal audio', value: user.joinVoiceChannelCount || 'Sin datos', inline: true },
+                       { name: 'Ultimo acceso canal audio', value: user.lastVoiceChannelAccess || 'Sin datos', inline: true },
+                       { name: 'Nom. ultimo canal de audio', value: user.lastVoiceChannelName || 'Sin datos', inline: true },
+                       { name: 'Cant. de msg.', value: user.msgChannelCount || 'Sin datos', inline: true },
+                       { name: 'Nom. ultimo canal de texto', value: user.lastVoiceChannelName || 'Sin datos', inline: true },
+                       { name: 'Fecha de ultimo mensaje', value: user.lastTextChannelDate || 'Sin datos', inline: true }
+                   )
+           })
+           REPORT_CHANNEL.send(embed);
+          
+        }
+
+
+    });
+
+
+});*/
 
 const PORT = process.env.PORT || 3000;
 const app = express();
