@@ -1,0 +1,25 @@
+{
+  "name": "magios-datacollector-bot",
+  "version": "1.0.1",
+  "description": "Bot",
+  "main": "index.js",
+  "scripts": {
+    "start": "node bot"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ebarbinmagios-datacollector-bot.git"
+  },
+  "author": "ebarbin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ebarbin/magios-datacollector-bot/issues"
+  },
+  "homepage": "https://github.com/ebarbin/magios-datacollector-bot#readme",
+  "dependencies": {
+    "discord.js": "^12.5.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "moment": "^2.29.1"
+  }
+}
