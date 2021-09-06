@@ -92,20 +92,20 @@ getDataBase = async () => {
 }
 
 
-updateDateBase = async () => {
+updateDateBase = () => {
     DATABASE_CHANNEL.send(JSON.stringify(DATABASE));
 }
 
-client.on('message', async (message) => {
+client.on('message', (message) => {
 
     if (message.author.bot) return;
     
-    message.channel.fetch().then(channel => { 
+    message.channel.fetch().then(async channel => { 
 
         if (channel.parent.name != 'ADMIN' && channel.name != DATABASE_CHANNEL_NAME) {
 
             await getDataBase();
-            
+
             let dataBaseUser = DATABASE.users.find(user => user.id == message.author.id);
 
             if (!dataBaseUser) {
@@ -129,7 +129,29 @@ client.on('message', async (message) => {
             }
 
             updateDateBase();
-        }
+        }        
+    })
+});
+
+const PORT = process.env.PORT || 3000;
+const app = express();
+app.listen(PORT, () => {
+    console.log(`App is running on port ${ PORT }`);
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         //DATABASE_CHANNEL.send(message.author.username + " en el canal "+channel.name+" escribio: " + message.content);
 
@@ -182,15 +204,3 @@ client.on('message', async (message) => {
             }
 
         }*/
-        
-        
-    })
-
-
-});
-
-const PORT = process.env.PORT || 3000;
-const app = express();
-app.listen(PORT, () => {
-    console.log(`App is running on port ${ PORT }`);
-});
