@@ -8,18 +8,20 @@ const client = new Client({
 });
 
 const DATABASE_CHANNEL_NAME = 'database';
+
 let DATABASE_CHANNEL;
+
 let DATABASE = {users:[]};
 
 client.login(process.env.DISCORD_BOT_TOKEN);
 
 client.once('ready', () => { 
-    DATABASE_CHANNEL = client.channels.cache.find(channel => channel.name === DATABASE_CHANNEL_NAME);
+    DATABASE_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === DATABASE_CHANNEL_NAME);
     console.log('Discord bot is connected.') 
 });
 
-client.on('voiceStateUpdate', async (oldMember, newMember) => {
-    
+client.on('voiceStateUpdate', async (oldMember, newMember) => {   
+
     let join = true;
     let joinUser = null;
     let channelName = null;
@@ -85,7 +87,6 @@ getDataBase = async () => {
     await DATABASE_CHANNEL.messages.fetch({ limit: 1 }).then(messages => {
         if (messages.size > 0) {
             let lastMessage = messages.first();
-            lastMessage.delete();
             DATABASE = JSON.parse(lastMessage.content);
         }
     })
