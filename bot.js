@@ -192,13 +192,13 @@ client.on('message', async (message) => {
                         
                                 embed.addFields(
                                         { name: '------------------', value: 'Usuario: '+ user.username + ' ('+user.id+')', inline: false },
-                                        { name: 'Tiempo en canal audio', value: user.voiceChannelTotalTime || '-', inline: true },
-                                        { name: 'Cant. ingresos canal audio', value: user.joinVoiceChannelCount || '-', inline: true },
-                                        { name: 'Ultimo acceso canal audio', value: user.lastVoiceChannelAccess || '-', inline: true },
-                                        { name: 'Nom. ultimo canal de audio', value: user.lastVoiceChannelName || '-', inline: true },
-                                        { name: 'Cant. de msg.', value: user.msgChannelCount || '-', inline: true },
-                                        { name: 'Nom. ultimo canal de texto', value: user.lastTextChannelName || '-', inline: true },
-                                        { name: 'Fecha de ultimo mensaje', value: user.lastTextChannelDate.format('DD/MM/YYYY HH:mm:ss') || '-', inline: true }
+                                        { name: '1. Tiempo en canal audio', value: user.voiceChannelTotalTime || '-', inline: true },
+                                        { name: '2. Cant. ingresos canal audio', value: user.joinVoiceChannelCount || '-', inline: true },
+                                        { name: '3. Ultimo acceso canal audio', value: user.lastVoiceChannelAccess || '-', inline: true },
+                                        { name: '4. Nom. ultimo canal de audio', value: user.lastVoiceChannelName || '-', inline: true },
+                                        { name: '5. Cant. de msg.', value: user.msgChannelCount || '-', inline: true },
+                                        { name: '6. Nom. ultimo canal de texto', value: user.lastTextChannelName || '-', inline: true },
+                                        { name: '7. Fecha de ultimo mensaje', value: user.lastTextChannelDate.format('DD/MM/YYYY HH:mm:ss') || '-', inline: true }
                                     )
                             })
                             REPORT_CHANNEL.send(embed);
@@ -219,16 +219,72 @@ client.on('message', async (message) => {
                             
                             embed.addFields(
                                     { name: '------------------------------------------', value: 'Usuario: '+ user.username, inline: false },
-                                    { name: 'Tiempo en canal audio', value: user.voiceChannelTotalTime || 'Sin datos', inline: true },
-                                    { name: 'Cant. ingresos canal audio', value: user.joinVoiceChannelCount || 'Sin datos', inline: true },
-                                    { name: 'Ultimo acceso canal audio', value: user.lastVoiceChannelAccess || 'Sin datos', inline: true },
-                                    { name: 'Nom. ultimo canal de audio', value: user.lastVoiceChannelName || 'Sin datos', inline: true },
-                                    { name: 'Cant. de msg.', value: user.msgChannelCount || 'Sin datos', inline: true },
-                                    { name: 'Nom. ultimo canal de texto', value: user.lastTextChannelName || 'Sin datos', inline: true },
-                                    { name: 'Fecha de ultimo mensaje', value: user.lastTextChannelDate || 'Sin datos', inline: true }
+                                    { name: '1. Tiempo en canal audio', value: user.voiceChannelTotalTime || 'Sin datos', inline: true },
+                                    { name: '2. Cant. ingresos canal audio', value: user.joinVoiceChannelCount || 'Sin datos', inline: true },
+                                    { name: '3. Ultimo acceso canal audio', value: user.lastVoiceChannelAccess || 'Sin datos', inline: true },
+                                    { name: '4. Nom. ultimo canal de audio', value: user.lastVoiceChannelName || 'Sin datos', inline: true },
+                                    { name: '5. Cant. de msg.', value: user.msgChannelCount || 'Sin datos', inline: true },
+                                    { name: '6. Nom. ultimo canal de texto', value: user.lastTextChannelName || 'Sin datos', inline: true },
+                                    { name: '7. Fecha de ultimo mensaje', value: user.lastTextChannelDate || 'Sin datos', inline: true }
                                 )
                         
                             REPORT_CHANNEL.send(embed);
+                        }
+                    }
+
+                } else if (message.content.indexOf('!setid') >= 0) {
+
+                    const arr = message.content.split('!setid');
+                    if (arr.length == 4) {
+                        const paramId = arr[1].trim();
+                        const prop = Number(arr[2].trim());
+                        const val = arr[3].trim();
+
+                        const user = DATABASE.users.find(u => u.id == paramId );
+
+                        if (user) {
+
+                            if (!isNaN(prop)) {
+                                switch(prop) {
+                                    case 1:
+                                        if (!isNaN(val)) {
+                                            user.voiceChannelTotalTime = val;
+                                        }
+                                        break;
+                                    case 2:
+                                        if (!isNaN(val)) {
+                                            user.joinVoiceChannelCount = val;
+                                        }
+                                    break;
+                                    case 3:
+                                        if (val.length == 19) {
+                                            user.joinVoiceChannelCount = moment(val, 'DD/MM/YYYY HH:mm:ss').format('DD/MM/YYYY HH:mm:ss');
+                                        }
+                                    break;
+                                    case 4:
+                                        if (val.length > 0) {
+                                            user.lastVoiceChannelName = val;
+                                        }
+                                    break;
+                                    case 5:
+                                        if (val.length > 0) {
+                                            user.msgChannelCount = val;
+                                        }
+                                    break;
+                                    case 6:
+                                        if (val.length > 0) {
+                                            user.lastTextChannelName = val;
+                                        }
+                                    break
+                                    case 7:
+                                        if (val.length == 19) {
+                                            user.lastTextChannelDate = moment(val, 'DD/MM/YYYY HH:mm:ss').format('DD/MM/YYYY HH:mm:ss');
+                                        }
+                                    break;
+                                }
+                            }
+
+                            updateDateBase();
                         }
                     }
                 }
