@@ -232,7 +232,7 @@ client.on('message', async (message) => {
                         }
                     }
 
-                } else if (message.content.indexOf('!test') >= 0) {
+                } else if (message.content.indexOf('!setval') >= 0) {
 
                     const arr = message.content.split(' ');
                     if (arr.length == 4) {
