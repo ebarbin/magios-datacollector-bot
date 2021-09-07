@@ -70,6 +70,7 @@ client.on('voiceStateUpdate', async (oldMember, newMember) => {
             };
 
             if (join) {
+                newUser.avatar = 'https://cdn.discordapp.com/avatars/' + joinUser.id + '/' + joinUser.avatar + '.jpg',
                 newUser.joinVoiceChannelCount = 1;
                 newUser.lastVoiceChannelAccessDate = moment().format('DD/MM/YYYY HH:mm:ss')
                 newUser.lastVoiceChannelName = channelName;
