@@ -70,7 +70,6 @@ client.on('voiceStateUpdate', async (oldMember, newMember) => {
             };
 
             if (join) {
-                newUser.avatar = 'https://cdn.discordapp.com/avatars/' + joinUser.id + '/' + joinUser.avatar + '.jpg',
                 newUser.joinVoiceChannelCount = 1;
                 newUser.lastVoiceChannelAccessDate = moment().format('DD/MM/YYYY HH:mm:ss')
                 newUser.lastVoiceChannelName = channelName;
@@ -80,6 +79,8 @@ client.on('voiceStateUpdate', async (oldMember, newMember) => {
 
         } else {
 
+            dataBaseUser.avatar = 'https://cdn.discordapp.com/avatars/' + joinUser.id + '/' + joinUser.avatar + '.jpg';
+            
             if (join) {
                 dataBaseUser.joinVoiceChannelCount = parseInt(dataBaseUser.joinVoiceChannelCount) + 1
                 dataBaseUser.lastVoiceChannelAccessDate = moment().format('DD/MM/YYYY HH:mm:ss');
