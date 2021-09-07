@@ -206,7 +206,7 @@ client.on('message', async (message) => {
 
                 } else if (message.content.indexOf('!getid') >= 0) {
 
-                    const arr = message.content.split('!getid');
+                    const arr = message.content.split(' ');
                     if (arr.length == 2) {
                         const param = arr[1].trim();    
                         const user = DATABASE.users.find(u => u.id == param );
@@ -218,7 +218,7 @@ client.on('message', async (message) => {
                             .setThumbnail('https://cdn.discordapp.com/avatars/' + user.id + '/' + user.avatar + '.jpg');
                             
                             embed.addFields(
-                                    { name: '------------------------------------------', value: 'Usuario: '+ user.username, inline: false },
+                                    { name: '------------------------------------------', value: 'Usuario: '+ user.username + ' ('+user.id+')', inline: false },
                                     { name: '1. Tiempo en canal audio', value: user.voiceChannelTotalTime || 'Sin datos', inline: true },
                                     { name: '2. Cant. ingresos canal audio', value: user.joinVoiceChannelCount || 'Sin datos', inline: true },
                                     { name: '3. Ultimo acceso canal audio', value: user.lastVoiceChannelAccess || 'Sin datos', inline: true },
@@ -232,9 +232,9 @@ client.on('message', async (message) => {
                         }
                     }
 
-                } else if (message.content.indexOf('!setid') >= 0) {
+                } else if (message.content.indexOf('!test') >= 0) {
 
-                    const arr = message.content.split('!setid');
+                    const arr = message.content.split(' ');
                     if (arr.length == 4) {
                         const paramId = arr[1].trim();
                         const prop = Number(arr[2].trim());
@@ -267,7 +267,7 @@ client.on('message', async (message) => {
                                         }
                                     break;
                                     case 5:
-                                        if (val.length > 0) {
+                                        if (!isNaN(val)) {
                                             user.msgChannelCount = val;
                                         }
                                     break;
