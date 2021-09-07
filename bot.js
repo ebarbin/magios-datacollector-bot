@@ -129,7 +129,7 @@ client.on('message', async (message) => {
                     let newUser = {
                         id: message.author.id,
                         username: message.author.username,
-                        avatar: 'https://cdn.discordapp.com/avatars/' + joinUser.id + '/' + joinUser.avatar + '.jpg',
+                        avatar: 'https://cdn.discordapp.com/avatars/' + message.author.id + '/' + message.author.avatar + '.jpg',
                         voiceChannelTotalTime: 0,
                         joinVoiceChannelCount: 0,
                         msgChannelCount: 0,
