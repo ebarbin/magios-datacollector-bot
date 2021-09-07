@@ -58,7 +58,7 @@ client.on('voiceStateUpdate', async (oldMember, newMember) => {
             
             let newUser = {
                 id: joinUser.id,
-                //avatar: 'https://cdn.discordapp.com/avatars/' + joinUser.id + '/' + joinUser.avatar + '.jpg',
+                avatar: joinUser.avatar,
                 username: joinUser.username,
                 voiceChannelTotalTime: 0,
                 joinVoiceChannelCount: 0,
@@ -79,9 +79,8 @@ client.on('voiceStateUpdate', async (oldMember, newMember) => {
 
         } else {
 
-            //dataBaseUser.avatar = 'https://cdn.discordapp.com/avatars/' + joinUser.id + '/' + joinUser.avatar + '.jpg';
-
             if (join) {
+                dataBaseUser.avatar = joinUser.avatar;
                 dataBaseUser.joinVoiceChannelCount = parseInt(dataBaseUser.joinVoiceChannelCount) + 1
                 dataBaseUser.lastVoiceChannelAccessDate = moment().format('DD/MM/YYYY HH:mm:ss');
                 dataBaseUser.lastVoiceChannelName = channelName;
@@ -89,6 +88,7 @@ client.on('voiceStateUpdate', async (oldMember, newMember) => {
                 const now = moment(new Date(), 'DD/MM/YYYY HH:mm:ss');
                 const lastVoiceChannelAccessDate = moment(dataBaseUser.lastVoiceChannelAccessDate, 'DD/MM/YYYY HH:mm:ss');
                 dataBaseUser.voiceChannelTotalTime = dataBaseUser.voiceChannelTotalTime + now.diff(lastVoiceChannelAccessDate, 'seconds');
+                dataBaseUser.avatar = joinUser.avatar;
             }
         }
 
@@ -131,7 +131,7 @@ client.on('message', async (message) => {
                     let newUser = {
                         id: message.author.id,
                         username: message.author.username,
-                        //avatar: 'https://cdn.discordapp.com/avatars/' + message.author.id + '/' + message.author.avatar + '.jpg',
+                        avatar: message.author.avatar,
                         voiceChannelTotalTime: 0,
                         joinVoiceChannelCount: 0,
                         msgChannelCount: 0,
@@ -144,7 +144,7 @@ client.on('message', async (message) => {
                     DATABASE.users.push(newUser);
 
                 } else {
-                    //dataBaseUser.avatar = 'https://cdn.discordapp.com/avatars/' + message.author.id + '/' + message.author.avatar + '.jpg',
+                    dataBaseUser.avatar = message.author.avatar,
                     dataBaseUser.msgChannelCount = parseInt(dataBaseUser.msgChannelCount) + 1
                     dataBaseUser.lastTextChannelName = channel.name;
                     dataBaseUser.lastTextChannelDate =  moment().format('DD/MM/YYYY HH:mm:ss');
@@ -215,7 +215,7 @@ client.on('message', async (message) => {
                             .setTitle('Detalle usuario')
                             .setColor('#00830b')
                             .setTimestamp()
-                            //.setThumbnail(user.avatar);
+                            .setThumbnail('https://cdn.discordapp.com/avatars/' + user.id + '/' + user.avatar + '.jpg');
                             
                             embed.addFields(
                                     { name: '------------------------------------------', value: 'Usuario: '+ user.username, inline: false },
