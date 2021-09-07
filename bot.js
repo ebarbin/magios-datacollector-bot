@@ -58,7 +58,7 @@ client.on('voiceStateUpdate', async (oldMember, newMember) => {
             
             let newUser = {
                 id: joinUser.id,
-                avatar: 'https://cdn.discordapp.com/avatars/' + joinUser.id + '/' + joinUser.avatar + '.jpg',
+                //avatar: 'https://cdn.discordapp.com/avatars/' + joinUser.id + '/' + joinUser.avatar + '.jpg',
                 username: joinUser.username,
                 voiceChannelTotalTime: 0,
                 joinVoiceChannelCount: 0,
@@ -79,8 +79,8 @@ client.on('voiceStateUpdate', async (oldMember, newMember) => {
 
         } else {
 
-            dataBaseUser.avatar = 'https://cdn.discordapp.com/avatars/' + joinUser.id + '/' + joinUser.avatar + '.jpg';
-            
+            //dataBaseUser.avatar = 'https://cdn.discordapp.com/avatars/' + joinUser.id + '/' + joinUser.avatar + '.jpg';
+
             if (join) {
                 dataBaseUser.joinVoiceChannelCount = parseInt(dataBaseUser.joinVoiceChannelCount) + 1
                 dataBaseUser.lastVoiceChannelAccessDate = moment().format('DD/MM/YYYY HH:mm:ss');
@@ -131,7 +131,7 @@ client.on('message', async (message) => {
                     let newUser = {
                         id: message.author.id,
                         username: message.author.username,
-                        avatar: 'https://cdn.discordapp.com/avatars/' + message.author.id + '/' + message.author.avatar + '.jpg',
+                        //avatar: 'https://cdn.discordapp.com/avatars/' + message.author.id + '/' + message.author.avatar + '.jpg',
                         voiceChannelTotalTime: 0,
                         joinVoiceChannelCount: 0,
                         msgChannelCount: 0,
@@ -144,7 +144,7 @@ client.on('message', async (message) => {
                     DATABASE.users.push(newUser);
 
                 } else {
-                    dataBaseUser.avatar = 'https://cdn.discordapp.com/avatars/' + message.author.id + '/' + message.author.avatar + '.jpg',
+                    //dataBaseUser.avatar = 'https://cdn.discordapp.com/avatars/' + message.author.id + '/' + message.author.avatar + '.jpg',
                     dataBaseUser.msgChannelCount = parseInt(dataBaseUser.msgChannelCount) + 1
                     dataBaseUser.lastTextChannelName = channel.name;
                     dataBaseUser.lastTextChannelDate =  moment().format('DD/MM/YYYY HH:mm:ss');
@@ -215,7 +215,7 @@ client.on('message', async (message) => {
                             .setTitle('Detalle usuario')
                             .setColor('#00830b')
                             .setTimestamp()
-                            .setThumbnail(user.avatar);
+                            //.setThumbnail(user.avatar);
                             
                             embed.addFields(
                                     { name: '------------------------------------------', value: 'Usuario: '+ user.username, inline: false },
