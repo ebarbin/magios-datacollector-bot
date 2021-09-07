@@ -11,6 +11,7 @@ const client = new Client({
 
 const DATABASE_CHANNEL_NAME = 'database';
 const REPORT_CHANNEL_NAME = 'report';
+const ADMIN_GENERAL_CHANNEL_NAME = 'admin-general';
 
 let DATABASE_CHANNEL;
 let REPORT_CHANNEL;
@@ -122,7 +123,7 @@ client.on('message', async (message) => {
 
         message.channel.fetch().then(channel => { 
 
-            if (channel.parent.name != 'ADMIN' && channel.name != DATABASE_CHANNEL_NAME) {
+            if (channel.parent.name != 'ADMIN') {
 
                 let dataBaseUser = DATABASE.users.find(user => user.id == message.author.id);
 
@@ -152,7 +153,7 @@ client.on('message', async (message) => {
 
                 updateDateBase();
 
-            } else if (channel.parent.name == 'ADMIN') {
+            } else if (channel.parent.name == 'ADMIN' && channel.name != ADMIN_GENERAL_CHANNEL_NAME) {
 
                 if (message.content == '!delete') {
 
