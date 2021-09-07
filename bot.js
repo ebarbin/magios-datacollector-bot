@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const { Client, Intents, MessageEmbed } = require('discord.js');
 
+const _ = require('lodash');
 const moment = require('moment');
 
 const client = new Client({
@@ -57,6 +58,7 @@ client.on('voiceStateUpdate', async (oldMember, newMember) => {
             
             let newUser = {
                 id: joinUser.id,
+                avatar: 'https://cdn.discordapp.com/avatars/' + joinUser.id + '/' + joinUser.avatar + '.jpg',
                 username: joinUser.username,
                 voiceChannelTotalTime: 0,
                 joinVoiceChannelCount: 0,
@@ -95,7 +97,6 @@ client.on('voiceStateUpdate', async (oldMember, newMember) => {
     }
  });
 
-
 getDataBase = async () => { 
     await DATABASE_CHANNEL.messages.fetch({ limit: 1 }).then(messages => {
         if (messages.size > 0) {
@@ -104,7 +105,6 @@ getDataBase = async () => {
         }
     }).catch();
 }
-
 
 updateDateBase = () => {
     DATABASE_CHANNEL.send(JSON.stringify(DATABASE));
@@ -129,6 +129,7 @@ client.on('message', async (message) => {
                     let newUser = {
                         id: message.author.id,
                         username: message.author.username,
+                        avatar: 'https://cdn.discordapp.com/avatars/' + joinUser.id + '/' + joinUser.avatar + '.jpg',
                         voiceChannelTotalTime: 0,
                         joinVoiceChannelCount: 0,
                         msgChannelCount: 0,
@@ -164,28 +165,71 @@ client.on('message', async (message) => {
                         ms.forEach(msg => msg.delete() );
                     }).catch();
 
-                } else if (message.content == '!report') {
+                } else if (message.content == '!list') {
 
-                    let embed = new MessageEmbed()
-                    .setTitle('Reporte de actividad')
-                    .setDescription('Reporte buchon magio!')
-                    .setColor('#00830b')
-                    .setTimestamp();
-
-                    DATABASE.users.forEach(user => {
-                        
-                        embed.addFields(
-                                { name: '------------------------------------------', value: 'Usuario: '+ user.username, inline: false },
-                                { name: 'Tiempo en canal audio', value: user.voiceChannelTotalTime || 'Sin datos', inline: true },
-                                { name: 'Cant. ingresos canal audio', value: user.joinVoiceChannelCount || 'Sin datos', inline: true },
-                                { name: 'Ultimo acceso canal audio', value: user.lastVoiceChannelAccess || 'Sin datos', inline: true },
-                                { name: 'Nom. ultimo canal de audio', value: user.lastVoiceChannelName || 'Sin datos', inline: true },
-                                { name: 'Cant. de msg.', value: user.msgChannelCount || 'Sin datos', inline: true },
-                                { name: 'Nom. ultimo canal de texto', value: user.lastVoiceChannelName || 'Sin datos', inline: true },
-                                { name: 'Fecha de ultimo mensaje', value: user.lastTextChannelDate || 'Sin datos', inline: true }
-                            )
+                    const pageSize = 3;
+                    const pages = Math.round((DATABASE.users.length + 1) / pageSize);
+                    
+                    let auxData = DATABASE.users.map(u => {
+                        u.lastTextChannelDate = moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss');
+                        return u;
                     })
-                    REPORT_CHANNEL.send(embed)
+                    auxData = _.orderBy(auxData, 'lastTextChannelDate', 'desc');
+
+                    for (let i = 1; i <= pages; i++) {
+                        
+                        let paginateData = paginate(auxData, pageSize, i);
+
+                        let embed = new MessageEmbed()
+                            .setTitle('Reporte de actividad ' + i + ' de ' + pages)
+                            .setColor('#00830b')
+                            .setTimestamp();
+
+                            paginateData.forEach(user => {
+                        
+                                embed.addFields(
+                                        { name: '------------------', value: 'Usuario: '+ user.username + ' ('+user.id+')', inline: false },
+                                        { name: 'Tiempo en canal audio', value: user.voiceChannelTotalTime || '-', inline: true },
+                                        { name: 'Cant. ingresos canal audio', value: user.joinVoiceChannelCount || '-', inline: true },
+                                        { name: 'Ultimo acceso canal audio', value: user.lastVoiceChannelAccess || '-', inline: true },
+                                        { name: 'Nom. ultimo canal de audio', value: user.lastVoiceChannelName || '-', inline: true },
+                                        { name: 'Cant. de msg.', value: user.msgChannelCount || '-', inline: true },
+                                        { name: 'Nom. ultimo canal de texto', value: user.lastTextChannelName || '-', inline: true },
+                                        { name: 'Fecha de ultimo mensaje', value: user.lastTextChannelDate.format('DD/MM/YYYY HH:mm:ss') || '-', inline: true }
+                                    )
+                            })
+                            REPORT_CHANNEL.send(embed);
+                    }
+
+                } else if (message.content.indexOf('!getid') >= 0) {
+
+                    const arr = message.content.split('!getid');
+                    if (arr.length == 2) {
+                        const param = arr[1].trim();
+                        console.log(param)
+                        const user = DATABASE.users.find(u => u.id == param );
+                        console.log(user);
+                        if (user) {
+                            let embed = new MessageEmbed()
+                            .setTitle('Detalle usuario')
+                            .setColor('#00830b')
+                            .setTimestamp()
+                            .setThumbnail(user.avatar);
+                            
+                            embed.addFields(
+                                    { name: '------------------------------------------', value: 'Usuario: '+ user.username, inline: false },
+                                    { name: 'Tiempo en canal audio', value: user.voiceChannelTotalTime || 'Sin datos', inline: true },
+                                    { name: 'Cant. ingresos canal audio', value: user.joinVoiceChannelCount || 'Sin datos', inline: true },
+                                    { name: 'Ultimo acceso canal audio', value: user.lastVoiceChannelAccess || 'Sin datos', inline: true },
+                                    { name: 'Nom. ultimo canal de audio', value: user.lastVoiceChannelName || 'Sin datos', inline: true },
+                                    { name: 'Cant. de msg.', value: user.msgChannelCount || 'Sin datos', inline: true },
+                                    { name: 'Nom. ultimo canal de texto', value: user.lastTextChannelName || 'Sin datos', inline: true },
+                                    { name: 'Fecha de ultimo mensaje', value: user.lastTextChannelDate || 'Sin datos', inline: true }
+                                )
+                        
+                            REPORT_CHANNEL.send(embed);
+                        }
+                    }
                 }
 
                 message.delete();
@@ -197,6 +241,11 @@ client.on('message', async (message) => {
         console.log('Error '+ e);
     }
 });
+
+function paginate(array, page_size, page_number) {
+    // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
+    return array.slice((page_number - 1) * page_size, page_number * page_size);
+}
 
 /*cron.schedule('* * * * *', async () => {
     
