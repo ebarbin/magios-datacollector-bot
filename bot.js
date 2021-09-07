@@ -142,6 +142,7 @@ client.on('message', async (message) => {
                     DATABASE.users.push(newUser);
 
                 } else {
+                    dataBaseUser.avatar = 'https://cdn.discordapp.com/avatars/' + message.author.id + '/' + message.author.avatar + '.jpg',
                     dataBaseUser.msgChannelCount = parseInt(dataBaseUser.msgChannelCount) + 1
                     dataBaseUser.lastTextChannelName = channel.name;
                     dataBaseUser.lastTextChannelDate =  moment().format('DD/MM/YYYY HH:mm:ss');
@@ -205,10 +206,8 @@ client.on('message', async (message) => {
 
                     const arr = message.content.split('!getid');
                     if (arr.length == 2) {
-                        const param = arr[1].trim();
-                        console.log(param)
+                        const param = arr[1].trim();    
                         const user = DATABASE.users.find(u => u.id == param );
-                        console.log(user);
                         if (user) {
                             let embed = new MessageEmbed()
                             .setTitle('Detalle usuario')
