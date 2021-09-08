@@ -231,17 +231,20 @@ client.on('message', async (message) => {
 
             if (message.content == '!delete') {
 
-                DATABASE_CHANNEL.messages.fetch().then(ms => { 
-                    ms.forEach(msg => msg.delete() );
-                }).catch();
-
-                DATABASE = {users:[]};
-
             } else if (message.content == '!clear') {
 
-                REPORT_CHANNEL.messages.fetch().then(ms => { 
+                const newChannel = await REPORT_CHANNEL.clone()
+                console.log(newChannel.id) // Do with this new channel ID what you want
+            
+                // Delete old channel
+                REPORT_CHANNEL.delete()
+
+                /*const fetched = await REPORT_CHANNEL.fetchMessages({limit: 99});
+                REPORT_CHANNEL.bulkDelete(fetched);*/
+
+                /*REPORT_CHANNEL.messages.fetch().then(ms => { 
                     ms.forEach(msg => msg.delete() );
-                }).catch();
+                }).catch();*/
 
             } else if (message.content == '!list') {
 
@@ -269,11 +272,11 @@ client.on('message', async (message) => {
                     
                             embed.addFields(
                                     { name: '------------------', value: 'Usuario: '+ user.username + ' ('+user.id+')', inline: false },
-                                    { name: '1. Tiempo en canal audio', value: user.voiceChannelTotalTime || '-', inline: true },
-                                    { name: '2. Cant. ingresos canal audio', value: user.joinVoiceChannelCount || '-', inline: true },
+                                    { name: '1. Tiempo en canal audio', value: user.voiceChannelTotalTime || 0, inline: true },
+                                    { name: '2. Cant. ingresos canal audio', value: user.joinVoiceChannelCount || 0, inline: true },
                                     { name: '3. Ultimo acceso canal audio', value: user.lastVoiceChannelAccess || '-', inline: true },
                                     { name: '4. Nom. ultimo canal de audio', value: user.lastVoiceChannelName || '-', inline: true },
-                                    { name: '5. Cant. de msg.', value: user.msgChannelCount || '-', inline: true },
+                                    { name: '5. Cant. de msg.', value: user.msgChannelCount || 0, inline: true },
                                     { name: '6. Nom. ultimo canal de texto', value: user.lastTextChannelName || '-', inline: true },
                                     { name: '7. Fecha de ultimo mensaje', value: user.lastTextChannelDate.format('DD/MM/YYYY HH:mm:ss') || '-', inline: true }
                                 )
@@ -298,13 +301,13 @@ client.on('message', async (message) => {
                         
                         embed.addFields(
                                 { name: '------------------------------------------', value: 'Usuario: '+ user.username + ' ('+user.id+')', inline: false },
-                                { name: '1. Tiempo en canal audio', value: user.voiceChannelTotalTime || 'Sin datos', inline: true },
-                                { name: '2. Cant. ingresos canal audio', value: user.joinVoiceChannelCount || 'Sin datos', inline: true },
-                                { name: '3. Ultimo acceso canal audio', value: user.lastVoiceChannelAccess || 'Sin datos', inline: true },
-                                { name: '4. Nom. ultimo canal de audio', value: user.lastVoiceChannelName || 'Sin datos', inline: true },
-                                { name: '5. Cant. de msg.', value: user.msgChannelCount || 'Sin datos', inline: true },
-                                { name: '6. Nom. ultimo canal de texto', value: user.lastTextChannelName || 'Sin datos', inline: true },
-                                { name: '7. Fecha de ultimo mensaje', value: user.lastTextChannelDate || 'Sin datos', inline: true }
+                                { name: '1. Tiempo en canal audio', value: user.voiceChannelTotalTime || 0, inline: true },
+                                { name: '2. Cant. ingresos canal audio', value: user.joinVoiceChannelCount || 0, inline: true },
+                                { name: '3. Ultimo acceso canal audio', value: user.lastVoiceChannelAccess || '-', inline: true },
+                                { name: '4. Nom. ultimo canal de audio', value: user.lastVoiceChannelName || '-', inline: true },
+                                { name: '5. Cant. de msg.', value: user.msgChannelCount || 0, inline: true },
+                                { name: '6. Nom. ultimo canal de texto', value: user.lastTextChannelName || '-', inline: true },
+                                { name: '7. Fecha de ultimo mensaje', value: user.lastTextChannelDate || '-', inline: true }
                             )
                     
                         REPORT_CHANNEL.send(embed);
