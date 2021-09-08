@@ -215,7 +215,7 @@ client.on('message', async (message) => {
                     msgChannelCount: 0,
                     lastVoiceChannelAccessDate: null,
                     lastVoiceChannelName: null,
-                    lastTextChannelName: channel.name,
+                    lastTextChannelName: message.channel.name,
                     lastTextChannelDate: moment().format('DD/MM/YYYY HH:mm:ss'),
                     modules: []
                 };
@@ -225,13 +225,13 @@ client.on('message', async (message) => {
             } else {
                 dataBaseUser.avatar = message.author.avatar,
                 dataBaseUser.msgChannelCount = parseInt(dataBaseUser.msgChannelCount) + 1
-                dataBaseUser.lastTextChannelName = channel.name;
+                dataBaseUser.lastTextChannelName = message.channel.name;
                 dataBaseUser.lastTextChannelDate =  moment().format('DD/MM/YYYY HH:mm:ss');
 
                 await updateUser(dataBaseUser);
             }
 
-        } else if (channel.parent.name == 'ADMIN' && channel.name != ADMIN_GENERAL_CHANNEL_NAME) {
+        } else if (message.channel.parent.name == 'ADMIN' && message.channel.name != ADMIN_GENERAL_CHANNEL_NAME) {
 
             if (message.content == '!delete') {
 
