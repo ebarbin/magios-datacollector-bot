@@ -200,7 +200,7 @@ client.on('message', async (message) => {
                 }
             }*/
 
-          } else if (channel.parent.name != 'ADMIN') {
+          } else if (message.channel.parent.name != 'ADMIN') {
 
             let dataBaseUser = await getUser(message.author.id);
 
