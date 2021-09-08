@@ -138,7 +138,7 @@ getAllUsers = async () => {
         const res = await postgresClient.query(query);
         const result = [];
         if (res.rows.length > 0) {
-            for(let i = 0; i < res.rowCount.length; i++) {
+            for(let i = 0; i < res.rows.length; i++) {
                 result.push(JSON.parse(res.rows[i].data));
             }
         }
@@ -160,8 +160,6 @@ client.on('message', async (message) => {
     try {
     
         if (message.author.bot) return;
-
-        console.log(message.channel);
         
         if (message.channel.type == 'dm') {
 /*
@@ -248,11 +246,9 @@ client.on('message', async (message) => {
             } else if (message.content == '!list') {
 
                 let users = await getAllUsers();
-
-                console.log('Usuarios: ' + users.length);
                 
                 const pageSize = 3;
-                const pages = Math.round(users.length / pageSize);
+                const pages = Math.round((users.length +1)/ pageSize);
                 
                 users = users.map(u => {
                     u.lastTextChannelDate = moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss');
@@ -260,7 +256,7 @@ client.on('message', async (message) => {
                 })
                 users = _.orderBy(users, 'lastTextChannelDate', 'desc');
 
-                for (let i = 0; i < pages; i++) {
+                for (let i = 1; i <= pages; i++) {
                     
                     let paginatedUsers = paginate(users, pageSize, i);
 
