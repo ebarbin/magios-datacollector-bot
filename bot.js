@@ -209,12 +209,6 @@ client.on('message', async (message) => {
             
             const pageSize = 3;
             const pages = Math.round((users.length +1)/ pageSize);
-            
-            users = users.map(u => {
-                u.lastTextChannelDate = moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss');
-                return u;
-            })
-            users = _.orderBy(users, 'lastTextChannelDate', 'desc');
 
             for (let i = 1; i <= pages; i++) {
                 
@@ -230,7 +224,7 @@ client.on('message', async (message) => {
                         embed.addFields(
                             { name: '------', value: user.username + ' ('+user.id+')', inline: false },
                             { name: 'Ingreso', value: user.joinDate ? user.joinDate : '-', inline: true },
-                            { name: 'Ultimo mensaje', value: user.lastTextChannelDate.format('DD/MM/YYYY HH:mm:ss') || '-', inline: true },
+                            { name: 'Ultimo mensaje', value: user.lastTextChannelDate || '-', inline: true },
                             /*{ name: '1. Canal audio (seg.)', value: user.voiceChannelTotalTime || 0, inline: true },
                             { name: '2. Ingresos audio (cant.)', value: user.joinVoiceChannelCount || 0, inline: true },
                             { name: '3. Ultimo acceso audio (fec.)', value: user.lastVoiceChannelAccess || '-', inline: true },
@@ -267,7 +261,7 @@ client.on('message', async (message) => {
                         { name: '4. Canal audio', value: user.lastVoiceChannelName || '-', inline: true },
                         { name: '5. Mensajes (cant.)', value: user.msgChannelCount || 0, inline: true },
                         { name: '6. Canal texto', value: user.lastTextChannelName || '-', inline: true },
-                        { name: '7. Ultimo mensaje (fec.)', value: user.lastTextChannelDate.format('DD/MM/YYYY HH:mm:ss') || '-', inline: true },
+                        { name: '7. Ultimo mensaje (fec.)', value: user.lastTextChannelDate || '-', inline: true },
                         { name: 'Ingreso (fec.)', value: user.joinDate ? user.joinDate : '-', inline: false }
                         )
                 
