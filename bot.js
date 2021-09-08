@@ -231,7 +231,7 @@ client.on('message', async (message) => {
                 
                         embed.addFields(
                             { name: '------', value: user.username + ' ('+user.id+')', inline: false },
-                            { name: 'Ingreso', value: user.joinDate ? user.joinDate : '-', inline: false },
+                            { name: 'Ingreso', value: user.joinDate ? user.joinDate : '-', inline: true },
                             { name: 'Ultimo mensaje', value: user.lastTextChannelDate.format('DD/MM/YYYY HH:mm:ss') || '-', inline: true },
                             /*{ name: '1. Canal audio (seg.)', value: user.voiceChannelTotalTime || 0, inline: true },
                             { name: '2. Ingresos audio (cant.)', value: user.joinVoiceChannelCount || 0, inline: true },
@@ -263,7 +263,7 @@ client.on('message', async (message) => {
                     
                     embed.addFields(
                         { name: '------', value: user.username + ' ('+user.id+')', inline: false },
-                        { name: 'Ingreso', value: user.joinDate ? user.joinDate : '-', inline: false },
+                        { name: 'Ingreso', value: user.joinDate ? user.joinDate : '-', inline: true },
                         { name: 'Ultimo mensaje', value: user.lastTextChannelDate.format('DD/MM/YYYY HH:mm:ss') || '-', inline: true },
                         /*{ name: '1. Canal audio (seg.)', value: user.voiceChannelTotalTime || 0, inline: true },
                         { name: '2. Ingresos audio (cant.)', value: user.joinVoiceChannelCount || 0, inline: true },
