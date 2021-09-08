@@ -37,6 +37,28 @@ client.once('ready', async () => {
     postgresClient.connect();
 });
 
+client.on('guildMemberAdd', member => {
+    const user = member.user;
+    let dataBaseUser = await getUser(user.id);
+    if (!dataBaseUser) {
+        const newUser = {
+            id: user.id,
+            joinDate: moment().format('DD/MM/YYYY HH:mm:ss'),
+            avatar: user.avatar,
+            username: user.username,
+            voiceChannelTotalTime: 0,
+            joinVoiceChannelCount: 0,
+            msgChannelCount: 0,
+            lastVoiceChannelAccessDate: null,
+            lastVoiceChannelName: null,
+            lastTextChannelName: null,
+            lastTextChannelDate: null,
+            modules: []
+        };
+        await saveUser(newUser);
+    }
+});
+
 client.on('voiceStateUpdate', async (oldMember, newMember) => {
 
     try {
@@ -107,53 +129,6 @@ client.on('voiceStateUpdate', async (oldMember, newMember) => {
         console.log('Error '+ e);
     }
  });
-
-
- updateUser = async (user) => {
-    const query = { text: 'UPDATE magios2 SET data = $2 WHERE id = $1', values: [user.id, JSON.stringify(user)] };
-    const res = await postgresClient.query(query);
- }
-
- saveUser = async (user) => { 
-    const query = { text: 'INSERT INTO magios2 (id, data) VALUES($1, $2)', values: [user.id, JSON.stringify(user)] };
-    const res = await postgresClient.query(query);
- } 
-
- getUser = async (userId) => { 
-    try {
-        const query =  { text: 'SELECT * FROM magios2 WHERE id = $1', values: [userId] };
-        const res = await postgresClient.query(query)
-        if (res.rows.length > 0) {
-            return JSON.parse(res.rows[0].data);
-        } else {
-            return null;
-        }
-      } catch (err) {
-      }
-}
-
-getAllUsers = async () => {
-    try {
-        const query =  { text: 'SELECT * FROM magios2' };
-        const res = await postgresClient.query(query);
-        const result = [];
-        if (res.rows.length > 0) {
-            for(let i = 0; i < res.rows.length; i++) {
-                result.push(JSON.parse(res.rows[i].data));
-            }
-        }
-        return result;
-      } catch (err) {
-      }
-}
-
-createDataBase = async () => { 
-    const res = await postgresClient.query('CREATE TABLE magios2 (id TEXT, data TEXT)');
-}
-
-client.on('guildMemberAdd', member => {
-    member.guild.channels.get('channelID').send("Welcome"); 
-});
 
 client.on('message', async (message) => {
 
@@ -370,7 +345,49 @@ client.on('message', async (message) => {
     }
 });
 
-function paginate(array, page_size, page_number) {
+updateUser = async (user) => {
+    const query = { text: 'UPDATE magios2 SET data = $2 WHERE id = $1', values: [user.id, JSON.stringify(user)] };
+    const res = await postgresClient.query(query);
+ }
+
+ saveUser = async (user) => { 
+    const query = { text: 'INSERT INTO magios2 (id, data) VALUES($1, $2)', values: [user.id, JSON.stringify(user)] };
+    const res = await postgresClient.query(query);
+ } 
+
+ getUser = async (userId) => { 
+    try {
+        const query =  { text: 'SELECT * FROM magios2 WHERE id = $1', values: [userId] };
+        const res = await postgresClient.query(query)
+        if (res.rows.length > 0) {
+            return JSON.parse(res.rows[0].data);
+        } else {
+            return null;
+        }
+      } catch (err) {
+      }
+}
+
+getAllUsers = async () => {
+    try {
+        const query =  { text: 'SELECT * FROM magios2' };
+        const res = await postgresClient.query(query);
+        const result = [];
+        if (res.rows.length > 0) {
+            for(let i = 0; i < res.rows.length; i++) {
+                result.push(JSON.parse(res.rows[i].data));
+            }
+        }
+        return result;
+      } catch (err) {
+      }
+}
+
+createDataBase = async () => { 
+    const res = await postgresClient.query('CREATE TABLE magios2 (id TEXT, data TEXT)');
+}
+
+paginate = (array, page_size, page_number) => {
     return array.slice((page_number - 1) * page_size, page_number * page_size);
 }
 
