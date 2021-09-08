@@ -230,14 +230,14 @@ client.on('message', async (message) => {
                     paginatedUsers.forEach(user => {
                 
                         embed.addFields(
-                                { name: '------------------', value: 'Usuario: '+ user.username + ' ('+user.id+')', inline: false },
-                                { name: '1. Tiempo en canal audio', value: user.voiceChannelTotalTime || 0, inline: true },
-                                { name: '2. Cant. ingresos canal audio', value: user.joinVoiceChannelCount || 0, inline: true },
-                                { name: '3. Ultimo acceso canal audio', value: user.lastVoiceChannelAccess || '-', inline: true },
-                                { name: '4. Nom. ultimo canal de audio', value: user.lastVoiceChannelName || '-', inline: true },
-                                { name: '5. Cant. de msg.', value: user.msgChannelCount || 0, inline: true },
-                                { name: '6. Nom. ultimo canal de texto', value: user.lastTextChannelName || '-', inline: true },
-                                { name: '7. Fecha de ultimo mensaje', value: user.lastTextChannelDate.format('DD/MM/YYYY HH:mm:ss') || '-', inline: true }
+                                { name: '----------------', value: 'Usuario: '+ user.username + ' ('+user.id+')', inline: false },
+                                { name: '1. Canal audio (seg.)', value: user.voiceChannelTotalTime || 0, inline: true },
+                                { name: '2. Ingresos audio (cant.)', value: user.joinVoiceChannelCount || 0, inline: true },
+                                { name: '3. Ultimo acceso audio (fec.)', value: user.lastVoiceChannelAccess || '-', inline: true },
+                                { name: '4. Canal audio', value: user.lastVoiceChannelName || '-', inline: true },
+                                { name: '5. Mensajes (cant.)', value: user.msgChannelCount || 0, inline: true },
+                                { name: '6. Canal texto', value: user.lastTextChannelName || '-', inline: true },
+                                { name: '7. Ultimo mensaje (fec.)', value: user.lastTextChannelDate.format('DD/MM/YYYY HH:mm:ss') || '-', inline: true }
                             )
                     })
                     REPORT_CHANNEL.send(embed);
@@ -259,14 +259,14 @@ client.on('message', async (message) => {
                     .setThumbnail('https://cdn.discordapp.com/avatars/' + user.id + '/' + user.avatar + '.jpg');
                     
                     embed.addFields(
-                            { name: '------------------------------------------', value: 'Usuario: '+ user.username + ' ('+user.id+')', inline: false },
-                            { name: '1. Tiempo en canal audio', value: user.voiceChannelTotalTime || 0, inline: true },
-                            { name: '2. Cant. ingresos canal audio', value: user.joinVoiceChannelCount || 0, inline: true },
-                            { name: '3. Ultimo acceso canal audio', value: user.lastVoiceChannelAccess || '-', inline: true },
-                            { name: '4. Nom. ultimo canal de audio', value: user.lastVoiceChannelName || '-', inline: true },
-                            { name: '5. Cant. de msg.', value: user.msgChannelCount || 0, inline: true },
-                            { name: '6. Nom. ultimo canal de texto', value: user.lastTextChannelName || '-', inline: true },
-                            { name: '7. Fecha de ultimo mensaje', value: user.lastTextChannelDate || '-', inline: true }
+                        { name: '----------------', value: 'Usuario: '+ user.username + ' ('+user.id+')', inline: false },
+                        { name: '1. Canal audio (seg.)', value: user.voiceChannelTotalTime || 0, inline: true },
+                        { name: '2. Ingresos audio (cant.)', value: user.joinVoiceChannelCount || 0, inline: true },
+                        { name: '3. Ultimo acceso audio (fec.)', value: user.lastVoiceChannelAccess || '-', inline: true },
+                        { name: '4. Canal audio', value: user.lastVoiceChannelName || '-', inline: true },
+                        { name: '5. Mensajes (cant.)', value: user.msgChannelCount || 0, inline: true },
+                        { name: '6. Canal texto', value: user.lastTextChannelName || '-', inline: true },
+                        { name: '7. Ultimo mensaje (fec.)', value: user.lastTextChannelDate.format('DD/MM/YYYY HH:mm:ss') || '-', inline: true }
                         )
                 
                     REPORT_CHANNEL.send(embed);
