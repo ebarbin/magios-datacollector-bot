@@ -233,18 +233,9 @@ client.on('message', async (message) => {
 
             } else if (message.content == '!clear') {
 
-                const newChannel = await REPORT_CHANNEL.clone()
-                console.log(newChannel.id) // Do with this new channel ID what you want
-            
-                // Delete old channel
-                REPORT_CHANNEL.delete()
-
-                /*const fetched = await REPORT_CHANNEL.fetchMessages({limit: 99});
-                REPORT_CHANNEL.bulkDelete(fetched);*/
-
-                /*REPORT_CHANNEL.messages.fetch().then(ms => { 
+                REPORT_CHANNEL.messages.fetch().then(ms => { 
                     ms.forEach(msg => msg.delete() );
-                }).catch();*/
+                }).catch();
 
             } else if (message.content == '!list') {
 
