@@ -230,15 +230,17 @@ client.on('message', async (message) => {
                     paginatedUsers.forEach(user => {
                 
                         embed.addFields(
-                                { name: '----------------', value: 'Usuario: '+ user.username + ' ('+user.id+')', inline: false },
-                                { name: '1. Canal audio (seg.)', value: user.voiceChannelTotalTime || 0, inline: true },
-                                { name: '2. Ingresos audio (cant.)', value: user.joinVoiceChannelCount || 0, inline: true },
-                                { name: '3. Ultimo acceso audio (fec.)', value: user.lastVoiceChannelAccess || '-', inline: true },
-                                { name: '4. Canal audio', value: user.lastVoiceChannelName || '-', inline: true },
-                                { name: '5. Mensajes (cant.)', value: user.msgChannelCount || 0, inline: true },
-                                { name: '6. Canal texto', value: user.lastTextChannelName || '-', inline: true },
-                                { name: '7. Ultimo mensaje (fec.)', value: user.lastTextChannelDate.format('DD/MM/YYYY HH:mm:ss') || '-', inline: true },
-                                { name: 'Ingreso (fec.)', value: user.joinDate ? user.joinDate : '-', inline: false }
+                            { name: '------', value: user.username + ' ('+user.id+')', inline: false },
+                            { name: 'Ingreso', value: user.joinDate ? user.joinDate : '-', inline: false },
+                            { name: 'Ultimo mensaje', value: user.lastTextChannelDate.format('DD/MM/YYYY HH:mm:ss') || '-', inline: true },
+                            /*{ name: '1. Canal audio (seg.)', value: user.voiceChannelTotalTime || 0, inline: true },
+                            { name: '2. Ingresos audio (cant.)', value: user.joinVoiceChannelCount || 0, inline: true },
+                            { name: '3. Ultimo acceso audio (fec.)', value: user.lastVoiceChannelAccess || '-', inline: true },
+                            { name: '4. Canal audio', value: user.lastVoiceChannelName || '-', inline: true },
+                            { name: '5. Mensajes (cant.)', value: user.msgChannelCount || 0, inline: true },
+                            { name: '6. Canal texto', value: user.lastTextChannelName || '-', inline: true },
+                            { name: '7. Ultimo mensaje (fec.)', value: user.lastTextChannelDate.format('DD/MM/YYYY HH:mm:ss') || '-', inline: true },
+                            { name: 'Ingreso (fec.)', value: user.joinDate ? user.joinDate : '-', inline: false }*/
                             )
                     })
                     REPORT_CHANNEL.send(embed);
@@ -260,15 +262,17 @@ client.on('message', async (message) => {
                     .setThumbnail('https://cdn.discordapp.com/avatars/' + user.id + '/' + user.avatar + '.jpg');
                     
                     embed.addFields(
-                        { name: '----------------', value: 'Usuario: '+ user.username + ' ('+user.id+')', inline: false },
-                        { name: '1. Canal audio (seg.)', value: user.voiceChannelTotalTime || 0, inline: true },
+                        { name: '------', value: user.username + ' ('+user.id+')', inline: false },
+                        { name: 'Ingreso', value: user.joinDate ? user.joinDate : '-', inline: false },
+                        { name: 'Ultimo mensaje', value: user.lastTextChannelDate.format('DD/MM/YYYY HH:mm:ss') || '-', inline: true },
+                        /*{ name: '1. Canal audio (seg.)', value: user.voiceChannelTotalTime || 0, inline: true },
                         { name: '2. Ingresos audio (cant.)', value: user.joinVoiceChannelCount || 0, inline: true },
                         { name: '3. Ultimo acceso audio (fec.)', value: user.lastVoiceChannelAccess || '-', inline: true },
                         { name: '4. Canal audio', value: user.lastVoiceChannelName || '-', inline: true },
                         { name: '5. Mensajes (cant.)', value: user.msgChannelCount || 0, inline: true },
                         { name: '6. Canal texto', value: user.lastTextChannelName || '-', inline: true },
                         { name: '7. Ultimo mensaje (fec.)', value: user.lastTextChannelDate.format('DD/MM/YYYY HH:mm:ss') || '-', inline: true },
-                        { name: 'Ingreso (fec.)', value: user.joinDate ? user.joinDate : '-', inline: false }
+                        { name: 'Ingreso (fec.)', value: user.joinDate ? user.joinDate : '-', inline: false }*/
                         )
                 
                     REPORT_CHANNEL.send(embed);
@@ -276,7 +280,7 @@ client.on('message', async (message) => {
             }
 
         } else if (message.content.indexOf('!setval') >= 0) {
-
+            /*
             const arr = message.content.split(' ');
             if (arr.length == 4) {
                 const paramId = arr[1].trim();
@@ -329,7 +333,7 @@ client.on('message', async (message) => {
 
                     await updateUser(user);
                 }
-            }
+            }*/
         }
 
         message.delete();
