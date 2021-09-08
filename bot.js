@@ -110,7 +110,7 @@ client.on('voiceStateUpdate', async (oldMember, newMember) => {
 
 
  updateUser = async (user) => {
-    const query = { text: 'UPDATE magios SET data = $2 WHERE id == $1', values: [user.id, JSON.stringify(user)] };
+    const query = { text: 'UPDATE magios2 SET data = $2 WHERE id = $1', values: [user.id, JSON.stringify(user)] };
     const res = await postgresClient.query(query);
  }
 
@@ -129,7 +129,6 @@ client.on('voiceStateUpdate', async (oldMember, newMember) => {
             return null;
         }
       } catch (err) {
-        console.log(err.stack)
       }
 }
 
@@ -145,7 +144,6 @@ getAllUsers = async () => {
         }
         return result;
       } catch (err) {
-        console.log(err.stack)
       }
 }
 
@@ -249,8 +247,10 @@ client.on('message', async (message) => {
 
             } else if (message.content == '!list') {
 
-                const users = await getAllUsers();
+                let users = await getAllUsers();
 
+                console.log('Usuarios: ' + users.length);
+                
                 const pageSize = 3;
                 const pages = Math.round(users.length / pageSize);
                 
