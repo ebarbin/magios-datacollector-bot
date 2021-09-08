@@ -216,7 +216,7 @@ client.on('message', async (message) => {
                 u.lastTextChannelDate = moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss');
                 return u;
             })
-            users = _.orderBy(users, 'lastTextChannelDate', 'desc');
+            users = _.orderBy(users, ['joinDate', 'lastTextChannelDate'], 'asc');
 
             for (let i = 1; i <= pages; i++) {
                 
