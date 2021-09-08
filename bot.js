@@ -222,7 +222,7 @@ client.on('message', async (message) => {
                     paginatedUsers.forEach(user => {
                 
                         embed.addFields(
-                            { name: user.username, value: '('+user.id+')', inline: false },
+                            { name: '--> ' + user.username, value: '('+user.id+')', inline: false },
                             { name: 'Ingreso', value: user.joinDate ? user.joinDate : '-', inline: true },
                             { name: 'Ultimo mensaje', value: user.lastTextChannelDate || '-', inline: true },
                             /*{ name: '1. Canal audio (seg.)', value: user.voiceChannelTotalTime || 0, inline: true },
@@ -254,7 +254,7 @@ client.on('message', async (message) => {
                     .setThumbnail('https://cdn.discordapp.com/avatars/' + user.id + '/' + user.avatar + '.jpg');
                     
                     embed.addFields(
-                        { name: '---> ' + user.username, value:'('+user.id+')', inline: false },
+                        { name: user.username, value:'('+user.id+')', inline: false },
                         { name: '1. Canal audio (seg.)', value: user.voiceChannelTotalTime || 0, inline: true },
                         { name: '2. Ingresos audio (cant.)', value: user.joinVoiceChannelCount || 0, inline: true },
                         { name: '3. Ultimo acceso audio (fec.)', value: user.lastVoiceChannelAccess || '-', inline: true },
