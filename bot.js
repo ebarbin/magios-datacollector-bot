@@ -37,7 +37,7 @@ client.once('ready', async () => {
     postgresClient.connect();
 });
 
-client.on('guildMemberAdd', member => {
+client.on('guildMemberAdd', async member => {
     const user = member.user;
     let dataBaseUser = await getUser(user.id);
     if (!dataBaseUser) {
