@@ -307,20 +307,19 @@ cron.schedule('*/2 * * * *', () => {
 checkNewUserAtStartup = () => { 
     GUILD.members.fetch().then((members) =>
         members.forEach((member) => {
-            if (member.user.bot) continue;
-
-            const roles = getUserRoles(member);
-            
-            getUser(member.user.id).then(dbUser => {
-                if (!dbUser) {
-                    const newUser = createEmptyUser(member.user);
-                    newUser.roles = roles;
-                    saveUser(newUser);
-                } else {
-                    dbUser.roles = roles;
-                    updateUser(dbUser);
-                }
-            })
+            if (!member.user.bot) {
+                const roles = getUserRoles(member);
+                getUser(member.user.id).then(dbUser => {
+                    if (!dbUser) {
+                        const newUser = createEmptyUser(member.user);
+                        newUser.roles = roles;
+                        saveUser(newUser);
+                    } else {
+                        dbUser.roles = roles;
+                        updateUser(dbUser);
+                    }
+                })
+            }
         })
     );
 }
