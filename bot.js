@@ -174,7 +174,40 @@ client.on('message', async (message) => {
                         })
                         message.channel.send(embed);
                 }
+
+            } else if (message.content.indexOf('!getid') >= 0) {
+
+                const arr = message.content.split(' ');
+                if (arr.length == 2) {
+                    const param = arr[1].trim();    
+    
+                    const uuser = await getUser(param);
+    
+                    if (uuser) {
+                        let embed = new MessageEmbed()
+                        .setTitle('Detalle usuario')
+                        .setColor('#00830b')
+                        .setTimestamp()
+                        .setThumbnail('https://cdn.discordapp.com/avatars/' + uuser.id + '/' + uuser.avatar + '.jpg');
+                        
+                        embed.addFields(
+                            { name: uuser.username, value:'('+uuser.id+')', inline: false },
+                            { name: '1. Canal audio (seg.)', value: uuser.voiceChannelTotalTime || 0, inline: true },
+                            { name: '2. Ingresos audio (cant.)', value: uuser.joinVoiceChannelCount || 0, inline: true },
+                            { name: '3. Ultimo acceso audio (fec.)', value: uuser.lastVoiceChannelAccess || '-', inline: true },
+                            { name: '4. Canal audio', value: uuser.lastVoiceChannelName || '-', inline: true },
+                            { name: '5. Mensajes (cant.)', value: uuser.msgChannelCount || 0, inline: true },
+                            { name: '6. Canal texto', value: uuser.lastTextChannelName || '-', inline: true },
+                            { name: '7. Ultimo mensaje (fec.)', value: uuser.lastTextChannelDate || '-', inline: true },
+                            { name: 'Ingreso (fec.)', value: uuser.joinDate ? uuser.joinDate : '-', inline: false }
+                            )
+                    
+                        message.send(embed);
+                    }
+                }
+    
             }
+            
         }
 
     } else if (message.channel.parent.name != 'ADMIN') {
