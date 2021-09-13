@@ -27,6 +27,7 @@ const client = new DiscordClient({
 
 const REPORT_CHANNEL_NAME = 'report';
 const ADMIN_GENERAL_CHANNEL_NAME = 'admin-general';
+const GUILD_ID = '628750110821449739';
 
 let REPORT_CHANNEL;
 
@@ -36,6 +37,8 @@ client.once('ready', async () => {
     REPORT_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === REPORT_CHANNEL_NAME);
     console.log('Discord bot is connected.')
     postgresClient.connect();
+
+    checkNewUserAtStartup();
 });
 
 client.on('guildMemberAdd', async member => {
@@ -84,19 +87,7 @@ client.on('voiceStateUpdate', async (oldMember, newMember) => {
     
     if (!dataBaseUser) {
         
-        let newUser = {
-            id: joinUser.id,
-            avatar: joinUser.avatar,
-            username: joinUser.username,
-            voiceChannelTotalTime: 0,
-            joinVoiceChannelCount: 0,
-            msgChannelCount: 0,
-            lastVoiceChannelAccessDate: null,
-            lastVoiceChannelName: null,
-            lastTextChannelName: null,
-            lastTextChannelDate: null,
-            modules: []
-        };
+        const newUser = createEmptyUser(joinUser);
 
         if (join) {
             newUser.joinVoiceChannelCount = 1;
@@ -168,20 +159,9 @@ client.on('message', async (message) => {
 
         if (!dataBaseUser) {
 
-            let newUser = {
-                id: message.author.id,
-                username: message.author.username,
-                avatar: message.author.avatar,
-                voiceChannelTotalTime: 0,
-                joinVoiceChannelCount: 0,
-                msgChannelCount: 0,
-                lastVoiceChannelAccessDate: null,
-                lastVoiceChannelName: null,
-                lastTextChannelName: message.channel.name,
-                lastTextChannelDate: moment().format('DD/MM/YYYY HH:mm:ss'),
-                modules: []
-            };
-    
+            const newUser = createEmptyUser(joinUser);
+            newUser.lastTextChannelName = message.channel.name;
+            newUser.lastTextChannelDate = moment().format('DD/MM/YYYY HH:mm:ss');
             await saveUser(newUser);
 
         } else {
@@ -333,6 +313,35 @@ client.on('message', async (message) => {
 cron.schedule('*/2 * * * *', () => {
     console.log('running a task every two minutes');
 });
+
+checkNewUserAtStartup = () =>{
+    const guild = client.guilds.cache.find((g) => g.id === GUILD_ID );
+    guild.members.fetch().then((members) =>
+        members.forEach((member) => {
+            getUser(member.user.id).then(dbUser => {
+                if (!dbUser) {
+                    saveUser(createEmptyUser(member.user));
+                }
+            })
+        })
+    );
+}
+
+createEmptyUser = (user) => {
+    return {
+        id: user.id,
+        avatar: user.avatar,
+        username: user.username,
+        voiceChannelTotalTime: 0,
+        joinVoiceChannelCount: 0,
+        msgChannelCount: 0,
+        lastVoiceChannelAccessDate: null,
+        lastVoiceChannelName: null,
+        lastTextChannelName: null,
+        lastTextChannelDate: null,
+        modules: []
+    }
+}
 
 updateUser = async (user) => {
     const query = { text: 'UPDATE magios2 SET data = $2 WHERE id = $1', values: [user.id, JSON.stringify(user)] };
