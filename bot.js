@@ -28,6 +28,7 @@ const client = new DiscordClient({
 const REPORT_CHANNEL_NAME = 'report';
 const ADMIN_GENERAL_CHANNEL_NAME = 'admin-general';
 const GUILD_ID = '628750110821449739';
+const AVATAR_BASE_PATH = 'https://cdn.discordapp.com/avatars/';
 
 let REPORT_CHANNEL;
 let GUILD;
@@ -188,7 +189,7 @@ client.on('message', async (message) => {
                         .setTitle('Detalle usuario')
                         .setColor('#00830b')
                         .setTimestamp()
-                        .setThumbnail('https://cdn.discordapp.com/avatars/' + uuser.id + '/' + uuser.avatar + '.jpg');
+                        .setThumbnail(AVATAR_BASE_PATH + uuser.id + '/' + uuser.avatar + '.jpg');
                         
                         embed.addFields(
                             { name: uuser.username, value:'('+uuser.id+')', inline: false },
@@ -342,7 +343,7 @@ client.on('message', async (message) => {
                     .setTitle('Detalle usuario')
                     .setColor('#00830b')
                     .setTimestamp()
-                    .setThumbnail('https://cdn.discordapp.com/avatars/' + user.id + '/' + user.avatar + '.jpg');
+                    .setThumbnail(AVATAR_BASE_PATH + user.id + '/' + user.avatar + '.jpg');
                     
                     embed.addFields(
                         { name: user.username, value:'('+user.id+')', inline: false },
