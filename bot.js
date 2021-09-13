@@ -193,6 +193,7 @@ client.on('message', async (message) => {
                 
                         embed.addFields(
                             { name: '--> ' + user.username, value: '('+user.id+')', inline: false },
+                            { name: 'Rol/es', value: user.roles ? user.roles.join(',') : '-', inline: true },
                             { name: 'Ingreso', value: user.joinDate ? user.joinDate : '-', inline: true },
                             { name: 'Ultimo mensaje', value: user.lastTextChannelDate || '-', inline: true },
                             /*{ name: '1. Canal audio (seg.)', value: user.voiceChannelTotalTime || 0, inline: true },
@@ -229,6 +230,7 @@ client.on('message', async (message) => {
                 
                         embed.addFields(
                             { name: '--> ' + user.username, value: '('+user.id+')', inline: false },
+                            { name: 'Rol/es', value: user.roles ? user.roles.join(',') : '-', inline: true },
                             { name: 'Ingreso', value: user.joinDate ? user.joinDate : '-', inline: true },
                             { name: 'Ultimo mensaje', value: user.lastTextChannelDate || '-', inline: true },
                             /*{ name: '1. Canal audio (seg.)', value: user.voiceChannelTotalTime || 0, inline: true },
@@ -265,6 +267,7 @@ client.on('message', async (message) => {
                 
                         embed.addFields(
                             { name: '--> ' + user.username, value: '('+user.id+')', inline: false },
+                            { name: 'Rol/es', value: user.roles ? user.roles.join(',') : '-', inline: true },
                             { name: 'Ingreso', value: user.joinDate ? user.joinDate : '-', inline: true },
                             { name: 'Ultimo mensaje', value: user.lastTextChannelDate || '-', inline: true },
                             /*{ name: '1. Canal audio (seg.)', value: user.voiceChannelTotalTime || 0, inline: true },
