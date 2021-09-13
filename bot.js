@@ -175,6 +175,36 @@ client.on('message', async (message) => {
                         })
                         message.channel.send(embed);
                 }
+            } else if (message.content == '!magios') {
+
+                let users = await getAllUsers();
+                users = users.filter(u => u.roles && u.roles.find(r => r == 'Magios'));
+                users = _.sortBy(users, [ u => {
+                    return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); 
+                }], ['asc']);
+                
+                const pageSize = 3;
+                const pages = Math.round((users.length +1)/ pageSize);
+    
+                for (let i = 1; i <= pages; i++) {
+                    
+                    let paginatedUsers = paginate(users, pageSize, i);
+    
+                    let embed = new MessageEmbed()
+                        .setTitle('Roles Magios - ' + i + ' de ' + pages)
+                        .setColor('#00830b')
+                        .setTimestamp();
+    
+                        paginatedUsers.forEach(user => {
+                    
+                            embed.addFields(
+                                { name: '--> ' + user.username, value: '('+user.id+')', inline: false },
+                                { name: 'Rol/es', value: user.roles ? user.roles.join(',') : '-', inline: true },
+                                { name: 'Ingreso', value: user.joinDate ? user.joinDate : '-', inline: true },
+                                { name: 'Ultimo mensaje', value: user.lastTextChannelDate || '-', inline: true })
+                        })
+                        message.channel.send(embed);
+                }
 
             } else if (message.content.indexOf('!getid') >= 0) {
 
