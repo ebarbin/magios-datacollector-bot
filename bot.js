@@ -208,6 +208,42 @@ client.on('message', async (message) => {
                     REPORT_CHANNEL.send(embed);
             }
 
+        } else if (message.content == '!newjoiner') {
+
+            let users = await getAllUsers();
+            users = users.filter(user => user.roles && user.roles.find(r == 'NewJoiner'));
+            
+            const pageSize = 3;
+            const pages = Math.round((users.length +1)/ pageSize);
+
+            for (let i = 1; i <= pages; i++) {
+                
+                let paginatedUsers = paginate(users, pageSize, i);
+
+                let embed = new MessageEmbed()
+                    .setTitle('Reporte de actividad ' + i + ' de ' + pages)
+                    .setColor('#00830b')
+                    .setTimestamp();
+
+                    paginatedUsers.forEach(user => {
+                
+                        embed.addFields(
+                            { name: '--> ' + user.username, value: '('+user.id+')', inline: false },
+                            { name: 'Ingreso', value: user.joinDate ? user.joinDate : '-', inline: true },
+                            { name: 'Ultimo mensaje', value: user.lastTextChannelDate || '-', inline: true },
+                            /*{ name: '1. Canal audio (seg.)', value: user.voiceChannelTotalTime || 0, inline: true },
+                            { name: '2. Ingresos audio (cant.)', value: user.joinVoiceChannelCount || 0, inline: true },
+                            { name: '3. Ultimo acceso audio (fec.)', value: user.lastVoiceChannelAccess || '-', inline: true },
+                            { name: '4. Canal audio', value: user.lastVoiceChannelName || '-', inline: true },
+                            { name: '5. Mensajes (cant.)', value: user.msgChannelCount || 0, inline: true },
+                            { name: '6. Canal texto', value: user.lastTextChannelName || '-', inline: true },
+                            { name: '7. Ultimo mensaje (fec.)', value: user.lastTextChannelDate.format('DD/MM/YYYY HH:mm:ss') || '-', inline: true },
+                            { name: 'Ingreso (fec.)', value: user.joinDate ? user.joinDate : '-', inline: false }*/
+                            )
+                    })
+                    REPORT_CHANNEL.send(embed);
+            }
+
         } else if (message.content.indexOf('!getid') >= 0) {
 
             const arr = message.content.split(' ');
