@@ -211,7 +211,7 @@ client.on('message', async (message) => {
         } else if (message.content == '!limbo') {
 
             let users = await getAllUsers();
-            users = users.filter(user => user.roles && user.roles.find(r == 'Limbo'));
+            users = users.filter(user => user.roles && user.roles.find(r => r == 'Limbo'));
             
             const pageSize = 3;
             const pages = Math.round((users.length +1)/ pageSize);
@@ -247,7 +247,7 @@ client.on('message', async (message) => {
         } else if (message.content == '!newjoiner') {
 
             let users = await getAllUsers();
-            users = users.filter(user => user.roles && user.roles.find(r == 'NewJoiner'));
+            users = users.filter(user => user.roles && user.roles.find(r => r == 'NewJoiner'));
             
             const pageSize = 3;
             const pages = Math.round((users.length +1)/ pageSize);
