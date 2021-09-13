@@ -251,7 +251,7 @@ client.on('message', async (message) => {
             let users = await getAllUsers();
             users = users.filter(user => user.roles && user.roles.find(r => r == 'NewJoiner'));
             users = _.sortBy(users, [ u => {
-                return u.lastTextChannelDate && moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); 
+                return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); 
             }], ['asc']);
             
             const pageSize = 3;
