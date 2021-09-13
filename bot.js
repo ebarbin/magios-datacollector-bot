@@ -202,7 +202,7 @@ client.on('message', async (message) => {
                             { name: 'Ingreso (fec.)', value: uuser.joinDate ? uuser.joinDate : '-', inline: false }
                             )
                     
-                        message.send(embed);
+                        message.channel.send(embed);
                     }
                 }
     
