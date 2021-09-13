@@ -30,11 +30,14 @@ const ADMIN_GENERAL_CHANNEL_NAME = 'admin-general';
 const GUILD_ID = '628750110821449739';
 
 let REPORT_CHANNEL;
+let GUILD;
 
 client.login(process.env.DISCORD_BOT_TOKEN);
 
 client.once('ready', async () => { 
     REPORT_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === REPORT_CHANNEL_NAME);
+    GUILD = client.guilds.cache.find((g) => g.id === GUILD_ID );
+
     console.log('Discord bot is connected.')
     postgresClient.connect();
 
@@ -45,54 +48,40 @@ client.on('guildMemberAdd', async member => {
     const user = member.user;
     let dataBaseUser = await getUser(user.id);
     if (!dataBaseUser) {
-        const newUser = {
-            id: user.id,
-            joinDate: moment().format('DD/MM/YYYY HH:mm:ss'),
-            avatar: user.avatar,
-            username: user.username,
-            voiceChannelTotalTime: 0,
-            joinVoiceChannelCount: 0,
-            msgChannelCount: 0,
-            lastVoiceChannelAccessDate: null,
-            lastVoiceChannelName: null,
-            lastTextChannelName: null,
-            lastTextChannelDate: null,
-            modules: []
-        };
+        const roles = getUserRoles(member);
+        const newUser = createEmptyUser(user);
+        newUser.roles = roles;
+        newUser.joinDate = moment().format('DD/MM/YYYY HH:mm:ss');
         await saveUser(newUser);
     }
 });
 
 client.on('voiceStateUpdate', async (oldMember, newMember) => {
     let join = true;
-    let joinUser = null;
-    let channelName = null;
 
+    let entryData;
     if (newMember.channel) {
+        entryData = newMember;
         join = true;
-        joinUser = newMember.member.user;
-        channelName = newMember.channel.name;
-
-        if (newMember.channel.parent.name == 'ADMIN') return;
-
     } else {
+        entryData = oldMember;
         join = false;
-        joinUser = oldMember.member.user;
-        channelName = oldMember.channel.name;
-        
-        if (oldMember.channel.parent.name == 'ADMIN') return;
     }
+
+    if (entryData.channel.parent.name == 'ADMIN') return;
     
-    let dataBaseUser = await getUser(joinUser.id);
-    
+    let dataBaseUser = await getUser(entryData.member.user.id);
+    const roles = getUserRoles(entryData.member);
+
     if (!dataBaseUser) {
-        
-        const newUser = createEmptyUser(joinUser);
+            
+        const newUser = createEmptyUser(entryData.member.user);
+        newUser.roles = roles;
 
         if (join) {
             newUser.joinVoiceChannelCount = 1;
             newUser.lastVoiceChannelAccessDate = moment().format('DD/MM/YYYY HH:mm:ss')
-            newUser.lastVoiceChannelName = channelName;
+            newUser.lastVoiceChannelName = entryData.channel.name;
         }
 
         await saveUser(newUser);
@@ -100,17 +89,18 @@ client.on('voiceStateUpdate', async (oldMember, newMember) => {
     } else {
 
         if (join) {
-            dataBaseUser.avatar = joinUser.avatar;
+            dataBaseUser.avatar = entryData.member.user.avatar;
             dataBaseUser.joinVoiceChannelCount = parseInt(dataBaseUser.joinVoiceChannelCount) + 1
             dataBaseUser.lastVoiceChannelAccessDate = moment().format('DD/MM/YYYY HH:mm:ss');
-            dataBaseUser.lastVoiceChannelName = channelName;
+            dataBaseUser.lastVoiceChannelName = entryData.channel.name;
         } else {
             const now = moment(new Date(), 'DD/MM/YYYY HH:mm:ss');
             const lastVoiceChannelAccessDate = moment(dataBaseUser.lastVoiceChannelAccessDate, 'DD/MM/YYYY HH:mm:ss');
             dataBaseUser.voiceChannelTotalTime = dataBaseUser.voiceChannelTotalTime + now.diff(lastVoiceChannelAccessDate, 'seconds');
-            dataBaseUser.avatar = joinUser.avatar;
+            dataBaseUser.avatar = entryData.member.user.avatar;
         }
-
+        
+        dataBaseUser.roles = roles;
         await updateUser(dataBaseUser);
     }
  });
@@ -314,17 +304,36 @@ cron.schedule('*/2 * * * *', () => {
     console.log('running a task every two minutes');
 });
 
-checkNewUserAtStartup = () =>{
-    const guild = client.guilds.cache.find((g) => g.id === GUILD_ID );
-    guild.members.fetch().then((members) =>
+checkNewUserAtStartup = () => { 
+    GUILD.members.fetch().then((members) =>
         members.forEach((member) => {
+            if (member.user.bot) continue;
+
+            const roles = getUserRoles(member);
+            
             getUser(member.user.id).then(dbUser => {
                 if (!dbUser) {
-                    saveUser(createEmptyUser(member.user));
+                    const newUser = createEmptyUser(member.user);
+                    newUser.roles = roles;
+                    saveUser(newUser);
+                } else {
+                    dbUser.roles = roles;
+                    updateUser(dbUser);
                 }
             })
         })
     );
+}
+
+getUserRoles = (member) => {
+    const roles = [];
+    member.roles.cache.forEach(role => {
+        let rol = GUILD.roles.cache.find(r => r.id == role.id)
+        if (rol.name != '@everyone') {
+            roles.push(rol.name);
+        }
+    });
+    return roles;
 }
 
 createEmptyUser = (user) => {
