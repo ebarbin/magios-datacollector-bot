@@ -2,6 +2,9 @@ require('dotenv').config();
 const express = require('express');
 const cron = require('node-cron');
 
+const _ = require('lodash');
+const moment = require('moment');
+
 const DiscordClient = require('discord.js').Client;
 const MessageEmbed = require('discord.js').MessageEmbed;
 const IntentsClient = require('discord.js').Intents;
@@ -16,10 +19,7 @@ const postgresClient = new PostgresClient({
     password: process.env.POSTGRES_PASSWORD,
     port: process.env.POSTGRES_PORT,
     ssl: true
-})
-
-const _ = require('lodash');
-const moment = require('moment');
+});
 
 const client = new DiscordClient({
     intents: [IntentsClient.FLAGS.GUILDS, IntentsClient.FLAGS.GUILD_MESSAGES, IntentsClient.FLAGS.GUILD_MESSAGE_REACTIONS]
@@ -109,41 +109,75 @@ client.on('message', async (message) => {
     if (message.author.bot) return;
     
     if (message.channel.type == 'dm') {
-/*
-        let dataBaseUser = await getUser(message.author.id);
 
-        if (!dataBaseUser) {
-            let newUser = {
-                id: message.author.id,
-                username: message.author.username,
-                avatar: message.author.avatar,
-                voiceChannelTotalTime: 0,
-                joinVoiceChannelCount: 0,
-                msgChannelCount: 0,
-                lastVoiceChannelAccessDate: null,
-                lastVoiceChannelName: null,
-                lastTextChannelName: channel.name,
-                lastTextChannelDate: moment().format('DD/MM/YYYY HH:mm:ss'),
-                modules: []
-            };
-            DATABASE.users.push(newUser);
-            dataBaseUser = newUser;
-        }
+        const user = await getUser(message.author.id);
+        if (user && user.roles && user.roles.find(r => r == 'Admins')) {
 
-        if (message.content.indexOf('!add') >= 0) {
-            const values = message.content.split(' ');
-            if (values.length == 2) {
-                if (!dataBaseUser.modules) {
-                    dataBaseUser.modules = [values[1]];
-                    updateDateBase();
-                } else if (dataBaseUser.modules.find(module => module == values[1])) {
-                    dataBaseUser.modules.push(values[1]);
-                    updateDateBase();
+            if (message.content == '!limbo') {
+
+                let users = await getAllUsers();
+                users = users.filter(u => u.roles && u.roles.find(r => r == 'Limbo'));
+                users = _.sortBy(users, [ u => {
+                    return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); 
+                }], ['asc']);
+                
+                const pageSize = 3;
+                const pages = Math.round((users.length +1)/ pageSize);
+    
+                for (let i = 1; i <= pages; i++) {
+                    
+                    let paginatedUsers = paginate(users, pageSize, i);
+    
+                    let embed = new MessageEmbed()
+                        .setTitle('Reporte rol Limbo ' + i + ' de ' + pages)
+                        .setColor('#00830b')
+                        .setTimestamp();
+    
+                        paginatedUsers.forEach(user => {
+                    
+                            embed.addFields(
+                                { name: '--> ' + user.username, value: '('+user.id+')', inline: false },
+                                { name: 'Rol/es', value: user.roles ? user.roles.join(',') : '-', inline: true },
+                                { name: 'Ingreso', value: user.joinDate ? user.joinDate : '-', inline: true },
+                                { name: 'Ultimo mensaje', value: user.lastTextChannelDate || '-', inline: true })
+                        })
+                        message.channel.send(embed);
+                }
+    
+            } else if (message.content == '!newjoiner') {
+
+                let users = await getAllUsers();
+                users = users.filter(u => u.roles && u.roles.find(r => r == 'NewJoiner'));
+                users = _.sortBy(users, [ u => {
+                    return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); 
+                }], ['asc']);
+                
+                const pageSize = 3;
+                const pages = Math.round((users.length +1)/ pageSize);
+    
+                for (let i = 1; i <= pages; i++) {
+                    
+                    let paginatedUsers = paginate(users, pageSize, i);
+    
+                    let embed = new MessageEmbed()
+                        .setTitle('Reporte rol NewJoiner' + i + ' de ' + pages)
+                        .setColor('#00830b')
+                        .setTimestamp();
+    
+                        paginatedUsers.forEach(user => {
+                    
+                            embed.addFields(
+                                { name: '--> ' + user.username, value: '('+user.id+')', inline: false },
+                                { name: 'Rol/es', value: user.roles ? user.roles.join(',') : '-', inline: true },
+                                { name: 'Ingreso', value: user.joinDate ? user.joinDate : '-', inline: true },
+                                { name: 'Ultimo mensaje', value: user.lastTextChannelDate || '-', inline: true })
+                        })
+                        message.channel.send(embed);
                 }
             }
-        }*/
+        }
 
-        } else if (message.channel.parent.name != 'ADMIN') {
+    } else if (message.channel.parent.name != 'ADMIN') {
 
         let dataBaseUser = await getUser(message.author.id);
 
@@ -195,16 +229,7 @@ client.on('message', async (message) => {
                             { name: '--> ' + user.username, value: '('+user.id+')', inline: false },
                             { name: 'Rol/es', value: user.roles ? user.roles.join(',') : '-', inline: true },
                             { name: 'Ingreso', value: user.joinDate ? user.joinDate : '-', inline: true },
-                            { name: 'Ultimo mensaje', value: user.lastTextChannelDate || '-', inline: true },
-                            /*{ name: '1. Canal audio (seg.)', value: user.voiceChannelTotalTime || 0, inline: true },
-                            { name: '2. Ingresos audio (cant.)', value: user.joinVoiceChannelCount || 0, inline: true },
-                            { name: '3. Ultimo acceso audio (fec.)', value: user.lastVoiceChannelAccess || '-', inline: true },
-                            { name: '4. Canal audio', value: user.lastVoiceChannelName || '-', inline: true },
-                            { name: '5. Mensajes (cant.)', value: user.msgChannelCount || 0, inline: true },
-                            { name: '6. Canal texto', value: user.lastTextChannelName || '-', inline: true },
-                            { name: '7. Ultimo mensaje (fec.)', value: user.lastTextChannelDate.format('DD/MM/YYYY HH:mm:ss') || '-', inline: true },
-                            { name: 'Ingreso (fec.)', value: user.joinDate ? user.joinDate : '-', inline: false }*/
-                            )
+                            { name: 'Ultimo mensaje', value: user.lastTextChannelDate || '-', inline: true })
                     })
                     REPORT_CHANNEL.send(embed);
             }
@@ -225,7 +250,7 @@ client.on('message', async (message) => {
                 let paginatedUsers = paginate(users, pageSize, i);
 
                 let embed = new MessageEmbed()
-                    .setTitle('Reporte de actividad ' + i + ' de ' + pages)
+                    .setTitle('Reporte rol Limbo ' + i + ' de ' + pages)
                     .setColor('#00830b')
                     .setTimestamp();
 
@@ -235,16 +260,7 @@ client.on('message', async (message) => {
                             { name: '--> ' + user.username, value: '('+user.id+')', inline: false },
                             { name: 'Rol/es', value: user.roles ? user.roles.join(',') : '-', inline: true },
                             { name: 'Ingreso', value: user.joinDate ? user.joinDate : '-', inline: true },
-                            { name: 'Ultimo mensaje', value: user.lastTextChannelDate || '-', inline: true },
-                            /*{ name: '1. Canal audio (seg.)', value: user.voiceChannelTotalTime || 0, inline: true },
-                            { name: '2. Ingresos audio (cant.)', value: user.joinVoiceChannelCount || 0, inline: true },
-                            { name: '3. Ultimo acceso audio (fec.)', value: user.lastVoiceChannelAccess || '-', inline: true },
-                            { name: '4. Canal audio', value: user.lastVoiceChannelName || '-', inline: true },
-                            { name: '5. Mensajes (cant.)', value: user.msgChannelCount || 0, inline: true },
-                            { name: '6. Canal texto', value: user.lastTextChannelName || '-', inline: true },
-                            { name: '7. Ultimo mensaje (fec.)', value: user.lastTextChannelDate.format('DD/MM/YYYY HH:mm:ss') || '-', inline: true },
-                            { name: 'Ingreso (fec.)', value: user.joinDate ? user.joinDate : '-', inline: false }*/
-                            )
+                            { name: 'Ultimo mensaje', value: user.lastTextChannelDate || '-', inline: true })
                     })
                     REPORT_CHANNEL.send(embed);
             }
@@ -265,7 +281,7 @@ client.on('message', async (message) => {
                 let paginatedUsers = paginate(users, pageSize, i);
 
                 let embed = new MessageEmbed()
-                    .setTitle('Reporte de actividad ' + i + ' de ' + pages)
+                    .setTitle('Reporte rol NewJoiner ' + i + ' de ' + pages)
                     .setColor('#00830b')
                     .setTimestamp();
 
