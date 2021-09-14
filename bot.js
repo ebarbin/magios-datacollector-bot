@@ -36,7 +36,7 @@ const options = {
     footer: {
         height: "10mm",
         contents: {
-            default: '<span style="color: #444;">{{page}}</span>/<span>{{pages}}</span>', // fallback value
+            default: '<span style="text-align: right;color: #444;">{{page}}</span>/<span>{{pages}}</span>',
         }
     }
 };
@@ -260,6 +260,78 @@ client.on('message', async (message) => {
             } else if (message.content == '!download all') {
                 
                 let users = await getAllUsers();
+
+                const document = {
+                    html: TEMPLATE,
+                    data: { users: users, title:'Reporte Todos' },
+                    path: "./magios_report.pdf",
+                    type: "",
+                };
+
+                pdf.create(document, options).then((res) => {
+                    message.channel.send({
+                      files: [res.filename]
+                    });
+                })
+                .catch((error) => {
+                  console.error(error);
+                });
+
+            } else if (message.content == '!download magios') {
+                
+                let users = await getAllUsers();
+                users = users.filter(user => user.roles && user.roles.find(r => r == 'Magios'));
+                users = _.sortBy(users, [ u => {
+                    return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); 
+                }], ['asc']);
+
+                const document = {
+                    html: TEMPLATE,
+                    data: { users: users, title:'Reporte Magios' },
+                    path: "./magios_report.pdf",
+                    type: "",
+                };
+
+                pdf.create(document, options).then((res) => {
+                    message.channel.send({
+                      files: [res.filename]
+                    });
+                })
+                .catch((error) => {
+                  console.error(error);
+                });
+
+            } else if (message.content == '!download limbo') {
+                
+                let users = await getAllUsers();
+                users = users.filter(user => user.roles && user.roles.find(r => r == 'Limbo'));
+                users = _.sortBy(users, [ u => {
+                    return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); 
+                }], ['asc']);
+
+                const document = {
+                    html: TEMPLATE,
+                    data: { users: users, title:'Reporte Limbo'  },
+                    path: "./magios_report.pdf",
+                    type: "",
+                };
+
+                pdf.create(document, options).then((res) => {
+                    message.channel.send({
+                      files: [res.filename]
+                    });
+                })
+                .catch((error) => {
+                  console.error(error);
+                });
+
+            } else if (message.content == '!download newjoiner') {
+                
+                let users = await getAllUsers();
+                users = users.filter(user => user.roles && user.roles.find(r => r == 'NewJoiner'));
+                users = _.sortBy(users, [ u => {
+                    return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); 
+                }], ['asc']);
 
                 const document = {
                     html: TEMPLATE,
