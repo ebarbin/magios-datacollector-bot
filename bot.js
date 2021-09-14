@@ -46,10 +46,13 @@ const client = new DiscordClient({
 });
 
 const REPORT_CHANNEL_NAME = 'report';
+const EVENTOS_CALENDARIO_CHANNEL_NAME = 'eventos-calendario';
+
 const ADMIN_GENERAL_CHANNEL_NAME = 'admin-general';
 const GUILD_ID = '628750110821449739';
 const AVATAR_BASE_PATH = 'https://cdn.discordapp.com/avatars/';
 
+let EVENTOS_CALENDARIO_CHANNEL;
 let REPORT_CHANNEL;
 let GUILD;
 
@@ -57,6 +60,8 @@ client.login(process.env.DISCORD_BOT_TOKEN);
 
 client.once('ready', async () => { 
     REPORT_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === REPORT_CHANNEL_NAME);
+    EVENTOS_CALENDARIO_CHANNEL = client.channels.cache.find(channel => channel.name === EVENTOS_CALENDARIO_CHANNEL_NAME);
+
     GUILD = client.guilds.cache.find((g) => g.id === GUILD_ID );
 
     console.log('Discord bot is connected.')
@@ -563,8 +568,27 @@ client.on('message', async (message) => {
     }
 });
 
-cron.schedule('*/2 * * * *', () => {
-    console.log('running a task every two minutes');
+cron.schedule('*/1440 * * * *', () => {
+    console.log('running a task every 24hs hours');
+    EVENTOS_CALENDARIO_CHANNEL.messages.fetch({ limit: 100 }).then(messages => {
+        messages.forEach(m => {
+            if (m.author.bot && m.author.username == 'sesh' && m.embeds && m.embeds.length > 0) {
+                const embed = m.embeds[0];
+                if (embed.title.indexOf('is starting now!') >= 0) {
+                    const msgId = embed.description.split('/')[embed.description.split('/').length-1].split(')**')[0];
+                    const originalMsg = m.channel.messages.cache.find(msg => msg.id == msgId);
+                    const msgDate = moment(m.createdAt);
+                    const rightNow = moment();
+                    if (rightNow.diff(msgDate, 'hours') >= 24) {
+                        m.delete();
+                        if (originalMsg) {
+                            originalMsg.delete();  
+                        }
+                    }
+                }
+            }
+        })
+    });
 });
 
 checkNewUserAtStartup = () => { 
