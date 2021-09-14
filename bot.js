@@ -264,7 +264,7 @@ client.on('message', async (message) => {
                 const document = {
                     html: TEMPLATE,
                     data: { users: users, title:'Reporte Todos' },
-                    path: "./magios_report.pdf",
+                    path: "./magios_report_all.pdf",
                     type: "",
                 };
 
@@ -288,7 +288,7 @@ client.on('message', async (message) => {
                 const document = {
                     html: TEMPLATE,
                     data: { users: users, title:'Reporte Magios' },
-                    path: "./magios_report.pdf",
+                    path: "./magios_report_magios.pdf",
                     type: "",
                 };
 
@@ -311,8 +311,8 @@ client.on('message', async (message) => {
 
                 const document = {
                     html: TEMPLATE,
-                    data: { users: users, title:'Reporte Limbo'  },
-                    path: "./magios_report.pdf",
+                    data: { users: users, title:'Reporte Limbo' },
+                    path: "./magios_report_limbo.pdf",
                     type: "",
                 };
 
@@ -335,8 +335,8 @@ client.on('message', async (message) => {
 
                 const document = {
                     html: TEMPLATE,
-                    data: { users: users },
-                    path: "./magios_report.pdf",
+                    data: { users: users, title:'Reporte NewJoiner'},
+                    path: "./magios_report_newjoiner.pdf",
                     type: "",
                 };
 
