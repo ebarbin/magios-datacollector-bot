@@ -5,6 +5,10 @@ const cron = require('node-cron');
 const _ = require('lodash');
 const moment = require('moment');
 
+const pdf = require("pdf-creator-node");
+const fs = require("fs");
+const TEMPLATE = fs.readFileSync("template.html", "utf8");
+
 const DiscordClient = require('discord.js').Client;
 const MessageEmbed = require('discord.js').MessageEmbed;
 const IntentsClient = require('discord.js').Intents;
@@ -20,6 +24,22 @@ const postgresClient = new PostgresClient({
     port: process.env.POSTGRES_PORT,
     ssl: true
 });
+
+const options = {
+    format: "A4",
+    orientation: "portrait",
+    border: "10mm",
+    header: {
+        height: "10mm",
+        contents: '<div style="text-align: right;">Los Magios</div>'
+    },
+    footer: {
+        height: "10mm",
+        contents: {
+            default: '<span style="color: #444;">{{page}}</span>/<span>{{pages}}</span>', // fallback value
+        }
+    }
+};
 
 const client = new DiscordClient({
     intents: [IntentsClient.FLAGS.GUILDS, IntentsClient.FLAGS.GUILD_MESSAGES, IntentsClient.FLAGS.GUILD_MESSAGE_REACTIONS]
@@ -236,7 +256,26 @@ client.on('message', async (message) => {
                         message.channel.send(embed);
                     }
                 }
-    
+
+            } else if (message.content == '!download all') {
+                
+                let users = await getAllUsers();
+
+                const document = {
+                    html: TEMPLATE,
+                    data: { users: users },
+                    path: "./magios_report.pdf",
+                    type: "",
+                };
+
+                pdf.create(document, options).then((res) => {
+                    message.channel.send({
+                      files: [res.filename]
+                    });
+                })
+                .catch((error) => {
+                  console.error(error);
+                });
             }
             
         }

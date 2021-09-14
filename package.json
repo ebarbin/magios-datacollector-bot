@@ -23,6 +23,7 @@
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "node-cron": "^3.0.0",
+    "pdf-creator-node": "^2.2.4",
     "pg": "^8.7.1"
   }
 }
