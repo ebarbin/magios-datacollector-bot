@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Los Magios</title>
+  </head>
+  <body>
+    <h1>User List</h1>
+    <table border="1">
+        <thead>
+            <th>Username</th>
+        </thead>
+        <tbody>
+            {{#each users}}
+                <tr>
+                    <td>{{this.username}}</td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+  </body>
+</html>
