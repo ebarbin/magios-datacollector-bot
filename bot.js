@@ -7,7 +7,7 @@ const moment = require('moment');
 
 const pdf = require("pdf-creator-node");
 const fs = require("fs");
-const TEMPLATE = fs.readFileSync("template.html", "utf8");
+const TEMPLATE = fs.readFileSync("assets/template.html", "utf8");
 
 const DiscordClient = require('discord.js').Client;
 const MessageEmbed = require('discord.js').MessageEmbed;
@@ -31,12 +31,12 @@ const options = {
     border: "10mm",
     header: {
         height: "10mm",
-        contents: '<div style="text-align: right;">Los Magios</div>'
+        contents: '<div style="font-size:small; text-align: right;">Los Magios</div>'
     },
     footer: {
         height: "10mm",
         contents: {
-            default: '<span style="text-align: right;color: #444;">{{page}}</span>/<span>{{pages}}</span>',
+            default: '<div style="text-align: right;color: #444;">{{page}}</span>/<span>{{pages}}</div>',
         }
     }
 };
