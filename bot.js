@@ -640,12 +640,12 @@ createEmptyUser = (user) => {
 }
 
 updateUser = async (user) => {
-    const query = { text: 'UPDATE magios2 SET data = $2 WHERE id = $1', values: [user.id, JSON.stringify(user)] };
+    const query = { text: 'UPDATE magios2 SET username = $2, data = $3 WHERE id = $1', values: [user.id, user.username, JSON.stringify(user)] };
     const res = await postgresClient.query(query);
  }
 
  saveUser = async (user) => { 
-    const query = { text: 'INSERT INTO magios2 (id, data) VALUES($1, $2)', values: [user.id, JSON.stringify(user)] };
+    const query = { text: 'INSERT INTO magios2 (id, username, data) VALUES($1, $2, $3)', values: [user.id, user.username, JSON.stringify(user)] };
     const res = await postgresClient.query(query);
  } 
 
