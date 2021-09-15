@@ -715,10 +715,10 @@ app.get('/:id', (req, res) =>{
 
 app.post('/user-join-server', (req, res) => {
 
-    const username = req.body.username;
-    const strDate = req.body.date;
-    const serverId = req.body.serverId;
-    const ip = req.body.ip;
+    const username = req.body.username.trim();
+    const strDate = req.body.date.trim();
+    const serverId = req.body.serverId.trim();
+    const ip = req.body.ip.trim();
 
     findUserByUsername(username).then(user => {
         if (!user) {
