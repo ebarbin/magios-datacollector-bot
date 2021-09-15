@@ -652,7 +652,7 @@ updateUser = async (user) => {
 
  findUserByUsername = async (username) => {
     try {
-        const query =  { text: 'SELECT * FROM magios2 WHERE username like %$1%', values: [username] };
+        const query =  { text: 'SELECT * FROM magios2 WHERE username like $1', values: ['%' + username + '%'] };
         const res = await postgresClient.query(query)
         if (res.rows.length > 0) {
             return JSON.parse(res.rows[0].data);
