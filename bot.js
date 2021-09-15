@@ -723,11 +723,12 @@ app.post('/user-join-server', (req, res) => {
 
     findUserByUsername(username).then(user => {
         if (!user) {
-            ADMIN_GENERAL_CHANNEL.send('Unknow user: ' + user + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '.')
+            ADMIN_GENERAL_CHANNEL.send('Unknow user: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '.')
             console.log('Username: ' + user + ' not exist!');
         } else {
             user.lastServerAccess = moment(strDate, 'DD-MM-YYYY HH:mm.sss').format('DD/MM/YYYY HH:mm:ss');
             user.lastServerId = serverId;
+            user.lastServerAccessIp = ip;
             updateUser(user);
         }
     })
