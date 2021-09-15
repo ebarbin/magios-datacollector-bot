@@ -722,8 +722,8 @@ app.post('/user-join-server', (req, res) => {
 
     findUserByUsername(username).then(user => {
         if (!user) {
-            REPORT_CHANNEL.send('Unknow user: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '.')
-            console.log('Username: ' + username + ' not exist!');
+            REPORT_CHANNEL.send('Unknown user: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '.')
+            console.log('Unknown user: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '.');
         } else {
             user.lastServerAccess = moment(strDate, 'DD-MM-YYYY HH:mm.sss').format('DD/MM/YYYY HH:mm:ss');
             user.lastServerId = serverId;
