@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const bodyParser = require('body-parser');
 const cron = require('node-cron');
 
 const _ = require('lodash');
@@ -686,7 +687,14 @@ paginate = (array, page_size, page_number) => {
 
 const PORT = process.env.PORT || 3000;
 const app = express();
+
+app.use(bodyParser.json());
+
 app.listen(PORT, () => {
     console.log(`App is running on port ${ PORT }`);
 });
 
+app.get('/:id', (req, res) =>{
+    console.log(req.params);
+    res.status(200).send();
+})
