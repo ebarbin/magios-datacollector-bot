@@ -63,7 +63,6 @@ client.login(process.env.DISCORD_BOT_TOKEN);
 client.once('ready', async () => { 
     REPORT_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === REPORT_CHANNEL_NAME);
     EVENTOS_CALENDARIO_CHANNEL = client.channels.cache.find(channel => channel.name === EVENTOS_CALENDARIO_CHANNEL_NAME);
-    ADMIN_GENERAL_CHANNEL = client.channels.cache.find(channel => channel.name === ADMIN_GENERAL_CHANNEL_NAME);
 
     GUILD = client.guilds.cache.find((g) => g.id === GUILD_ID );
 
@@ -723,7 +722,7 @@ app.post('/user-join-server', (req, res) => {
 
     findUserByUsername(username).then(user => {
         if (!user) {
-            ADMIN_GENERAL_CHANNEL.send('Unknow user: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '.')
+            REPORT_CHANNEL.send('Unknow user: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '.')
             console.log('Username: ' + user + ' not exist!');
         } else {
             user.lastServerAccess = moment(strDate, 'DD-MM-YYYY HH:mm.sss').format('DD/MM/YYYY HH:mm:ss');
