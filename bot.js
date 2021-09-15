@@ -649,6 +649,19 @@ updateUser = async (user) => {
     const res = await postgresClient.query(query);
  } 
 
+ findUserByUsername = async (username) => {
+    try {
+        const query =  { text: 'SELECT * FROM magios2 WHERE username like %$1%', values: [username] };
+        const res = await postgresClient.query(query)
+        if (res.rows.length > 0) {
+            return JSON.parse(res.rows[0].data);
+        } else {
+            return null;
+        }
+      } catch (err) {
+      }
+ }
+
  getUser = async (userId) => { 
     try {
         const query =  { text: 'SELECT * FROM magios2 WHERE id = $1', values: [userId] };
@@ -699,7 +712,21 @@ app.get('/:id', (req, res) =>{
     res.status(200).send();
 })
 
-app.post('/user-join-server', (req, res) =>{
-    console.log(req.body);
+app.post('/user-join-server', (req, res) => {
+
+    const username = req.body.username;
+    const strDate = req.body.date;
+    const serverId = req.body.serverId;
+
+    findUserByUsername(username).then(user => {
+        if (!user) {
+            console.log('Username: ' + user + ' not exist!');
+        } else {
+            user.lastServerAccess = moment(strDate, 'DD-MM-YYYY HH:mm.sss').format('DD/MM/YYYY HH:mm:ss');
+            user.lastServerId = serverId;
+            updateUser(user);
+        }
+    })
+
     res.status(200).send();
 })
