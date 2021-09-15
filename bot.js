@@ -701,4 +701,5 @@ app.get('/:id', (req, res) =>{
 
 app.post('/user-join-server', (req, res) =>{
     console.log(req.body);
+    res.status(200).send();
 })
