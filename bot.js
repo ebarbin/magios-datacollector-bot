@@ -716,12 +716,14 @@ app.post('/user-join-server', (req, res) => {
 
     const username = req.body.username;
     const strDate = req.body.date;
+    const serverId = req.body.serverId;
 
     findUserByUsername(username).then(user => {
         if (!user) {
             console.log('Username: ' + user + ' not exist!');
         } else {
             user.lastServerAccess = moment(strDate, 'DD-MM-YYYY HH:mm.sss').format('DD/MM/YYYY HH:mm:ss');
+            user.lastServerId = serverId;
             updateUser(user);
         }
     })
