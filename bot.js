@@ -2,18 +2,18 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const cron = require('node-cron');
-
 const _ = require('lodash');
 const moment = require('moment');
-
 const pdf = require("pdf-creator-node");
 const fs = require("fs");
-const TEMPLATE = fs.readFileSync("assets/template.html", "utf8");
-
 const DiscordClient = require('discord.js').Client;
 const MessageEmbed = require('discord.js').MessageEmbed;
 const IntentsClient = require('discord.js').Intents;
 const PostgresClient = require('pg').Client;
+
+//################################################################################################
+//####################################### INIT CONFIG ############################################
+const TEMPLATE = fs.readFileSync("assets/template.html", "utf8");
 
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
 
@@ -53,13 +53,135 @@ const ADMIN_GENERAL_CHANNEL_NAME = 'admin-general';
 const GUILD_ID = '628750110821449739';
 const AVATAR_BASE_PATH = 'https://cdn.discordapp.com/avatars/';
 
-let ADMIN_GENERAL_CHANNEL;
 let EVENTOS_CALENDARIO_CHANNEL;
 let REPORT_CHANNEL;
 let GUILD;
 
-client.login(process.env.DISCORD_BOT_TOKEN);
+const PORT = process.env.PORT || 3000;
+const app = express();
 
+app.use(bodyParser.json());
+
+app.listen(PORT, () => {
+    console.log(`App is running on port ${ PORT }`);
+});
+
+client.login(process.env.DISCORD_BOT_TOKEN);
+//####################################### INIT CONFIG ############################################
+//################################################################################################
+
+//################################################################################################
+//####################################### FUNCTION'S #############################################
+checkNewUserAtStartup = () => { 
+    GUILD.members.fetch().then((members) =>
+        members.forEach((member) => {
+            if (!member.user.bot) {
+                const roles = getUserRoles(member);
+                getUser(member.user.id).then(dbUser => {
+                    if (!dbUser) {
+                        const newUser = createEmptyUser(member.user);
+                        newUser.roles = roles;
+                        saveUser(newUser);
+                    } else {
+                        dbUser.roles = roles;
+                        updateUser(dbUser);
+                    }
+                })
+            }
+        })
+    );
+}
+
+getUserRoles = (member) => {
+    const roles = [];
+    member.roles.cache.forEach(role => {
+        let rol = GUILD.roles.cache.find(r => r.id == role.id)
+        if (rol.name != '@everyone') {
+            roles.push(rol.name);
+        }
+    });
+    return roles;
+}
+
+createEmptyUser = (user) => {
+    return {
+        id: user.id,
+        avatar: user.avatar,
+        username: user.username,
+        voiceChannelTotalTime: 0,
+        joinVoiceChannelCount: 0,
+        msgChannelCount: 0,
+        lastVoiceChannelAccessDate: null,
+        lastVoiceChannelName: null,
+        lastTextChannelName: null,
+        lastTextChannelDate: null,
+        modules: []
+    }
+}
+
+updateUser = async (user) => {
+    const query = { text: 'UPDATE magios2 SET username = $2, data = $3 WHERE id = $1', values: [user.id, user.username, JSON.stringify(user)] };
+    const res = await postgresClient.query(query);
+ }
+
+ saveUser = async (user) => { 
+    const query = { text: 'INSERT INTO magios2 (id, username, data) VALUES($1, $2, $3)', values: [user.id, user.username, JSON.stringify(user)] };
+    const res = await postgresClient.query(query);
+ } 
+
+ findUserByUsername = async (username) => {
+    try {
+        const query =  { text: 'SELECT * FROM magios2 WHERE username like $1', values: ['%' + username + '%'] };
+        const res = await postgresClient.query(query)
+        if (res.rows.length > 0) {
+            return JSON.parse(res.rows[0].data);
+        } else {
+            return null;
+        }
+      } catch (err) {
+      }
+ }
+
+ getUser = async (userId) => { 
+    try {
+        const query =  { text: 'SELECT * FROM magios2 WHERE id = $1', values: [userId] };
+        const res = await postgresClient.query(query)
+        if (res.rows.length > 0) {
+            return JSON.parse(res.rows[0].data);
+        } else {
+            return null;
+        }
+      } catch (err) {
+      }
+}
+
+getAllUsers = async () => {
+    try {
+        const query =  { text: 'SELECT * FROM magios2' };
+        const res = await postgresClient.query(query);
+        const result = [];
+        if (res.rows.length > 0) {
+            for(let i = 0; i < res.rows.length; i++) {
+                result.push(JSON.parse(res.rows[i].data));
+            }
+        }
+        return result;
+      } catch (err) {
+      }
+}
+
+createDataBase = async () => { 
+    const res = await postgresClient.query('CREATE TABLE magios2 (id TEXT, data TEXT)');
+}
+
+paginate = (array, page_size, page_number) => {
+    return array.slice((page_number - 1) * page_size, page_number * page_size);
+}
+//####################################### FUNCTION'S #############################################
+//################################################################################################
+
+//################################################################################################
+//################################### DISCORD EVENT'S ############################################
 client.once('ready', async () => { 
     REPORT_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === REPORT_CHANNEL_NAME);
     EVENTOS_CALENDARIO_CHANNEL = client.channels.cache.find(channel => channel.name === EVENTOS_CALENDARIO_CHANNEL_NAME);
@@ -510,66 +632,16 @@ client.on('message', async (message) => {
             }
 
         } else if (message.content.indexOf('!setval') >= 0) {
-            /*
-            const arr = message.content.split(' ');
-            if (arr.length == 4) {
-                const paramId = arr[1].trim();
-                const prop = Number(arr[2].trim());
-                const val = arr[3].trim();
-
-                let user = await getUser(paramId);
-
-                if (user) {
-
-                    if (!isNaN(prop)) {
-                        switch(prop) {
-                            case 1:
-                                if (!isNaN(val)) {
-                                    user.voiceChannelTotalTime = val;
-                                }
-                                break;
-                            case 2:
-                                if (!isNaN(val)) {
-                                    user.joinVoiceChannelCount = val;
-                                }
-                            break;
-                            case 3:
-                                if (val.length == 19) {
-                                    user.joinVoiceChannelCount = moment(val, 'DD/MM/YYYY HH:mm:ss').format('DD/MM/YYYY HH:mm:ss');
-                                }
-                            break;
-                            case 4:
-                                if (val.length > 0) {
-                                    user.lastVoiceChannelName = val;
-                                }
-                            break;
-                            case 5:
-                                if (!isNaN(val)) {
-                                    user.msgChannelCount = val;
-                                }
-                            break;
-                            case 6:
-                                if (val.length > 0) {
-                                    user.lastTextChannelName = val;
-                                }
-                            break
-                            case 7:
-                                if (val.length == 19) {
-                                    user.lastTextChannelDate = moment(val, 'DD/MM/YYYY HH:mm:ss').format('DD/MM/YYYY HH:mm:ss');
-                                }
-                            break;
-                        }
-                    }
-
-                    await updateUser(user);
-                }
-            }*/
         }
 
         message.delete();
     }
 });
+//################################### DISCORD EVENT'S ############################################
+//################################################################################################
 
+//################################################################################################
+//################################### CRON'S #####################################################
 cron.schedule('*/1440 * * * *', () => {
     console.log('running a task every 24hs hours');
     EVENTOS_CALENDARIO_CHANNEL.messages.fetch({ limit: 100 }).then(messages => {
@@ -592,126 +664,15 @@ cron.schedule('*/1440 * * * *', () => {
         })
     });
 });
+//################################### CRON'S #####################################################
+//################################################################################################
 
-checkNewUserAtStartup = () => { 
-    GUILD.members.fetch().then((members) =>
-        members.forEach((member) => {
-            if (!member.user.bot) {
-                const roles = getUserRoles(member);
-                getUser(member.user.id).then(dbUser => {
-                    if (!dbUser) {
-                        const newUser = createEmptyUser(member.user);
-                        newUser.roles = roles;
-                        saveUser(newUser);
-                    } else {
-                        dbUser.roles = roles;
-                        updateUser(dbUser);
-                    }
-                })
-            }
-        })
-    );
-}
-
-getUserRoles = (member) => {
-    const roles = [];
-    member.roles.cache.forEach(role => {
-        let rol = GUILD.roles.cache.find(r => r.id == role.id)
-        if (rol.name != '@everyone') {
-            roles.push(rol.name);
-        }
-    });
-    return roles;
-}
-
-createEmptyUser = (user) => {
-    return {
-        id: user.id,
-        avatar: user.avatar,
-        username: user.username,
-        voiceChannelTotalTime: 0,
-        joinVoiceChannelCount: 0,
-        msgChannelCount: 0,
-        lastVoiceChannelAccessDate: null,
-        lastVoiceChannelName: null,
-        lastTextChannelName: null,
-        lastTextChannelDate: null,
-        modules: []
-    }
-}
-
-updateUser = async (user) => {
-    const query = { text: 'UPDATE magios2 SET username = $2, data = $3 WHERE id = $1', values: [user.id, user.username, JSON.stringify(user)] };
-    const res = await postgresClient.query(query);
- }
-
- saveUser = async (user) => { 
-    const query = { text: 'INSERT INTO magios2 (id, username, data) VALUES($1, $2, $3)', values: [user.id, user.username, JSON.stringify(user)] };
-    const res = await postgresClient.query(query);
- } 
-
- findUserByUsername = async (username) => {
-    try {
-        const query =  { text: 'SELECT * FROM magios2 WHERE username like $1', values: ['%' + username + '%'] };
-        const res = await postgresClient.query(query)
-        if (res.rows.length > 0) {
-            return JSON.parse(res.rows[0].data);
-        } else {
-            return null;
-        }
-      } catch (err) {
-      }
- }
-
- getUser = async (userId) => { 
-    try {
-        const query =  { text: 'SELECT * FROM magios2 WHERE id = $1', values: [userId] };
-        const res = await postgresClient.query(query)
-        if (res.rows.length > 0) {
-            return JSON.parse(res.rows[0].data);
-        } else {
-            return null;
-        }
-      } catch (err) {
-      }
-}
-
-getAllUsers = async () => {
-    try {
-        const query =  { text: 'SELECT * FROM magios2' };
-        const res = await postgresClient.query(query);
-        const result = [];
-        if (res.rows.length > 0) {
-            for(let i = 0; i < res.rows.length; i++) {
-                result.push(JSON.parse(res.rows[i].data));
-            }
-        }
-        return result;
-      } catch (err) {
-      }
-}
-
-createDataBase = async () => { 
-    const res = await postgresClient.query('CREATE TABLE magios2 (id TEXT, data TEXT)');
-}
-
-paginate = (array, page_size, page_number) => {
-    return array.slice((page_number - 1) * page_size, page_number * page_size);
-}
-
-const PORT = process.env.PORT || 3000;
-const app = express();
-
-app.use(bodyParser.json());
-
-app.listen(PORT, () => {
-    console.log(`App is running on port ${ PORT }`);
-});
-
+//################################################################################################
+//################################### ENDPOINT'S API REST ########################################
 app.get('/:id', (req, res) =>{
     console.log(req.params);
     res.status(200).send();
-})
+});
 
 app.post('/user-join-server', (req, res) => {
 
@@ -733,4 +694,12 @@ app.post('/user-join-server', (req, res) => {
     })
 
     res.status(200).send();
-})
+});
+
+app.get('/server-alive/:serverId', (req, res) => {
+
+    console.log(req.params);
+    res.status(200).send();
+});
+//################################### ENDPOINT'S API REST ########################################
+//################################################################################################
