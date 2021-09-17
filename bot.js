@@ -757,6 +757,7 @@ app.get('/norole', async (req, res) =>{
 
 app.post('/user-join-server', (req, res) => {
 
+    console.log(req.body);
     const username = req.body.username.trim();
     const strDate = req.body.date.trim();
     const serverId = req.body.serverId.trim();
