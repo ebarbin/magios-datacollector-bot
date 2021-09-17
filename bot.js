@@ -53,12 +53,14 @@ const client = new DiscordClient({
 });
 
 const REPORT_CHANNEL_NAME = 'report';
+const SERVER_STATUS_CHANNEL_NAME = 'server-status';
 const EVENTOS_CALENDARIO_CHANNEL_NAME = 'eventos-calendario';
 
 const ADMIN_GENERAL_CHANNEL_NAME = 'admin-general';
 const GUILD_ID = '628750110821449739';
 const AVATAR_BASE_PATH = 'https://cdn.discordapp.com/avatars/';
 
+let SERVER_STATUS_CHANNEL;
 let EVENTOS_CALENDARIO_CHANNEL;
 let REPORT_CHANNEL;
 let GUILD;
@@ -205,7 +207,7 @@ if (ENABLE_DISCORD_EVENTS) {
     client.once('ready', async () => { 
         REPORT_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === REPORT_CHANNEL_NAME);
         EVENTOS_CALENDARIO_CHANNEL = client.channels.cache.find(channel => channel.name === EVENTOS_CALENDARIO_CHANNEL_NAME);
-
+        SERVER_STATUS_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === SERVER_STATUS_CHANNEL_NAME);
         GUILD = client.guilds.cache.find((g) => g.id === GUILD_ID );
 
         console.log(TAG + ' - Discord bot is connected.')
@@ -690,9 +692,15 @@ const serverStatus = [{serverId:1, lastMessage: null}, {serverId:2, lastMessage:
 cron.schedule('*/10 * * * *', () => {
     console.log(TAG + ' - Checking server status - Running a task every 10 minutes.');
 
+    SERVER_STATUS_CHANNEL.messages.fetch().then(ms => { 
+        ms.forEach(msg => msg.delete() );
+    }).catch();
+
     serverStatus.forEach(se => {
         if (!se.lastMessage || moment().diff(se.lastMessage, 'minutes') > 15) {
-            REPORT_CHANNEL.send('Server ' + se. serverId + ' is offline or has not actity registered.');
+            SERVER_STATUS_CHANNEL.send('Server ' + se. serverId + ' is offline or has not actity registered.');
+        } else {
+            SERVER_STATUS_CHANNEL.send('Server ' + se. serverId + ' is online.');
         }
     });
 });
