@@ -66,7 +66,13 @@ let GUILD;
 const PORT = process.env.PORT || 3000;
 const app = express();
 
-app.engine('hbs', expressHbs({layoutsDir:'views/layouts/', extname:'hbs', defaultLayout:'main'}))
+app.engine('hbs', expressHbs({
+        layoutsDir:'views/layouts/', 
+        partialsDir:'views/layouts/',
+        extname:'hbs', 
+        defaultLayout:'main'
+    }));
+
 app.set('view engine', 'hbs')
 app.set('views', 'views');
 
@@ -209,13 +215,15 @@ if (ENABLE_DISCORD_EVENTS) {
 
     client.on('guildMemberAdd', async member => {
         const user = member.user;
-        let dataBaseUser = await getUser(user.id);
-        if (!dataBaseUser) {
-            const roles = getUserRoles(member);
-            const newUser = createEmptyUser(user);
-            newUser.roles = roles;
-            newUser.joinDate = moment().format('DD/MM/YYYY HH:mm:ss');
-            await saveUser(newUser);
+        if (!user.bot) {
+            let dataBaseUser = await getUser(user.id);
+            if (!dataBaseUser) {
+                const roles = getUserRoles(member);
+                const newUser = createEmptyUser(user);
+                newUser.roles = roles;
+                newUser.joinDate = moment().format('DD/MM/YYYY HH:mm:ss');
+                await saveUser(newUser);
+            }
         }
     });
 
@@ -686,6 +694,31 @@ cron.schedule('*/120 * * * *', () => {
 app.get('/', async (req, res) =>{
     const all = await getAllUsers();
     res.status(200).render('index', {users: all});
+});
+
+app.get('/magios', async (req, res) =>{
+    const all = await getAllUsers();
+    const magios = all.filter(u => u.roles && u.roles.find(r => r == 'Magios'));
+
+    res.status(200).render('magios', {users: magios});
+});
+
+app.get('/newjoiners', async (req, res) =>{
+    const all = await getAllUsers();
+    const newJoiner = all.filter(u => u.roles && u.roles.find(r => r == 'NewJoiner'));
+    res.status(200).render('newjoiners', {users: newJoiner});
+});
+
+app.get('/limbo', async (req, res) =>{
+    const all = await getAllUsers();
+    const limbo = all.filter(u => u.roles && u.roles.find(r => r == 'Limbo'));
+    res.status(200).render('limbo', {users: limbo});
+});
+
+app.get('/norole', async (req, res) =>{
+    const all = await getAllUsers();
+    const norole = all.filter(u => !u.roles || u.roles == '');
+    res.status(200).render('norole', {users: norole});
 });
 
 app.post('/user-join-server', (req, res) => {
