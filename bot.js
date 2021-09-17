@@ -693,12 +693,14 @@ cron.schedule('*/120 * * * *', () => {
 //################################### ENDPOINT'S API REST ########################################
 app.get('/', async (req, res) =>{
     const all = await getAllUsers();
+    all = _.sortBy(all, [ u => { return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); }], ['asc']);
     res.status(200).render('index', {users: all});
 });
 
 app.get('/magios', async (req, res) =>{
     const all = await getAllUsers();
     const magios = all.filter(u => u.roles && u.roles.find(r => r == 'Magios'));
+    magios = _.sortBy(magios, [ u => { return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); }], ['asc']);
 
     res.status(200).render('magios', {users: magios});
 });
@@ -706,18 +708,24 @@ app.get('/magios', async (req, res) =>{
 app.get('/newjoiners', async (req, res) =>{
     const all = await getAllUsers();
     const newJoiner = all.filter(u => u.roles && u.roles.find(r => r == 'NewJoiner'));
+    newJoiner = _.sortBy(newJoiner, [ u => { return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); }], ['asc']);
+
     res.status(200).render('newjoiners', {users: newJoiner});
 });
 
 app.get('/limbo', async (req, res) =>{
     const all = await getAllUsers();
     const limbo = all.filter(u => u.roles && u.roles.find(r => r == 'Limbo'));
+    limbo = _.sortBy(limbo, [ u => { return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); }], ['asc']);
+
     res.status(200).render('limbo', {users: limbo});
 });
 
 app.get('/norole', async (req, res) =>{
     const all = await getAllUsers();
     const norole = all.filter(u => !u.roles || u.roles == '');
+    norole = _.sortBy(norole, [ u => { return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); }], ['asc']);
+
     res.status(200).render('norole', {users: norole});
 });
 
