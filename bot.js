@@ -78,6 +78,7 @@ app.engine('hbs', expressHbs({
 app.set('view engine', 'hbs')
 app.set('views', 'views');
 
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -757,7 +758,6 @@ app.get('/norole', async (req, res) =>{
 
 app.post('/user-join-server', (req, res) => {
 
-    console.log(req.body);
     const username = req.body.username.trim();
     const strDate = req.body.date.trim();
     const serverId = req.body.serverId.trim();
