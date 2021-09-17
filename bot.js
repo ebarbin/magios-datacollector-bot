@@ -11,6 +11,8 @@ const MessageEmbed = require('discord.js').MessageEmbed;
 const IntentsClient = require('discord.js').Intents;
 const PostgresClient = require('pg').Client;
 
+const TAG = '[magios-datacollector-bot]';
+
 //################################################################################################
 //####################################### INIT CONFIG ############################################
 const TEMPLATE = fs.readFileSync("assets/template.html", "utf8");
@@ -63,7 +65,7 @@ const app = express();
 app.use(bodyParser.json());
 
 app.listen(PORT, () => {
-    console.log(`App is running on port ${ PORT }`);
+    console.log(`${TAG} - App is running on port ${ PORT }`);
 });
 
 client.login(process.env.DISCORD_BOT_TOKEN);
@@ -188,7 +190,7 @@ client.once('ready', async () => {
 
     GUILD = client.guilds.cache.find((g) => g.id === GUILD_ID );
 
-    console.log('Discord bot is connected.')
+    console.log(TAG + ' - Discord bot is connected.')
     postgresClient.connect();
 
     checkNewUserAtStartup();
@@ -642,8 +644,8 @@ client.on('message', async (message) => {
 
 //################################################################################################
 //################################### CRON'S #####################################################
-cron.schedule('*/1440 * * * *', () => {
-    console.log('running a task every 24hs hours');
+cron.schedule('*/120 * * * *', () => {
+    console.log(TAG + ' - Cleaning old events - Running a task every 2 hours.');
     EVENTOS_CALENDARIO_CHANNEL.messages.fetch({ limit: 100 }).then(messages => {
         messages.forEach(m => {
             if (m.author.bot && m.author.username == 'sesh' && m.embeds && m.embeds.length > 0) {
@@ -683,12 +685,14 @@ app.post('/user-join-server', (req, res) => {
 
     findUserByUsername(username).then(user => {
         if (!user) {
-            REPORT_CHANNEL.send('Unknown user: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '.')
-            console.log('Unknown user: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '.');
+            REPORT_CHANNEL.send('Unknown user: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '.');
+            console.log(TAG + ' - Unknown user: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '.');
         } else {
             user.lastServerAccess = moment(strDate, 'DD-MM-YYYY HH:mm.sss').format('DD/MM/YYYY HH:mm:ss');
             user.lastServerId = serverId;
             user.lastServerAccessIp = ip;
+            REPORT_CHANNEL.send('User: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '. Was updated.');
+            console.log(TAG + ' - User: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '. Was updated.');
             updateUser(user);
         }
     })
@@ -697,8 +701,9 @@ app.post('/user-join-server', (req, res) => {
 });
 
 app.get('/server-alive/:serverId', (req, res) => {
-
-    console.log(req.params);
+    const serverId = req.params.serverId;
+    console.log(TAG + ' -  Server ' + serverId + ' is alive.');
+    
     res.status(200).send();
 });
 //################################### ENDPOINT'S API REST ########################################
