@@ -698,9 +698,17 @@ cron.schedule('*/10 * * * *', () => {
 
     serverStatus.forEach(se => {
         if (!se.lastMessage || moment().diff(se.lastMessage, 'minutes') > 15) {
-            SERVER_STATUS_CHANNEL.send('Server ' + se. serverId + ' is offline or has not actity registered.');
+            const embed = new MessageEmbed()
+                .setTitle('Servidor ' + se.serverId +': OFFLINE')
+                .setColor('#c90000')
+                .setTimestamp()
+            SERVER_STATUS_CHANNEL.send(embed);
         } else {
-            SERVER_STATUS_CHANNEL.send('Server ' + se. serverId + ' is online.');
+            const embed = new MessageEmbed()
+                .setTitle('Servidor ' + se.serverId +': ONLINE')
+                .setColor('#00830b')
+                .setTimestamp()
+            SERVER_STATUS_CHANNEL.send(embed);
         }
     });
 });
