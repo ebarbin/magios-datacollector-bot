@@ -686,6 +686,16 @@ cron.schedule('*/120 * * * *', () => {
         })
     });
 });
+const serverStatus = [{serverId:1, lastMessage: null}, {serverId:2, lastMessage: null}];
+cron.schedule('*/10 * * * *', () => {
+    console.log(TAG + ' - Checking server status - Running a task every 10 minutes.');
+
+    serverStatus.forEach(se => {
+        if (!se.lastMessage || moment().diff(se.lastMessage, 'minutes') > 15) {
+            REPORT_CHANNEL.send('Server ' + se. serverId + ' is offline or has not actity registered.');
+        }
+    });
+});
 //################################### CRON'S #####################################################
 //################################################################################################
 
@@ -756,8 +766,7 @@ app.post('/user-join-server', (req, res) => {
 app.get('/server-alive/:serverId', (req, res) => {
     const serverId = req.params.serverId;
     console.log(TAG + ' -  Server ' + serverId + ' is alive.');
-    
-    res.status(200).send();
+    serverStatus[parseInt(serverId) - 1].lastMessage = moment();
 });
 //################################### ENDPOINT'S API REST ########################################
 //################################################################################################
