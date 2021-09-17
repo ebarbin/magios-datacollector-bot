@@ -88,7 +88,6 @@ app.listen(PORT, () => {
 
 client.login(process.env.DISCORD_BOT_TOKEN);
 postgresClient.connect();
-
 //####################################### INIT CONFIG ############################################
 //################################################################################################
 
@@ -129,7 +128,7 @@ createEmptyUser = (user) => {
     return {
         id: user.id,
         avatar: user.avatar,
-        username: user.username,
+        username: user.username.toLowerCase(),
         voiceChannelTotalTime: 0,
         joinVoiceChannelCount: 0,
         msgChannelCount: 0,
@@ -758,7 +757,7 @@ app.get('/norole', async (req, res) =>{
 
 app.post('/user-join-server', (req, res) => {
 
-    const username = req.body.username.trim();
+    const username = req.body.username.trim().toLowerCase();
     const strDate = req.body.date.trim();
     const serverId = req.body.serverId.trim();
     const ip = req.body.ip.trim();
