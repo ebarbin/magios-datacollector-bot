@@ -767,7 +767,7 @@ app.post('/user-join-server', (req, res) => {
             REPORT_CHANNEL.send('Unknown user: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '.');
             console.log(TAG + ' - Unknown user: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '.');
         } else {
-            user.lastServerAccess = moment(strDate, 'YYYY-MM-DD HH:mm.sss').format('DD/MM/YYYY HH:mm:ss');
+            user.lastServerAccess = strDate;
             user.lastServerId = serverId;
             user.lastServerAccessIp = ip;
             REPORT_CHANNEL.send('User: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '. Was updated.');
