@@ -17,7 +17,7 @@ const TAG = '[magios-datacollector-bot]';
 
 //################################################################################################
 //####################################### INIT CONFIG ############################################
-const ENABLE_DISCORD_EVENTS = false;
+const ENABLE_DISCORD_EVENTS = true;
 
 const TEMPLATE = fs.readFileSync("assets/templates/template.html", "utf8");
 
