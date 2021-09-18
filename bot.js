@@ -783,6 +783,7 @@ app.get('/server-alive/:serverId', (req, res) => {
     const serverId = req.params.serverId;
     console.log(TAG + ' -  Server ' + serverId + ' is alive.');
     serverStatus[parseInt(serverId) - 1].lastMessage = moment();
+    res.status(200).send();
 });
 //################################### ENDPOINT'S API REST ########################################
 //################################################################################################
