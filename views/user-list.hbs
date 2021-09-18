@@ -1,12 +1,13 @@
 {{> menu}}
 <div class="content">
-    <h1>Magios ({{users.length}})</h1>
+    <h1>{{title}} ({{users.length}})</h1>
     <table class="table">
       <thead>
         <tr>
           <th scope="col">Discord ID</th>
           <th scope="col">Username</th>
           <th scope="col">Join date</th>
+          <th scope="col">Roles</th>
           <th scope="col">Last message date</th>
           <th scope="col">Last server access</th>
         </tr>
@@ -17,8 +18,13 @@
               <td scope="row">{{this.id}}</td>
               <th>{{this.username}}</th>
               <td>{{this.joinDate}}</td>
+              <td>{{this.roles}}</td>
               <td>{{this.lastTextChannelDate}}</td>
-              <td>{{this.lastServerId}} - {{this.lastServerAccess}} - {{this.lastServerAccessIp}}</td>
+              {{#if this.lastServerAccess}}
+                <td>Server {{this.lastServerId}} - {{this.lastServerAccess}} - {{this.lastServerAccessIp}}</td>
+              {{else}}
+                <td></td>
+              {{/if}}
             </tr>
         {{/each}}
       </tbody>

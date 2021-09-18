@@ -1,0 +1,17 @@
+{{> menu}}
+<div class="content">
+<h1>Server status</h1>
+
+{{#if server1Status}}
+  <span class="badge rounded-pill bg-primary">Server 1</span>
+{{else}}
+  <span class="badge rounded-pill bg-danger">Server 1</span>
+{{/if}}
+
+{{#if server2Status}}
+  <span class="badge rounded-pill bg-primary">Server 2</span>
+{{else}}
+  <span class="badge rounded-pill bg-danger">Server 2</span>
+{{/if}}
+
+</div>

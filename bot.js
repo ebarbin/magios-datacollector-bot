@@ -17,7 +17,7 @@ const TAG = '[magios-datacollector-bot]';
 
 //################################################################################################
 //####################################### INIT CONFIG ############################################
-const ENABLE_DISCORD_EVENTS = true;
+const ENABLE_DISCORD_EVENTS = false;
 
 const TEMPLATE = fs.readFileSync("public/assets/template.html", "utf8");
 
@@ -688,7 +688,7 @@ cron.schedule('*/120 * * * *', () => {
         })
     });
 });
-const serverStatus = [{serverId:1, lastMessage: null}, {serverId:2, lastMessage: null}];
+const serverStatus = [{serverId:1, lastMessage: null, online: false}, {serverId:2, lastMessage: null, online: false}];
 cron.schedule('*/10 * * * *', () => {
     console.log(TAG + ' - Checking server status - Running a task every 10 minutes.');
 
@@ -698,12 +698,14 @@ cron.schedule('*/10 * * * *', () => {
 
     serverStatus.forEach(se => {
         if (!se.lastMessage || moment().diff(se.lastMessage, 'minutes') > 15) {
+            se.online = true;
             const embed = new MessageEmbed()
                 .setTitle('Servidor ' + se.serverId +': OFFLINE')
                 .setColor('#c90000')
                 .setTimestamp()
             SERVER_STATUS_CHANNEL.send(embed);
         } else {
+            se.online = false;
             const embed = new MessageEmbed()
                 .setTitle('Servidor ' + se.serverId +': ONLINE')
                 .setColor('#00830b')
@@ -717,44 +719,6 @@ cron.schedule('*/10 * * * *', () => {
 
 //################################################################################################
 //################################### ENDPOINT'S API REST ########################################
-app.get('/', async (req, res) =>{
-    let all = await getAllUsers();
-    all = _.sortBy(all, [ u => { return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); }], ['asc']);
-    res.status(200).render('index', {users: all});
-});
-
-app.get('/magios', async (req, res) =>{
-    const all = await getAllUsers();
-    let magios = all.filter(u => u.roles && u.roles.find(r => r == 'Magios'));
-    magios = _.sortBy(magios, [ u => { return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); }], ['asc']);
-
-    res.status(200).render('magios', {users: magios});
-});
-
-app.get('/newjoiners', async (req, res) =>{
-    const all = await getAllUsers();
-    let newJoiner = all.filter(u => u.roles && u.roles.find(r => r == 'NewJoiner'));
-    newJoiner = _.sortBy(newJoiner, [ u => { return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); }], ['asc']);
-
-    res.status(200).render('newjoiners', {users: newJoiner});
-});
-
-app.get('/limbo', async (req, res) =>{
-    const all = await getAllUsers();
-    let limbo = all.filter(u => u.roles && u.roles.find(r => r == 'Limbo'));
-    limbo = _.sortBy(limbo, [ u => { return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); }], ['asc']);
-
-    res.status(200).render('limbo', {users: limbo});
-});
-
-app.get('/norole', async (req, res) =>{
-    const all = await getAllUsers();
-    let norole = all.filter(u => !u.roles || u.roles == '');
-    norole = _.sortBy(norole, [ u => { return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); }], ['asc']);
-
-    res.status(200).render('norole', {users: norole});
-});
-
 app.post('/user-join-server', (req, res) => {
 
     const username = req.body.username.trim().toLowerCase();
@@ -783,7 +747,56 @@ app.get('/server-alive/:serverId', (req, res) => {
     const serverId = req.params.serverId;
     console.log(TAG + ' -  Server ' + serverId + ' is alive.');
     serverStatus[parseInt(serverId) - 1].lastMessage = moment();
+    serverStatus[parseInt(serverId) - 1].online = true;
     res.status(200).send();
 });
+//#############################################################################################
+
+app.get('/', async (req, res) =>{
+    let all = await getAllUsers();
+    all = _.sortBy(all, [ u => { return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); }], ['asc']);
+    res.status(200).render('user-list', {title: 'All users', users: all});
+});
+
+app.get('/magios', async (req, res) =>{
+    const all = await getAllUsers();
+    let magios = all.filter(u => u.roles && u.roles.find(r => r == 'Magios'));
+    magios = _.sortBy(magios, [ u => { return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); }], ['asc']);
+
+    res.status(200).render('user-list', {title: 'Magios', users: magios});
+});
+
+app.get('/newjoiners', async (req, res) =>{
+    const all = await getAllUsers();
+    let newJoiner = all.filter(u => u.roles && u.roles.find(r => r == 'NewJoiner'));
+    newJoiner = _.sortBy(newJoiner, [ u => { return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); }], ['asc']);
+
+    res.status(200).render('user-list', {title: 'NewJoiner', users: newJoiner});
+});
+
+app.get('/limbo', async (req, res) =>{
+    const all = await getAllUsers();
+    let limbo = all.filter(u => u.roles && u.roles.find(r => r == 'Limbo'));
+    limbo = _.sortBy(limbo, [ u => { return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); }], ['asc']);
+
+    res.status(200).render('user-list', {title:'Limbo', users: limbo});
+});
+
+app.get('/norole', async (req, res) =>{
+    const all = await getAllUsers();
+    let norole = all.filter(u => !u.roles || u.roles == '');
+    norole = _.sortBy(norole, [ u => { return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); }], ['asc']);
+
+    res.status(200).render('user-list', {title:'No role', users: norole});
+});
+
+app.get('/server-status', async (req, res) =>{
+    const all = await getAllUsers();
+    let norole = all.filter(u => !u.roles || u.roles == '');
+    norole = _.sortBy(norole, [ u => { return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); }], ['asc']);
+
+    res.status(200).render('server-status', {server1Status: serverStatus[0].online, server2Status: serverStatus[1].online});
+});
+
 //################################### ENDPOINT'S API REST ########################################
 //################################################################################################
