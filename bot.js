@@ -19,7 +19,7 @@ const TAG = '[magios-datacollector-bot]';
 //####################################### INIT CONFIG ############################################
 const ENABLE_DISCORD_EVENTS = false;
 
-const TEMPLATE = fs.readFileSync("public/assets/template.html", "utf8");
+const TEMPLATE = fs.readFileSync("assets/templates/template.html", "utf8");
 
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
 
@@ -80,7 +80,9 @@ app.set('views', 'views');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use('/images',express.static(path.join(__dirname, '/assets/images')));
+app.use('/js',express.static(path.join(__dirname, '/assets/javascripts')));
+app.use('/css',express.static(path.join(__dirname, '/assets/stylesheets')));
 
 app.listen(PORT, () => {
     console.log(`${TAG} - App is running on port ${ PORT }`);
