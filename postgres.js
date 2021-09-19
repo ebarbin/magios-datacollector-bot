@@ -14,9 +14,9 @@ const postgresClient = new PostgresClient({
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
 
 postgresClient.connect().then(() => {
-    console.log(TAG + ' - Database is connected');
+    console.log(TAG + ' - Database is connected.');
 }).catch(err => {
-    console.log(TAG + ' - Error connecting database');
+    console.log(TAG + ' - Error connecting database.');
 });
 
 const updateUser = async (user) => {

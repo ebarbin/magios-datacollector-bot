@@ -6,7 +6,7 @@ const path = require('path');
 const _ = require('lodash');
 const moment = require('moment-timezone');
 
-const commons = require('./common');
+const common = require('./common');
 const datasource = require('./postgres');
 const REPORT_CHANNEL = require('./discord').REPORT_CHANNEL;
 
@@ -41,7 +41,7 @@ app.post('/api/user-join-server', (req, res) => {
             REPORT_CHANNEL.send('Unknown user: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '.');
             console.log(TAG + ' - Unknown user: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '.');
         } else {
-            user.lastServerAccess = commons.getToDay().format('DD/MM/YYYY HH:mm:ss');
+            user.lastServerAccess = common.getToDay().format('DD/MM/YYYY HH:mm:ss');
             user.lastServerId = serverId;
             user.lastServerAccessIp = ip;
             REPORT_CHANNEL.send('User: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '. Was updated.');
@@ -56,8 +56,8 @@ app.post('/api/user-join-server', (req, res) => {
 app.get('/api/server-alive/:serverId', (req, res) => {
     const serverId = req.params.serverId;
     console.log(TAG + ' -  Server ' + serverId + ' is alive.');
-    commons.serverStatus[parseInt(serverId) - 1].lastMessage = commons.getToDay();
-    commons.serverStatus[parseInt(serverId) - 1].online = true;
+    common.serverStatus[parseInt(serverId) - 1].lastMessage = common.getToDay();
+    common.serverStatus[parseInt(serverId) - 1].online = true;
     res.status(200).send();
 });
 
@@ -104,5 +104,5 @@ app.get('/server-status', async (req, res) =>{
     let norole = all.filter(u => !u.roles || u.roles == '');
     norole = _.sortBy(norole, [ u => { return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); }], ['asc']);
 
-    res.status(200).render('server-status', {server1Status: serverStatus[0].online, server2Status: serverStatus[1].online});
+    res.status(200).render('server-status', {server1Status: common.serverStatus[0].online, server2Status: common.serverStatus[1].online});
 });
