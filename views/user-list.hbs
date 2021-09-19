@@ -4,6 +4,7 @@
     <table class="table">
       <thead>
         <tr>
+          <th></th>
           <th scope="col">Discord ID</th>
           <th scope="col">Username</th>
           <th scope="col">Join date</th>
@@ -15,6 +16,7 @@
       <tbody>
         {{#each users}}
             <tr>
+              <td><img class="rounded-circle" width="30" src="https://cdn.discordapp.com/avatars/{{this.id}}/{{this.avatar}}"></td>
               <td scope="row">{{this.id}}</td>
               <th>{{this.username}}</th>
               <td>{{this.joinDate}}</td>

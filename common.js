@@ -1,6 +1,8 @@
 const moment = require('moment-timezone');
 
 const serverStatus = [{serverId:1, lastMessage: null, online: false}, {serverId:2, lastMessage: null, online: false}];
+const AVATAR_BASE_PATH = 'https://cdn.discordapp.com/avatars/';
+const ENABLE_DISCORD_EVENTS = true;
 
 const getToDay = () => {
     return moment.tz('America/Argentina/Buenos_Aires');
@@ -32,3 +34,5 @@ exports.createEmptyUser = createEmptyUser;
 exports.getToDay = getToDay;
 exports.serverStatus = serverStatus;
 exports.exportsOptions = exportsOptions;
+exports.AVATAR_BASE_PATH = AVATAR_BASE_PATH;
+exports.ENABLE_DISCORD_EVENTS = ENABLE_DISCORD_EVENTS;

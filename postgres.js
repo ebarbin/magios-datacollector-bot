@@ -1,5 +1,6 @@
 require('dotenv').config();
 const PostgresClient = require('pg').Client;
+
 const TAG = '[magios-datacollector-bot]';
 
 const postgresClient = new PostgresClient({

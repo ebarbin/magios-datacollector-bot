@@ -12,7 +12,6 @@ const moment = require('moment-timezone');
 const common = require('./common');
 const datasource = require('./postgres');
 
-const ENABLE_DISCORD_EVENTS = true;
 const TAG = '[magios-datacollector-bot]';
 
 const client = new DiscordClient({
@@ -27,7 +26,6 @@ const EVENTOS_CALENDARIO_CHANNEL_NAME = 'eventos-calendario';
 
 const ADMIN_GENERAL_CHANNEL_NAME = 'admin-general';
 const GUILD_ID = '628750110821449739';
-const AVATAR_BASE_PATH = 'https://cdn.discordapp.com/avatars/';
 
 let SERVER_STATUS_CHANNEL;
 let EVENTOS_CALENDARIO_CHANNEL;
@@ -36,7 +34,7 @@ let GUILD;
 
 client.login(process.env.DISCORD_BOT_TOKEN);
 
-if (ENABLE_DISCORD_EVENTS) {
+if (common.ENABLE_DISCORD_EVENTS) {
 
     client.once('ready', async () => { 
         REPORT_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === REPORT_CHANNEL_NAME);
@@ -225,7 +223,7 @@ if (ENABLE_DISCORD_EVENTS) {
                             .setTitle('Detalle usuario')
                             .setColor('#00830b')
                             .setTimestamp()
-                            .setThumbnail(AVATAR_BASE_PATH + uuser.id + '/' + uuser.avatar + '.jpg');
+                            .setThumbnail(common.AVATAR_BASE_PATH + uuser.id + '/' + uuser.avatar + '.jpg');
                             
                             embed.addFields(
                                 { name: uuser.username, value:'('+uuser.id+')', inline: false },
@@ -470,7 +468,7 @@ if (ENABLE_DISCORD_EVENTS) {
                         .setTitle('Detalle usuario')
                         .setColor('#00830b')
                         .setTimestamp()
-                        .setThumbnail(AVATAR_BASE_PATH + user.id + '/' + user.avatar + '.jpg');
+                        .setThumbnail(common.AVATAR_BASE_PATH + user.id + '/' + user.avatar + '.jpg');
                         
                         embed.addFields(
                             { name: user.username, value:'('+user.id+')', inline: false },
