@@ -4,6 +4,7 @@ const DiscordClient = require('discord.js').Client;
 const MessageEmbed = require('discord.js').MessageEmbed;
 const IntentsClient = require('discord.js').Intents;
 
+const _ = require('lodash');
 const pdf = require("pdf-creator-node");
 const fs = require("fs");
 

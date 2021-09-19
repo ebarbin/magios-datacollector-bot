@@ -3,6 +3,7 @@ const express = require('express');
 const expressHbs = require('express-handlebars');
 const bodyParser = require('body-parser');
 const path = require('path');
+const _ = require('lodash');
 
 const commons = require('./common');
 const datasource = require('./postgres');
@@ -58,7 +59,6 @@ app.get('/api/server-alive/:serverId', (req, res) => {
     commons.serverStatus[parseInt(serverId) - 1].online = true;
     res.status(200).send();
 });
-
 
 app.get('/', async (req, res) =>{   
     let all = await datasource.getAllUsers();
