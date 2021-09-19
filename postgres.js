@@ -1,5 +1,6 @@
 require('dotenv').config();
 const PostgresClient = require('pg').Client;
+const TAG = '[magios-datacollector-bot]';
 
 const postgresClient = new PostgresClient({
     user: process.env.POSTGRES_USER,
@@ -12,7 +13,11 @@ const postgresClient = new PostgresClient({
 
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
 
-postgresClient.connect();
+postgresClient.connect().then(() => {
+    console.log(TAG + ' - Database is connected');
+}).catch(err => {
+    console.log(TAG + ' - Error connecting database');
+});
 
 const updateUser = async (user) => {
     const query = { text: 'UPDATE magios2 SET username = $2, data = $3 WHERE id = $1', values: [user.id, user.username, JSON.stringify(user)] };
