@@ -9,7 +9,7 @@ const pdf = require("pdf-creator-node");
 const fs = require("fs");
 
 const moment = require('moment-timezone');
-const commons = require('./common');
+const common = require('./common');
 const datasource = require('./postgres');
 
 const ENABLE_DISCORD_EVENTS = true;
@@ -57,7 +57,7 @@ if (ENABLE_DISCORD_EVENTS) {
                 const roles = getUserRoles(member);
                 const newUser = createEmptyUser(user);
                 newUser.roles = roles;
-                newUser.joinDate = commons.getToDay().format('DD/MM/YYYY HH:mm:ss');
+                newUser.joinDate = common.getToDay().format('DD/MM/YYYY HH:mm:ss');
                 await datasource.saveUser(newUser);
             }
         }
@@ -87,7 +87,7 @@ if (ENABLE_DISCORD_EVENTS) {
 
             if (join) {
                 newUser.joinVoiceChannelCount = 1;
-                newUser.lastVoiceChannelAccessDate = commons.getToDay().format('DD/MM/YYYY HH:mm:ss')
+                newUser.lastVoiceChannelAccessDate = common.getToDay().format('DD/MM/YYYY HH:mm:ss')
                 newUser.lastVoiceChannelName = entryData.channel.name;
             }
 
@@ -98,10 +98,10 @@ if (ENABLE_DISCORD_EVENTS) {
             if (join) {
                 dataBaseUser.avatar = entryData.member.user.avatar;
                 dataBaseUser.joinVoiceChannelCount = parseInt(dataBaseUser.joinVoiceChannelCount) + 1
-                dataBaseUser.lastVoiceChannelAccessDate = commons.getToDay().format('DD/MM/YYYY HH:mm:ss');
+                dataBaseUser.lastVoiceChannelAccessDate = common.getToDay().format('DD/MM/YYYY HH:mm:ss');
                 dataBaseUser.lastVoiceChannelName = entryData.channel.name;
             } else {
-                const now = commons.getToDay();
+                const now = common.getToDay();
                 const lastVoiceChannelAccessDate = moment(dataBaseUser.lastVoiceChannelAccessDate, 'DD/MM/YYYY HH:mm:ss');
                 dataBaseUser.voiceChannelTotalTime = dataBaseUser.voiceChannelTotalTime + now.diff(lastVoiceChannelAccessDate, 'seconds');
                 dataBaseUser.avatar = entryData.member.user.avatar;
@@ -340,20 +340,20 @@ if (ENABLE_DISCORD_EVENTS) {
 
         } else if (message.channel.parent.name != 'ADMIN') {
 
-            let dataBaseUser = await getUser(message.author.id);
+            let dataBaseUser = await datasource.getUser(message.author.id);
 
             if (!dataBaseUser) {
 
                 const newUser = createEmptyUser(joinUser);
                 newUser.lastTextChannelName = message.channel.name;
-                newUser.lastTextChannelDate = commons.getToDay().format('DD/MM/YYYY HH:mm:ss');
+                newUser.lastTextChannelDate = common.getToDay().format('DD/MM/YYYY HH:mm:ss');
                 await datasource.saveUser(newUser);
 
             } else {
                 dataBaseUser.avatar = message.author.avatar,
                 dataBaseUser.msgChannelCount = parseInt(dataBaseUser.msgChannelCount) + 1
                 dataBaseUser.lastTextChannelName = message.channel.name;
-                dataBaseUser.lastTextChannelDate =  commons.getToDay().format('DD/MM/YYYY HH:mm:ss');
+                dataBaseUser.lastTextChannelDate =  common.getToDay().format('DD/MM/YYYY HH:mm:ss');
 
                 await datasource.updateUser(dataBaseUser);
             }
