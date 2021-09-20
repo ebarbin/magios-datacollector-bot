@@ -5,6 +5,11 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const _ = require('lodash');
 const moment = require('moment-timezone');
+const btoa = require('btoa');
+const fetch = require('node-fetch');
+const cookieParser = require('cookie-parser');
+
+const { URLSearchParams } = require('url');
 
 const common = require('./common');
 const datasource = require('./postgres');
@@ -20,11 +25,28 @@ app.engine('hbs', expressHbs({ layoutsDir:'views/layouts/',  partialsDir:'views/
 app.set('view engine', 'hbs')
 app.set('views', 'views');
 
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use('/images',express.static(path.join(__dirname, '/assets/images')));
 app.use('/js',express.static(path.join(__dirname, '/assets/javascripts')));
 app.use('/css',express.static(path.join(__dirname, '/assets/stylesheets')));
+
+app.use((req, res, next) => {
+
+    if (req.url.indexOf('/oauth/redirect') >= 0 ||
+        req.url.indexOf('/api') >= 0 ||
+        req.url.indexOf('/not-allow') >= 0) {
+            next();
+    } else {
+        const authToken = req.cookies['AuthToken'];
+        if (!authToken) {
+            res.redirect(process.env.DISCORD_OAUTH +'/authorize?client_id='+process.env.DISCORD_CLIENT_ID+'&scope=identify&response_type=code&redirect_uri='+encodeURIComponent(process.env.APP_URL +'/oauth/redirect'));    
+        } else {
+            next();
+        }
+    }    
+})
 
 app.listen(PORT, () => {
     console.log(`${TAG} - WebApp is running on port ${ PORT }`);
@@ -48,7 +70,7 @@ app.post('/api/user-join-server', (req, res) => {
             console.log(TAG + ' - User: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '. Was updated.');
             datasource.updateUser(user);
         }
-    })
+    });
 
     res.status(200).send();
 });
@@ -61,10 +83,51 @@ app.get('/api/server-alive/:serverId', (req, res) => {
     res.status(200).send();
 });
 
-app.get('/', async (req, res) =>{   
+app.get('/', async (req, res) => {
+
     let all = await datasource.getAllUsers();
     all = _.sortBy(all, [ u => { return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); }], ['asc']);
-    res.status(200).render('user-list', {title: 'All users', users: all});
+    res.status(200).render('user-list', {users: all, token: req.query.token});
+});
+
+app.get('/oauth/redirect', async (req, res) => {
+
+    const creds = btoa(process.env.DISCORD_CLIENT_ID + ':' + process.env.DISCORD_AUTH_SECRET);
+    
+    const params = new URLSearchParams();
+    params.append('grant_type', 'authorization_code');
+    params.append('code', req.query.code);
+    params.append('redirect_uri', process.env.APP_URL +'/oauth/redirect');
+
+    const response = await fetch(process.env.DISCORD_OAUTH + '/token',
+        { method: 'POST',
+        headers: { Authorization: `Basic ${creds}`, 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: params
+    });
+
+    const json = await response.json();
+    const access_token = json.access_token;
+    
+    const response2 = await fetch(process.env.DISCORD_OAUTH_USERS_ME,
+        { method: 'GET',
+        headers: { Authorization: `Bearer ${access_token}`, 'Content-Type': 'application/x-www-form-urlencoded' }
+    });
+    const discordUser =  await response2.json();
+    let username = discordUser.username.toLowerCase();
+
+    const user = await datasource.findUserByUsername(username);
+    
+
+    if (user && user.roles.find(r=>r == 'Admins')) {
+        res.cookie('AuthToken', access_token);
+        res.redirect('/');
+    } else {
+        res.redirect('/not-allow');
+    }
+});
+
+app.get('/not-allow', async (req, res) =>{   
+    res.status(200).render('not-allow');
 });
 
 app.get('/magios', async (req, res) =>{
@@ -72,7 +135,7 @@ app.get('/magios', async (req, res) =>{
     let magios = all.filter(u => u.roles && u.roles.find(r => r == 'Magios'));
     magios = _.sortBy(magios, [ u => { return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); }], ['asc']);
 
-    res.status(200).render('user-list', {title: 'Magios', users: magios});
+    res.status(200).render('user-list', {title: 'Magios', users: magios });
 });
 
 app.get('/newjoiners', async (req, res) =>{
@@ -80,7 +143,7 @@ app.get('/newjoiners', async (req, res) =>{
     let newJoiner = all.filter(u => u.roles && u.roles.find(r => r == 'NewJoiner'));
     newJoiner = _.sortBy(newJoiner, [ u => { return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); }], ['asc']);
 
-    res.status(200).render('user-list', {title: 'NewJoiner', users: newJoiner});
+    res.status(200).render('user-list', {title: 'NewJoiner', users: newJoiner });
 });
 
 app.get('/limbo', async (req, res) =>{
@@ -96,7 +159,7 @@ app.get('/norole', async (req, res) =>{
     let norole = all.filter(u => !u.roles || u.roles == '');
     norole = _.sortBy(norole, [ u => { return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); }], ['asc']);
 
-    res.status(200).render('user-list', {title:'No role', users: norole});
+    res.status(200).render('user-list', {title:'No role', users: norole });
 });
 
 app.get('/server-status', async (req, res) =>{
@@ -104,5 +167,5 @@ app.get('/server-status', async (req, res) =>{
     let norole = all.filter(u => !u.roles || u.roles == '');
     norole = _.sortBy(norole, [ u => { return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); }], ['asc']);
 
-    res.status(200).render('server-status', {server1Status: common.serverStatus[0].online, server2Status: common.serverStatus[1].online});
+    res.status(200).render('server-status', {server1Status: common.serverStatus[0].online, server2Status: common.serverStatus[1].online });
 });
