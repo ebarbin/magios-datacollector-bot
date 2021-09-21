@@ -9,6 +9,8 @@ const common = require('./common');;
 
 const TAG = '[magios-datacollector-bot]';
 
+console.log(TAG + ' - Cron module start.');
+
 cron.schedule('*/120 * * * *', () => {
     console.log(TAG + ' - Cleaning old events - Running a task every 2 hours.');
     EVENTOS_CALENDARIO_CHANNEL.messages.fetch({ limit: 100 }).then(messages => {
