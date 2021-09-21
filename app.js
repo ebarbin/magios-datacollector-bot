@@ -1,4 +1,5 @@
 require('dotenv').config();
+
 const express = require('express');
 const expressHbs = require('express-handlebars');
 const bodyParser = require('body-parser');
@@ -8,7 +9,6 @@ const moment = require('moment-timezone');
 const btoa = require('btoa');
 const fetch = require('node-fetch');
 const cookieParser = require('cookie-parser');
-
 const { URLSearchParams } = require('url');
 
 const common = require('./common');
@@ -36,7 +36,8 @@ app.use((req, res, next) => {
 
     if (req.url.indexOf('/oauth/redirect') >= 0 ||
         req.url.indexOf('/api') >= 0 ||
-        req.url.indexOf('/not-allow') >= 0) {
+        req.url.indexOf('/not-allow') >= 0 ||
+        req.url.indexOf('/logout') >= 0) {
             next();
     } else {
         const authToken = req.cookies['AuthToken'];
@@ -83,13 +84,6 @@ app.get('/api/server-alive/:serverId', (req, res) => {
     res.status(200).send();
 });
 
-app.get('/', async (req, res) => {
-
-    let all = await datasource.getAllUsers();
-    all = _.sortBy(all, [ u => { return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); }], ['asc']);
-    res.status(200).render('user-list', {users: all, token: req.query.token});
-});
-
 app.get('/oauth/redirect', async (req, res) => {
 
     const creds = btoa(process.env.DISCORD_CLIENT_ID + ':' + process.env.DISCORD_AUTH_SECRET);
@@ -126,8 +120,20 @@ app.get('/oauth/redirect', async (req, res) => {
     }
 });
 
+app.get('/logout', async (req, res) =>{   
+    res.clearCookie("AuthToken");
+    res.redirect('/');
+});
+
 app.get('/not-allow', async (req, res) =>{   
     res.status(200).render('not-allow');
+});
+
+app.get('/', async (req, res) => {
+
+    let all = await datasource.getAllUsers();
+    all = _.sortBy(all, [ u => { return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); }], ['asc']);
+    res.status(200).render('user-list', {users: all, title: 'All'});
 });
 
 app.get('/magios', async (req, res) =>{
