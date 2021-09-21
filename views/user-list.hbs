@@ -8,9 +8,6 @@
           <th scope="col">Discord ID</th>
           <th scope="col">Username</th>
           <th scope="col">Join date</th>
-          <th scope="col">Roles</th>
-          <th scope="col">Last message date</th>
-          <th scope="col">Last server access</th>
         </tr>
       </thead>
       <tbody>
@@ -24,19 +21,14 @@
               data-bs-user-lastTextChannelDate="{{this.lastTextChannelDate}}"
               data-bs-user-lastServerAccess="{{this.lastServerAccess}}"
               data-bs-user-lastServerId="{{this.lastServerId}}"
-              data-bs-user-lastServerAccessIp="{{this.lastServerAccessIp}}">
+              data-bs-user-lastServerAccessIp="{{this.lastServerAccessIp}}"
+              data-bs-user-lastTextChannelName="{{this.lastTextChannelName}}"
+              >
 
               <td><img class="rounded-circle" width="30" src="https://cdn.discordapp.com/avatars/{{this.id}}/{{this.avatar}}"></td>
               <td scope="row">{{this.id}}</td>
               <th>{{this.username}}</th>
               <td>{{this.joinDate}}</td>
-              <td>{{this.roles}}</td>
-              <td>{{this.lastTextChannelDate}}</td>
-              {{#if this.lastServerAccess}}
-                <td>Server {{this.lastServerId}} - {{this.lastServerAccess}} - {{this.lastServerAccessIp}}</td>
-              {{else}}
-                <td></td>
-              {{/if}}
             </tr>
         {{/each}}
       </tbody>
@@ -44,71 +36,4 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="modalForm" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title"></h3>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <div class="card">
-                <img class="card-img-top">
-                <div class="card-body">
-                  <h5 class="card-title">Detalles</h5>
-                  <ol class="list-group list-group-numbered">
-                    <li class="list-group-item d-flex justify-content-between align-items-start">
-                      <div class="ms-2 me-auto">
-                        <div class="fw-bold">Subheading</div>
-                        Cras justo odio
-                      </div>
-                      <span class="badge bg-primary rounded-pill">14</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-start">
-                      <div class="ms-2 me-auto">
-                        <div class="fw-bold">Subheading</div>
-                        Cras justo odio
-                      </div>
-                      <span class="badge bg-primary rounded-pill">14</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-start">
-                      <div class="ms-2 me-auto">
-                        <div class="fw-bold">Subheading</div>
-                        Cras justo odio
-                      </div>
-                      <span class="badge bg-primary rounded-pill">14</span>
-                    </li>
-                  </ol>
-                </div>
-              </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-
-  
-  const exampleModal = document.getElementById('modalForm')
-  exampleModal.addEventListener('show.bs.modal', function (event) {
-    // Button that triggered the modal
-    const button = event.relatedTarget;
-    // Extract info from data-bs-* attributes
-    const username = button.getAttribute('data-bs-user-name');
-    const avatar = button.getAttribute('data-bs-user-avatar');
-
-    const userId = button.getAttribute('data-bs-user-id');
-    const joinDate = button.getAttribute('data-bs-user-joinDate');
-    const roles = button.getAttribute('data-bs-user-roles');
-    const lastTextChannelDate = button.getAttribute('data-bs-user-lastTextChannelDate');
-    const lastServerAccess = button.getAttribute('data-bs-user-lastServerAccess');
-    const lastServerId = button.getAttribute('data-bs-user-lastServerId');
-    const lastServerAccessIp = button.getAttribute('data-bs-user-lastServerAccessIp');
-
-    const modalTitle = exampleModal.querySelector('.modal-title');
-    modalTitle.textContent = username;
-
-    const img = exampleModal.querySelector('.card-img-top');
-    img.src = avatar;
-  });
-</script>
+{{> user-detail}}

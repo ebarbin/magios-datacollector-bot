@@ -1,0 +1,97 @@
+<div class="modal fade" id="modalForm" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"></h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="card">
+                <img class="card-img-top">
+                <div class="card-body">
+                  <h5 class="card-title">Detalles</h5>
+                  <ol class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                      <div class="ms-2 me-auto">
+                        <div class="fw-bold">Join date</div>
+                        <span class="join-date"></span>
+                      </div>
+                      <!--<span class="badge bg-primary rounded-pill">14</span>-->
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                      <div class="ms-2 me-auto">
+                        <div class="fw-bold">Roles</div>
+                        <span class="roles"></span>
+                      </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                      <div class="ms-2 me-auto">
+                        <div class="fw-bold">Last text channel date</div>
+                        <span class="lastTextChannelDate"></span>
+                      </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                      <div class="ms-2 me-auto">
+                        <div class="fw-bold">Last text channel name</div>
+                        <span class="lastTextChannelName"></span>
+                      </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                      <div class="ms-2 me-auto">
+                        <div class="fw-bold">Last server access</div>
+                        <span class="lastServerAccess"></span>
+                      </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                      <div class="ms-2 me-auto">
+                        <div class="fw-bold">Last server Id</div>
+                        <span class="lastServerId"></span>
+                      </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                      <div class="ms-2 me-auto">
+                        <div class="fw-bold">Last server access ip</div>
+                        <span class="lastServerAccessIp"></span>
+                      </div>
+                    </li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+  
+  const exampleModal = document.getElementById('modalForm')
+  exampleModal.addEventListener('show.bs.modal', function (event) {
+    // Button that triggered the modal
+    const button = event.relatedTarget;
+    // Extract info from data-bs-* attributes
+    const username = button.getAttribute('data-bs-user-name');
+    const avatar = button.getAttribute('data-bs-user-avatar');
+
+    const userId = button.getAttribute('data-bs-user-id');
+    const joinDate = button.getAttribute('data-bs-user-joinDate');
+    const roles = button.getAttribute('data-bs-user-roles');
+    const lastTextChannelDate = button.getAttribute('data-bs-user-lastTextChannelDate');
+    const lastServerAccess = button.getAttribute('data-bs-user-lastServerAccess');
+    const lastServerId = button.getAttribute('data-bs-user-lastServerId');
+    const lastServerAccessIp = button.getAttribute('data-bs-user-lastServerAccessIp');
+    const lastTextChannelName = button.getAttribute('data-bs-user-lastTextChannelName');
+
+    exampleModal.querySelector('.modal-title').textContent = username;
+    exampleModal.querySelector('.card-img-top').src = avatar;
+    exampleModal.querySelector('.join-date').textContent = joinDate;
+    exampleModal.querySelector('.roles').textContent = roles;
+    exampleModal.querySelector('.lastTextChannelDate').textContent = lastTextChannelDate;
+    exampleModal.querySelector('.lastServerAccess').textContent = lastServerAccess;
+    exampleModal.querySelector('.lastServerId').textContent = lastServerId;
+    exampleModal.querySelector('.lastServerAccessIp').textContent = lastServerAccessIp;
+    exampleModal.querySelector('.lastTextChannelName').textContent = lastTextChannelName;
+    
+    
+  });
+</script>

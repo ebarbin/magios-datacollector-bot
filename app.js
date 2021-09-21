@@ -51,7 +51,7 @@ app.use((req, res, next) => {
 })
 
 app.listen(PORT, () => {
-    console.log(`${TAG} - WebApp is running on port ${ PORT }`);
+    console.log(`${TAG} - WebApp is running on port ${ PORT }.`);
 });
 
 app.post('/api/user-join-server', (req, res) => {
