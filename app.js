@@ -13,6 +13,7 @@ const { URLSearchParams } = require('url');
 
 const common = require('./common');
 const datasource = require('./postgres');
+const cron = require('./cron');
 const REPORT_CHANNEL = require('./discord').REPORT_CHANNEL;
 
 const TAG = '[magios-datacollector-bot]';
