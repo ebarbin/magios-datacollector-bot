@@ -1,6 +1,7 @@
 const cron = require('node-cron');
 const moment = require('moment-timezone');
 const discordModule = require('./discord');
+const datasource = require('./postgres');
 
 const common = require('./common');;
 
@@ -18,13 +19,22 @@ cron.schedule('*/120 * * * *', () => {
     }) ;
 });
 
-cron.schedule('*/10 * * * *', () => {
+cron.schedule('*/10 * * * *', async () => {
     console.log(TAG + ' - Checking server status - Running a task every 10 minutes.');
     discordModule.cleanServerStatus().then(() => {
-        common.serverStatus.forEach(se => {
-            se.online = se.lastMessage && common.getToDay().diff(se.lastMessage, 'minutes') < 15;
-            discordModule.sendServerStatus(se).then(() => {
-                console.log(TAG + ' - Server ' + se.serverId + ' status was reported to discord as online = ' + se.online);
+
+        const servers = await datasource.getServerStatus();
+
+        servers.forEach(server => {
+            
+            server.status = false;
+            if (common.getToDay().diff(moment(server.updated, 'DD/MM/YYYY HH:mm:ss'), 'minutes') < 15) {
+                server.status = true;
+            }
+            
+            await datasource.updateServerStatus(server);
+            discordModule.sendServerStatus(server).then(() => {
+                console.log(TAG + ' - Server ' + se.id + ' status was reported to discord as online = ' + se.status);
             });
         });
     })

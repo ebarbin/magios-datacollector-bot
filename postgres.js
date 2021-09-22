@@ -1,5 +1,6 @@
 require('dotenv').config();
 const PostgresClient = require('pg').Client;
+const common = require('./common');
 
 const TAG = '[magios-datacollector-bot]';
 
@@ -71,8 +72,30 @@ const getAllUsers = async () => {
       }
 }
 
+const updateServerStatus = async (server) => {
+    const query = { text: 'UPDATE server_status SET status = $2, updated = $3 WHERE id = $1', values: [server.id, server.status, common.getToDay().format('DD/MM/YYYY HH:mm:ss')] };
+    const res = await postgresClient.query(query);
+}
+
+const getServerStatus = async () => {
+    try {
+        const query =  { text: 'SELECT * FROM server_status' };
+        const res = await postgresClient.query(query);
+        return res.rows;
+    } catch (err) {
+        return [];
+    }
+}
+
 const createDataBase = async () => { 
-    await postgresClient.query('CREATE TABLE magios2 (id TEXT, data TEXT)');
+    //await postgresClient.query('CREATE TABLE server_status (id TEXT, status boolean, updated TEXT)');
+    //await postgresClient.query('CREATE TABLE magios2 (id TEXT, data TEXT)');
+    
+ //   let query = { text: 'INSERT INTO server_status (id, status, updated) VALUES($1, $2, $3)', values: ['1', false, common.getToDay().format('DD/MM/YYYY HH:mm:ss')] };
+ //   await postgresClient.query(query);
+
+ //   query = { text: 'INSERT INTO server_status (id, status, updated) VALUES($1, $2, $3)', values: ['2', false, common.getToDay().format('DD/MM/YYYY HH:mm:ss')] };
+ //   await postgresClient.query(query);
 }
 
 exports.updateUser = updateUser;
@@ -81,3 +104,5 @@ exports.findUserByUsername = findUserByUsername;
 exports.getUser = getUser;
 exports.getAllUsers = getAllUsers;
 exports.createDataBase = createDataBase;
+exports.updateServerStatus = updateServerStatus;
+exports.getServerStatus = getServerStatus;

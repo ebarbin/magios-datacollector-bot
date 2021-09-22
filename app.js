@@ -79,10 +79,9 @@ userJoineServer = (req, res) => {
 }
 
 serverAlive = (req, res) => {
-    const serverId = req.params.serverId;
-    console.log(TAG + ' - Server ' + serverId + ' is alive.');
-    common.serverStatus[parseInt(serverId) - 1].lastMessage = common.getToDay();
-    common.serverStatus[parseInt(serverId) - 1].online = true;
+    console.log(TAG + ' - Server ' + req.params.serverId + ' is alive.');
+    datasource.updateServerStatus({id: req.params.serverId, status: true});
+    
     res.status(200).send();
 }
 
@@ -191,5 +190,7 @@ app.get('/server-status', async (req, res) =>{
     let norole = all.filter(u => !u.roles || u.roles == '');
     norole = _.sortBy(norole, [ u => { return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); }], ['asc']);
 
-    res.status(200).render('server-status', {server1Status: common.serverStatus[0].online, server2Status: common.serverStatus[1].online });
+    const servers = await datasource.getServerStatus();
+
+    res.status(200).render('server-status', {server1Status: servers[0].status, server2Status: servers[1].status });
 });
