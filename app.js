@@ -11,10 +11,10 @@ const fetch = require('node-fetch');
 const cookieParser = require('cookie-parser');
 const { URLSearchParams } = require('url');
 
+const discordModule = require('./discord');
 const common = require('./common');
 const datasource = require('./postgres');
 const cron = require('./cron');
-const REPORT_CHANNEL = require('./discord').REPORT_CHANNEL;
 
 const TAG = '[magios-datacollector-bot]';
 
@@ -62,13 +62,13 @@ app.post('/api/user-join-server', (req, res) => {
 
     datasource.findUserByUsername(username).then(user => {
         if (!user) {
-            REPORT_CHANNEL.send('Unknown user: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '.');
+            discordModule.sendMessageToReportChannel('Unknown user: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '.');
             console.log(TAG + ' - Unknown user: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '.');
         } else {
             user.lastServerAccess = common.getToDay().format('DD/MM/YYYY HH:mm:ss');
             user.lastServerId = serverId;
             user.lastServerAccessIp = ip;
-            REPORT_CHANNEL.send('User: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '. Was updated.');
+            discordModule.sendMessageToReportChannel('User: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '. Was updated.');
             console.log(TAG + ' - User: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '. Was updated.');
             datasource.updateUser(user);
         }

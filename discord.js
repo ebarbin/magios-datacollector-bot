@@ -34,8 +34,6 @@ let GUILD;
 
 client.login(process.env.DISCORD_BOT_TOKEN);
 
-if (common.ENABLE_DISCORD_EVENTS) {
-
     client.once('ready', async () => { 
         REPORT_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === REPORT_CHANNEL_NAME);
         EVENTOS_CALENDARIO_CHANNEL = client.channels.cache.find(channel => channel.name === EVENTOS_CALENDARIO_CHANNEL_NAME);
@@ -46,6 +44,8 @@ if (common.ENABLE_DISCORD_EVENTS) {
 
         checkNewUserAtStartup();
     });
+
+if (common.ENABLE_DISCORD_EVENTS) {
 
     client.on('guildMemberAdd', async member => {
         const user = member.user;
@@ -525,4 +525,62 @@ checkNewUserAtStartup = () => {
     );
 }
 
-exports.REPORT_CHANNEL = REPORT_CHANNEL;
+sendMessageToReportChannel = (msg) => {
+    REPORT_CHANNEL.send(msg);
+}
+
+cleanServerStatus = () => {
+    return new Promise((resolve, reject) => {
+        SERVER_STATUS_CHANNEL.messages.fetch({ limit: 100 }).then(ms => { 
+            ms.forEach(msg => msg.delete() );
+            resolve();
+        }).catch(() => reject());
+    })
+}
+
+sendServerStatus = (serverStatus) => {
+    return new Promise((resolve, reject) => {
+        const embed = new MessageEmbed().setTimestamp();
+        if (serverStatus.online) {
+            embed.setTitle('Servidor ' + serverStatus.serverId +': ONLINE').setColor('#00830b');
+        } else {
+            embed.setTitle('Servidor ' + serverStatus.serverId +': OFFLINE').setColor('#c90000');
+        }
+        SERVER_STATUS_CHANNEL.send(embed);
+        resolve();
+    })
+}
+
+cleanOldEvents = () => {
+    return new Promise((resolve, reject) => {
+        let quantity = 0;
+        EVENTOS_CALENDARIO_CHANNEL.messages.fetch({ limit: 100 }).then(messages => {
+            messages.forEach(m => {
+                if (m.author.bot && m.author.username == 'sesh' && m.embeds && m.embeds.length > 0) {
+                    const embed = m.embeds[0];
+                    if (embed.title.indexOf('is starting now!') >= 0) {
+                        const msgId = embed.description.split('/')[embed.description.split('/').length-1].split(')**')[0];
+                        const originalMsg = m.channel.messages.cache.find(msg => msg.id == msgId);
+                        const msgDate = moment(m.createdAt);
+                        const rightNow = common.getToDay();
+                        if (rightNow.diff(msgDate, 'hours') >= 24) {
+                            quantity++;
+                            m.delete();
+                            if (originalMsg) {
+                                originalMsg.delete();  
+                            }
+                        }
+                    }
+                }
+            })
+            resolve(quantity);
+        }).catch(err => {
+            reject(err);
+        });
+    });
+}
+
+exports.sendMessageToReportChannel = sendMessageToReportChannel;
+exports.cleanOldEvents = cleanOldEvents;
+exports.sendServerStatus = sendServerStatus;
+exports.cleanServerStatus = cleanServerStatus;
