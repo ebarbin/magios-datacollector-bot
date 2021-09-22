@@ -25,7 +25,7 @@ cron.schedule('*/10 * * * *', async () => {
 
         const servers = await datasource.getServerStatus();
 
-        servers.forEach(server => {
+        servers.forEach(async server => {
 
             server.status = false;
             if (common.getToDay().diff(moment(server.updated, 'DD/MM/YYYY HH:mm:ss'), 'minutes') < 15) {
