@@ -21,20 +21,17 @@ cron.schedule('*/120 * * * *', () => {
 
 cron.schedule('*/10 * * * *', async () => {
     console.log(TAG + ' - Checking server status - Running a task every 10 minutes.');
-    discordModule.cleanServerStatus().then(async () => {
+    await discordModule.cleanServerStatus();
 
-        const servers = await datasource.getServerStatus();
+    const servers = await datasource.getServerStatus();
 
-        servers.forEach(async server => {
+    servers.forEach(async server => {
+        if (common.getToDay().diff(moment(server.updated, 'DD/MM/YYYY HH:mm:ss'), 'minutes') > 15) {
+            server.status = false;
 
-            if (common.getToDay().diff(moment(server.updated, 'DD/MM/YYYY HH:mm:ss'), 'minutes') > 15) {
-                server.status = false;
-
-                await datasource.updateServerStatus(server);
-                await discordModule.sendServerStatus(server);
-                console.log(TAG + ' - Server ' + server.id + ' status was reported to discord as online = ' + server.status);
-            }
-            
-        });
-    })
+            await datasource.updateServerStatus(server);
+            await discordModule.sendServerStatus(server);
+            console.log(TAG + ' - Server ' + server.id + ' status was reported to discord as online = ' + server.status);
+        }
+    });
 });
