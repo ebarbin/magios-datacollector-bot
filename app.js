@@ -56,8 +56,7 @@ app.listen(PORT, () => {
     console.log(`${TAG} - WebApp is running on port ${ PORT }.`);
 });
 
-app.post('/api/user-join-server', (req, res) => {
-
+userJoineServer = (req, res) => {
     const username = req.body.username.trim().toLowerCase();
     const serverId = req.body.serverId.trim();
     const ip = req.body.ip.trim();
@@ -77,22 +76,30 @@ app.post('/api/user-join-server', (req, res) => {
     });
 
     res.status(200).send();
+}
+
+serverAlive = (req, res) => {
+    const serverId = req.params.serverId;
+    console.log(TAG + ' - Server ' + serverId + ' is alive.');
+    common.serverStatus[parseInt(serverId) - 1].lastMessage = common.getToDay();
+    common.serverStatus[parseInt(serverId) - 1].online = true;
+    res.status(200).send();
+}
+
+app.post('/user-join-server', (req, res) => {
+    userJoineServer(req, res);
+});
+
+app.post('/api/user-join-server', (req, res) => {
+    userJoineServer(req, res);
 });
 
 app.get('/api/server-alive/:serverId', (req, res) => {
-    const serverId = req.params.serverId;
-    console.log(TAG + ' -  Server ' + serverId + ' is alive.');
-    common.serverStatus[parseInt(serverId) - 1].lastMessage = common.getToDay();
-    common.serverStatus[parseInt(serverId) - 1].online = true;
-    res.status(200).send();
+    serverAlive(req, res);
 });
 
 app.get('/server-alive/:serverId', (req, res) => {
-    const serverId = req.params.serverId;
-    console.log(TAG + ' -  Server ' + serverId + ' is alive.');
-    common.serverStatus[parseInt(serverId) - 1].lastMessage = common.getToDay();
-    common.serverStatus[parseInt(serverId) - 1].online = true;
-    res.status(200).send();
+    serverAlive(req, res);
 });
 
 app.get('/oauth/redirect', async (req, res) => {
