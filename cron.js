@@ -21,12 +21,12 @@ cron.schedule('*/120 * * * *', () => {
 
 cron.schedule('*/10 * * * *', async () => {
     console.log(TAG + ' - Checking server status - Running a task every 10 minutes.');
-    discordModule.cleanServerStatus().then(() => {
+    discordModule.cleanServerStatus().then(async () => {
 
         const servers = await datasource.getServerStatus();
 
         servers.forEach(server => {
-            
+
             server.status = false;
             if (common.getToDay().diff(moment(server.updated, 'DD/MM/YYYY HH:mm:ss'), 'minutes') < 15) {
                 server.status = true;
