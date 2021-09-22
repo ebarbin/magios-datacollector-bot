@@ -538,13 +538,13 @@ cleanServerStatus = () => {
     })
 }
 
-sendServerStatus = (serverStatus) => {
+sendServerStatus = (server) => {
     return new Promise((resolve, reject) => {
         const embed = new MessageEmbed().setTimestamp();
-        if (serverStatus.online) {
-            embed.setTitle('Servidor ' + serverStatus.serverId +': ONLINE').setColor('#00830b');
+        if (server.status) {
+            embed.setTitle('Servidor ' + server.id +': ONLINE').setColor('#00830b');
         } else {
-            embed.setTitle('Servidor ' + serverStatus.serverId +': OFFLINE').setColor('#c90000');
+            embed.setTitle('Servidor ' + server.id +': OFFLINE').setColor('#c90000');
         }
         SERVER_STATUS_CHANNEL.send(embed);
         resolve();
