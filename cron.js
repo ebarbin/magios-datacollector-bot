@@ -22,7 +22,7 @@ cron.schedule('*/10 * * * *', () => {
     console.log(TAG + ' - Checking server status - Running a task every 10 minutes.');
     discordModule.cleanServerStatus().then(() => {
         common.serverStatus.forEach(se => {
-            se.online = se.lastMessage || common.getToDay().diff(se.lastMessage, 'minutes') > 15;
+            se.online = se.lastMessage && common.getToDay().diff(se.lastMessage, 'minutes') < 15;
             discordModule.sendServerStatus(se).then(() => {
                 console.log(TAG + ' - Server ' + se.serverId + ' status was reported to discord.');
             });
