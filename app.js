@@ -36,6 +36,8 @@ app.use('/css',express.static(path.join(__dirname, '/assets/stylesheets')));
 app.use((req, res, next) => {
 
     if (req.url.indexOf('/oauth/redirect') >= 0 ||
+        req.url.indexOf('/server-alive') >= 0 ||
+        req.url.indexOf('/user-join-server') >= 0 ||
         req.url.indexOf('/api') >= 0 ||
         req.url.indexOf('/not-allow') >= 0 ||
         req.url.indexOf('/logout') >= 0) {
@@ -78,6 +80,14 @@ app.post('/api/user-join-server', (req, res) => {
 });
 
 app.get('/api/server-alive/:serverId', (req, res) => {
+    const serverId = req.params.serverId;
+    console.log(TAG + ' -  Server ' + serverId + ' is alive.');
+    common.serverStatus[parseInt(serverId) - 1].lastMessage = common.getToDay();
+    common.serverStatus[parseInt(serverId) - 1].online = true;
+    res.status(200).send();
+});
+
+app.get('/server-alive/:serverId', (req, res) => {
     const serverId = req.params.serverId;
     console.log(TAG + ' -  Server ' + serverId + ' is alive.');
     common.serverStatus[parseInt(serverId) - 1].lastMessage = common.getToDay();
