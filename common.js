@@ -30,8 +30,6 @@ const exportsOptions = {
     footer: { height: "10mm", contents: { default: '<div style="text-align: right;color: #444;">{{page}}</span>/<span>{{pages}}</div>' } }
 };
 
-const sessions = [];
-
 exports.createEmptyUser = createEmptyUser;
 exports.getToDay = getToDay;
 exports.serverStatus = serverStatus;
