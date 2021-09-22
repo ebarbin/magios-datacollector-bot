@@ -34,7 +34,7 @@ cron.schedule('*/10 * * * *', async () => {
             
             await datasource.updateServerStatus(server);
             discordModule.sendServerStatus(server).then(() => {
-                console.log(TAG + ' - Server ' + se.id + ' status was reported to discord as online = ' + se.status);
+                console.log(TAG + ' - Server ' + server.id + ' status was reported to discord as online = ' + server.status);
             });
         });
     })
