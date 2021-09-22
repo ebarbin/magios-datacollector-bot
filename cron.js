@@ -24,7 +24,7 @@ cron.schedule('*/10 * * * *', () => {
         common.serverStatus.forEach(se => {
             se.online = se.lastMessage && common.getToDay().diff(se.lastMessage, 'minutes') < 15;
             discordModule.sendServerStatus(se).then(() => {
-                console.log(TAG + ' - Server ' + se.serverId + ' status was reported to discord as ' + se.online ? 'online' : 'offline');
+                console.log(TAG + ' - Server ' + se.serverId + ' status was reported to discord as online = ' + se.online);
             });
         });
     })
