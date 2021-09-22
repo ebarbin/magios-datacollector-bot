@@ -27,15 +27,14 @@ cron.schedule('*/10 * * * *', async () => {
 
         servers.forEach(async server => {
 
-            server.status = false;
-            if (common.getToDay().diff(moment(server.updated, 'DD/MM/YYYY HH:mm:ss'), 'minutes') < 15) {
-                server.status = true;
+            if (common.getToDay().diff(moment(server.updated, 'DD/MM/YYYY HH:mm:ss'), 'minutes') > 15) {
+                server.status = false;
+
+                await datasource.updateServerStatus(server);
+                await discordModule.sendServerStatus(server);
+                console.log(TAG + ' - Server ' + server.id + ' status was reported to discord as online = ' + server.status);
             }
             
-            await datasource.updateServerStatus(server);
-            discordModule.sendServerStatus(server).then(() => {
-                console.log(TAG + ' - Server ' + server.id + ' status was reported to discord as online = ' + server.status);
-            });
         });
     })
 });

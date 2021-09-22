@@ -78,9 +78,12 @@ userJoineServer = (req, res) => {
     res.status(200).send();
 }
 
-serverAlive = (req, res) => {
+serverAlive = async (req, res) => {
     console.log(TAG + ' - Server ' + req.params.serverId + ' is alive.');
-    datasource.updateServerStatus({id: req.params.serverId, status: true});
+    await datasource.updateServerStatus({id: req.params.serverId, status: true});
+
+    await discordModule.sendServerStatus({id: req.params.serverId, status: true});
+    console.log(TAG + ' - Server ' + req.params.serverId + ' status was reported to discord as online = ' + true);
     
     res.status(200).send();
 }
