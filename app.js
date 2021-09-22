@@ -96,12 +96,12 @@ app.post('/api/user-join-server', (req, res) => {
     userJoineServer(req, res);
 });
 
-app.get('/api/server-alive/:serverId', (req, res) => {
-    serverAlive(req, res);
+app.get('/api/server-alive/:serverId', async  (req, res) => {
+    await serverAlive(req, res);
 });
 
-app.get('/server-alive/:serverId', (req, res) => {
-    serverAlive(req, res);
+app.get('/server-alive/:serverId', async (req, res) => {
+   await serverAlive(req, res);
 });
 
 app.get('/oauth/redirect', async (req, res) => {
