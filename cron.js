@@ -8,7 +8,7 @@ const TAG = '[magios-datacollector-bot]';
 
 console.log(TAG + ' - Cron module start.');
 
-cron.schedule('*/1 * * * *', () => {
+cron.schedule('*/120 * * * *', () => {
     console.log(TAG + ' - Cleaning old events - Running a task every 2 hours.');
 
     discordModule.cleanOldEvents().then((quantity) => {
