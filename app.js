@@ -82,8 +82,12 @@ serverAlive = async (req, res) => {
     console.log(TAG + ' - Server ' + req.params.serverId + ' is alive.');
     await datasource.updateServerStatus({id: req.params.serverId, status: true});
 
-    await discordModule.sendServerStatus({id: req.params.serverId, status: true});
-    console.log(TAG + ' - Server ' + req.params.serverId + ' status was reported to discord as online = ' + true);
+    await discordModule.cleanServerStatus();
+    const servers = await datasource.getServerStatus();
+    servers.forEach(async server => {
+        await discordModule.sendServerStatus(server);
+        console.log(TAG + ' - Server ' + server.id + ' status was reported to discord as online = ' + server.status);
+    });
     
     res.status(200).send();
 }
