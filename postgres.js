@@ -79,7 +79,7 @@ const updateServerStatus = async (server) => {
 
 const getServerStatus = async () => {
     try {
-        const query =  { text: 'SELECT * FROM server_status' };
+        const query =  { text: 'SELECT * FROM server_status ORDER BY id ASC' };
         const res = await postgresClient.query(query);
         return res.rows;
     } catch (err) {
