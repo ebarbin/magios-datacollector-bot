@@ -109,7 +109,10 @@ app.get('/api/server-alive/:serverId', async  (req, res) => {
 
 app.post('/api/server-alive/:serverId', async  (req, res) => {
     console.log(TAG + ' - Server ' + req.params.serverId + ' is alive.');
-    await datasource.updateServerStatus({id: req.params.serverId, status: true});
+
+    const updated = req.body.updated.trim();
+
+    await datasource.updateServerStatus({id: req.params.serverId, status: true, updated: updated});
 
     await discordModule.cleanServerStatus();
     const servers = await datasource.getServerStatus();

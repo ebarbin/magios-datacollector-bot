@@ -73,7 +73,7 @@ const getAllUsers = async () => {
 }
 
 const updateServerStatus = async (server) => {
-    const query = { text: 'UPDATE server_status SET status = $2, updated = $3 WHERE id = $1', values: [server.id, server.status, common.getToDay().format('DD/MM/YYYY HH:mm:ss')] };
+    const query = { text: 'UPDATE server_status SET status = $2, updated = $3 WHERE id = $1', values: [server.id, server.status, server.updated ] };
     const res = await postgresClient.query(query);
 }
 

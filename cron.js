@@ -28,6 +28,7 @@ cron.schedule('*/10 * * * *', async () => {
     servers.forEach(async server => {
         if (common.getToDay().diff(moment(server.updated, 'DD/MM/YYYY HH:mm:ss'), 'minutes') > 15) {
             server.status = false;
+            server.updated = common.getToDay().format('DD/MM/YYYY HH:mm:ss');
             await datasource.updateServerStatus(server);
             console.log(TAG + ' - Server ' + server.id + ' status was reported to discord as online = ' + server.status);
         }
