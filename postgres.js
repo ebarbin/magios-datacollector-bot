@@ -87,6 +87,16 @@ const getServerStatus = async () => {
     }
 }
 
+const getServerStatusById = async (id) => {
+    try {
+        const query =  { text: 'SELECT * FROM server_status WHERE id = $1', values:[id]};
+        const res = await postgresClient.query(query);
+        return res.rows;
+    } catch (err) {
+        return [];
+    }
+}
+
 const createDataBase = async () => { 
     //await postgresClient.query('CREATE TABLE server_status (id TEXT, status boolean, updated TEXT)');
     //await postgresClient.query('CREATE TABLE magios2 (id TEXT, data TEXT)');
@@ -106,3 +116,4 @@ exports.getAllUsers = getAllUsers;
 exports.createDataBase = createDataBase;
 exports.updateServerStatus = updateServerStatus;
 exports.getServerStatus = getServerStatus;
+exports.getServerStatusById = getServerStatusById;

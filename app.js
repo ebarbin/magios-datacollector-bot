@@ -78,7 +78,36 @@ userJoineServer = (req, res) => {
     res.status(200).send();
 }
 
-serverAlive = async (req, res) => {
+app.post('/api/user-join-server', (req, res) => {
+    const username = req.body.username.trim().toLowerCase();
+    const serverId = req.body.serverId.trim();
+    const ip = req.body.ip.trim();
+
+    datasource.findUserByUsername(username).then(user => {
+        if (!user) {
+            discordModule.sendMessageToReportChannel('Unknown user: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '.');
+            console.log(TAG + ' - Unknown user: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '.');
+        } else {
+            user.lastServerAccess = common.getToDay().format('DD/MM/YYYY HH:mm:ss');
+            user.lastServerId = serverId;
+            user.lastServerAccessIp = ip;
+            discordModule.sendMessageToReportChannel('User: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '. Was updated.');
+            console.log(TAG + ' - User: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '. Was updated.');
+            datasource.updateUser(user);
+        }
+    });
+
+    res.status(200).send();
+});
+
+app.get('/api/server-alive/:serverId', async  (req, res) => {
+    
+    console.log(TAG + ' - Server ' + req.params.serverId + ' requesting last alive date.');
+    const serverStatus = await datasource.getServerStatusById(req.params.serverId);
+    res.json({response: serverStatus});
+});
+
+app.post('/api/server-alive/:serverId', async  (req, res) => {
     console.log(TAG + ' - Server ' + req.params.serverId + ' is alive.');
     await datasource.updateServerStatus({id: req.params.serverId, status: true});
 
@@ -90,22 +119,6 @@ serverAlive = async (req, res) => {
     });
     
     res.status(200).send();
-}
-
-app.post('/user-join-server', (req, res) => {
-    userJoineServer(req, res);
-});
-
-app.post('/api/user-join-server', (req, res) => {
-    userJoineServer(req, res);
-});
-
-app.get('/api/server-alive/:serverId', async  (req, res) => {
-    await serverAlive(req, res);
-});
-
-app.get('/server-alive/:serverId', async (req, res) => {
-   await serverAlive(req, res);
 });
 
 app.get('/oauth/redirect', async (req, res) => {
@@ -201,3 +214,12 @@ app.get('/server-status', async (req, res) =>{
 
     res.status(200).render('server-status', {server1Status: servers[0].status, server2Status: servers[1].status });
 });
+
+const fileUpload = require('express-fileupload');
+app.use(fileUpload());
+
+app.post('/api/thumbnail-upload', async (req, res) => {
+    let file = req['files'].thumbnail;
+    console.log("File uploaded: ", file.name);
+    res.status(200)
+ });
