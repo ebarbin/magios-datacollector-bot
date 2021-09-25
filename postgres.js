@@ -91,9 +91,13 @@ const getServerStatusById = async (id) => {
     try {
         const query =  { text: 'SELECT * FROM server_status WHERE id = $1', values:[id]};
         const res = await postgresClient.query(query);
-        return res.rows;
+        if (res.rows.length > 0) {
+            return res.rows[0];
+        } else {
+            return null
+        }
     } catch (err) {
-        return [];
+        return null;
     }
 }
 
