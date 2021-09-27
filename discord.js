@@ -34,7 +34,7 @@ let GUILD;
 
 client.login(process.env.DISCORD_BOT_TOKEN);
 
-    client.once('ready', async () => { 
+    client.once('ready', async () => {
         REPORT_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === REPORT_CHANNEL_NAME);
         EVENTOS_CALENDARIO_CHANNEL = client.channels.cache.find(channel => channel.name === EVENTOS_CALENDARIO_CHANNEL_NAME);
         SERVER_STATUS_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === SERVER_STATUS_CHANNEL_NAME);
@@ -53,7 +53,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
             let dataBaseUser = await datasource.getUser(user.id);
             if (!dataBaseUser) {
                 const roles = getUserRoles(member);
-                const newUser = createEmptyUser(user);
+                const newUser = common.createEmptyUser(user);
                 newUser.roles = roles;
                 newUser.joinDate = common.getToDay().format('DD/MM/YYYY HH:mm:ss');
                 await datasource.saveUser(newUser);
@@ -80,7 +80,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
 
         if (!dataBaseUser) {
                 
-            const newUser = createEmptyUser(entryData.member.user);
+            const newUser = common.createEmptyUser(entryData.member.user);
             newUser.roles = roles;
 
             if (join) {
@@ -342,7 +342,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
 
             if (!dataBaseUser) {
 
-                const newUser = createEmptyUser(joinUser);
+                const newUser = common.createEmptyUser(joinUser);
                 newUser.lastTextChannelName = message.channel.name;
                 newUser.lastTextChannelDate = common.getToDay().format('DD/MM/YYYY HH:mm:ss');
                 await datasource.saveUser(newUser);
@@ -512,7 +512,7 @@ checkNewUserAtStartup = () => {
                 const roles = getUserRoles(member);
                 datasource.getUser(member.user.id).then(dbUser => {
                     if (!dbUser) {
-                        const newUser = createEmptyUser(member.user);
+                        const newUser = common.createEmptyUser(member.user);
                         newUser.roles = roles;
                         datasource.saveUser(newUser);
                     } else {
@@ -569,6 +569,8 @@ cleanOldEvents = () => {
                             if (originalMsg) {
                                 originalMsg.delete();  
                             }
+                            const eventName = originalMsg.title.split(":calendar_spiral:")[1].trim().split('**')[1];
+                            sendMessageToReportChannel('The event "' + eventName + '" was removed.')
                         }
                     }
                 }
