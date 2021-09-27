@@ -516,6 +516,7 @@ checkNewUserAtStartup = () => {
                         const newUser = common.createEmptyUser(member.user);
                         newUser.roles = roles;
                         datasource.saveUser(newUser);
+                        sendMessageToReportChannel('The user "' + newUser.username + '" was created.');
                     } else {
                         dbUser.roles = roles;
                         datasource.updateUser(dbUser);
