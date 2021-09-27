@@ -57,6 +57,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
                 newUser.roles = roles;
                 newUser.joinDate = common.getToDay().format('DD/MM/YYYY HH:mm:ss');
                 await datasource.saveUser(newUser);
+                sendMessageToReportChannel('The user "' + newUser.username + '" was created.');
             }
         }
     });
@@ -570,7 +571,7 @@ cleanOldEvents = () => {
                                 originalMsg.delete();  
                             }
                             const eventName = originalMsg.title.split(":calendar_spiral:")[1].trim().split('**')[1];
-                            sendMessageToReportChannel('The event "' + eventName + '" was removed.')
+                            sendMessageToReportChannel('The event "' + eventName + '" was removed.');
                         }
                     }
                 }
