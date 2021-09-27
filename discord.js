@@ -42,7 +42,7 @@ client.login(process.env.DISCORD_BOT_TOKEN);
 
         console.log(TAG + ' - Discord bot is connected.')
 
-        checkNewUserAtStartup();
+        await checkNewUserAtStartup();
     });
 
 if (common.ENABLE_DISCORD_EVENTS) {
@@ -507,24 +507,27 @@ getUserRoles = (member) => {
 }
 
 checkNewUserAtStartup = () => { 
-    GUILD.members.fetch().then((members) =>
-        members.forEach((member) => {
-            if (!member.user.bot) {
-                const roles = getUserRoles(member);
-                datasource.getUser(member.user.id).then(dbUser => {
-                    if (!dbUser) {
-                        const newUser = common.createEmptyUser(member.user);
-                        newUser.roles = roles;
-                        datasource.saveUser(newUser);
-                        sendMessageToReportChannel('The user "' + newUser.username + '" was created.');
-                    } else {
-                        dbUser.roles = roles;
-                        datasource.updateUser(dbUser);
-                    }
-                })
-            }
-        })
-    );
+    return new Promise((resolve, reject) => {
+        GUILD.members.fetch().then((members) => {
+            members.forEach((member) => {
+                if (!member.user.bot) {
+                    const roles = getUserRoles(member);
+                    datasource.getUser(member.user.id).then(dbUser => {
+                        if (!dbUser) {
+                            const newUser = common.createEmptyUser(member.user);
+                            newUser.roles = roles;
+                            datasource.saveUser(newUser);
+                            sendMessageToReportChannel('The user "' + newUser.username + '" was created.');
+                        } else {
+                            dbUser.roles = roles;
+                            datasource.updateUser(dbUser);
+                        }
+                    })
+                }
+            })
+            resolve();
+        });
+    })
 }
 
 sendMessageToReportChannel = (msg) => {
@@ -588,3 +591,4 @@ exports.sendMessageToReportChannel = sendMessageToReportChannel;
 exports.cleanOldEvents = cleanOldEvents;
 exports.sendServerStatus = sendServerStatus;
 exports.cleanServerStatus = cleanServerStatus;
+exports.checkNewUserAtStartup = checkNewUserAtStartup;
