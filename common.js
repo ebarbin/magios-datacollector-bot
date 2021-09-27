@@ -12,6 +12,7 @@ const createEmptyUser = (user) => {
         id: user.id,
         avatar: user.avatar,
         username: user.username.toLowerCase(),
+        joinDate: getToDay().format('DD/MM/YYYY HH:mm:ss'),
         voiceChannelTotalTime: 0,
         joinVoiceChannelCount: 0,
         msgChannelCount: 0,
