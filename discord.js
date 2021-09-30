@@ -118,9 +118,18 @@ if (common.ENABLE_DISCORD_EVENTS) {
 
             const user = await datasource.getUser(message.author.id);
             if (user && user.roles && user.roles.find(r => r == 'Admins')) {
+                
                 if (message.content == '!terrains') {
-                    message.channel.send(common.terrains.join(', '));    
-                } else if (message.content == '!addmodule') {
+                    message.channel.send(common.terrains.join(', '));
+                } else if (message.content == '!jets') {
+                    message.channel.send(common.jets.join(', '));
+                } else if (message.content == '!warbirds') {
+                    message.channel.send(common.warbirds.join(', '));
+                } else if (message.content == '!helis') {
+                    message.channel.send(common.helis.join(', '));
+                } else if (message.content == '!others') {
+                    message.channel.send(common.others.join(', '));
+                } else if (message.content.indexOf('!addmodule') >= 0) {
 
                     try {
                         const module = message.content.split("!addmodule")[1].trim();
