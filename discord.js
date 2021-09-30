@@ -117,7 +117,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
         if (message.channel.type == 'dm') {
 
             const user = await datasource.getUser(message.author.id);
-            if (user && user.roles && user.roles.find(r => r == 'Admins')) {
+            if (user && user.roles && user.roles.find(r => r == 'Magios' || r == 'NewJoiner' || r == 'Admins')) {
 
                 if (message.content == '!terrains') {
                     message.reply(common.terrains.join(', '));
@@ -165,7 +165,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
                         message.reply("Fail adding module");
                     }
 
-                } else if (message.content == '!limbo') {
+                } else if (message.content == '!limbo' && user.roles.find(r => r == 'Admins')) {
 
                     let users = await datasource.getAllUsers();
                     users = users.filter(u => u.roles && u.roles.find(r => r == 'Limbo'));
@@ -196,7 +196,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
                             message.channel.send(embed);
                     }
         
-                } else if (message.content == '!newjoiner') {
+                } else if (message.content == '!newjoiner' && user.roles.find(r => r == 'Admins')) {
 
                     let users = await datasource.getAllUsers();
                     users = users.filter(u => u.roles && u.roles.find(r => r == 'NewJoiner'));
@@ -226,7 +226,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
                             })
                             message.channel.send(embed);
                     }
-                } else if (message.content == '!magios') {
+                } else if (message.content == '!magios' && user.roles.find(r => r == 'Admins')) {
 
                     let users = await datasource.getAllUsers();
                     users = users.filter(u => u.roles && u.roles.find(r => r == 'Magios'));
@@ -257,7 +257,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
                             message.channel.send(embed);
                     }
 
-                } else if (message.content.indexOf('!getid') >= 0) {
+                } else if (message.content.indexOf('!getid') >= 0 && user.roles.find(r => r == 'Admins')) {
 
                     const arr = message.content.split(' ');
                     if (arr.length == 2) {
@@ -288,7 +288,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
                         }
                     }
 
-                } else if (message.content == '!download all') {
+                } else if (message.content == '!download all' && user.roles.find(r => r == 'Admins')) {
                     
                     let users = await datasource.getAllUsers();
 
@@ -308,7 +308,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
                     console.error(error);
                     });
 
-                } else if (message.content == '!download magios') {
+                } else if (message.content == '!download magios' && user.roles.find(r => r == 'Admins')) {
                     
                     let users = await datasource.getAllUsers();
                     users = users.filter(user => user.roles && user.roles.find(r => r == 'Magios'));
@@ -332,7 +332,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
                     console.error(error);
                     });
 
-                } else if (message.content == '!download limbo') {
+                } else if (message.content == '!download limbo' && user.roles.find(r => r == 'Admins')) {
                     
                     let users = await datasource.getAllUsers();
                     users = users.filter(user => user.roles && user.roles.find(r => r == 'Limbo'));
@@ -356,7 +356,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
                     console.error(error);
                     });
 
-                } else if (message.content == '!download newjoiner') {
+                } else if (message.content == '!download newjoiner' && user.roles.find(r => r == 'Admins')) {
                     
                     let users = await datasource.getAllUsers();
                     users = users.filter(user => user.roles && user.roles.find(r => r == 'NewJoiner'));
