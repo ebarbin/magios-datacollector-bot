@@ -120,21 +120,21 @@ if (common.ENABLE_DISCORD_EVENTS) {
             if (user && user.roles && user.roles.find(r => r == 'Admins')) {
 
                 if (message.content == '!terrains') {
-                    message.channel.send(common.terrains.join(', '));
+                    message.reply.send(common.terrains.join(', '));
                 } else if (message.content == '!jets') {
-                    message.channel.send(common.jets.join(', '));
+                    message.reply.send(common.jets.join(', '));
                 } else if (message.content == '!warbirds') {
-                    message.channel.send(common.warbirds.join(', '));
+                    message.reply.send(common.warbirds.join(', '));
                 } else if (message.content == '!helis') {
-                    message.channel.send(common.helis.join(', '));
+                    message.reply.send(common.helis.join(', '));
                 } else if (message.content == '!others') {
-                    message.channel.send(common.others.join(', '));
+                    message.reply.send(common.others.join(', '));
                 } else if (message.content.indexOf('!addmodule') >= 0) {
 
                     try {
                         const module = message.content.split("!addmodule")[1].trim();
                         if (_.includes(user.modules, module)) {
-                            message.channel.send("Module already added.");   
+                            message.reply("Module already added.");   
                         } else {
                             if (_.includes(common.terrains, module)) {
                                 user.modules.push(module);
@@ -157,12 +157,12 @@ if (common.ENABLE_DISCORD_EVENTS) {
                                 await datasource.updateUser(user);
                                 message.reply("Module added.");
                             } else {
-                                message.channel.send("Fail adding module.");
+                                message.reply("Module not exists. Check module name using: !terrains, !jets, !warbirds, !helis, !others");
                             }
                         }
 
                     } catch(e) {
-                        message.channel.send("Fail adding module");
+                        message.reply("Fail adding module");
                     }
 
                 } else if (message.content == '!limbo') {
