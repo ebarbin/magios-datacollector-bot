@@ -119,7 +119,38 @@ if (common.ENABLE_DISCORD_EVENTS) {
             const user = await datasource.getUser(message.author.id);
             if (user && user.roles && user.roles.find(r => r == 'Admins')) {
 
-                if (message.content == '!limbo') {
+                if (message.content == '!addmodule') {
+
+                    try {
+                        const module = message.content.split("!addmodule")[1].trim();
+                        if (_.includes(user.modules, module)) {
+                            message.channel.send("Module already added.");   
+                        } else {
+                            if (_.includes(common.terrains, module)) {
+                                user.modules.push(module);
+                                await datasource.updateUser(user);
+                            } else if (_.includes(common.jets, module)) {
+                                user.modules.push(module);
+                                await datasource.updateUser(user);
+                            } else if (_.includes(common.warbirds, module)) {
+                                user.modules.push(module);
+                                await datasource.updateUser(user);
+                            } else if (_.includes(common.helis, module)) {
+                                user.modules.push(module);
+                                await datasource.updateUser(user);
+                            } else if (_.includes(common.others, module)) {
+                                user.modules.push(module);
+                                await datasource.updateUser(user);
+                            } else {
+                                message.channel.send("Faild adding module.");    
+                            }
+                        }
+
+                    } catch(e) {
+                        message.channel.send("Faild adding module");
+                    }
+
+                } else if (message.content == '!limbo') {
 
                     let users = await datasource.getAllUsers();
                     users = users.filter(u => u.roles && u.roles.find(r => r == 'Limbo'));
