@@ -151,9 +151,9 @@ app.get('/oauth/redirect', async (req, res) => {
 
     const user = await datasource.findUserByUsername(username);
     
-
-    if (user && user.roles.find(r=>r == 'Admins')) {
+    if (user && user.roles.find(r => r == 'Admins')) {
         res.cookie('AuthToken', access_token);
+        res.cookie('user', JSON.stringify(user));
         res.redirect('/');
     } else {
         res.redirect('/not-allow');
