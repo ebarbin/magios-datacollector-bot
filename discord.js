@@ -129,6 +129,38 @@ if (common.ENABLE_DISCORD_EVENTS) {
                     message.reply(common.helis.join(', '));
                 } else if (message.content == '!others') {
                     message.reply(common.others.join(', '));
+                } else if (message.content.indexOf('!addmodules') >= 0) {
+                    const modules = message.content.split("!addmodule")[1].trim().split(",");
+                    modules.forEach(m => {
+                        let mod = m.trim();
+                        if (_.includes(user.modules, mod)) {
+                            message.reply("Module already added.");   
+                        } else {
+                            if (_.includes(common.terrains, mod)) {
+                                user.modules.push(mod);
+                                await datasource.updateUser(user);
+                                message.reply("Module added.");
+                            } else if (_.includes(common.jets, mod)) {
+                                user.modules.push(mod);
+                                await datasource.updateUser(user);
+                                message.reply("Module added.");
+                            } else if (_.includes(common.warbirds, mod)) {
+                                user.modules.push(mod);
+                                await datasource.updateUser(user);
+                                message.reply("Module added.");
+                            } else if (_.includes(common.helis, mod)) {
+                                user.modules.push(mod);
+                                await datasource.updateUser(user);
+                                message.reply("Module added.");
+                            } else if (_.includes(common.others, mod)) {
+                                user.modules.push(mod);
+                                await datasource.updateUser(user);
+                                message.reply("Module added.");
+                            } else {
+                                message.reply("Module " + mod + " not exists. Check module name using: \"!terrains, !jets, !warbirds, !helis, !others\" commands.");
+                            }
+                        }
+                    });
                 } else if (message.content.indexOf('!addmodule') >= 0) {
 
                     try {
@@ -157,7 +189,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
                                 await datasource.updateUser(user);
                                 message.reply("Module added.");
                             } else {
-                                message.reply("Module not exists. Check module name using: \"!terrains, !jets, !warbirds, !helis, !others\" commands.");
+                                message.reply("Module " + module + " not exists. Check module name using: \"!terrains, !jets, !warbirds, !helis, !others\" commands.");
                             }
                         }
 
