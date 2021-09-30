@@ -215,7 +215,7 @@ app.get('/server-status', async (req, res) =>{
 
     const servers = await datasource.getServerStatus();
 
-    res.status(200).render('server-status', {server1Status: servers[0].status, server2Status: servers[1].status });
+    res.status(200).render('server-status', {server1Status: servers[0], server2Status: servers[1] });
 });
 
 app.get('/modules', async (req, res) =>{
