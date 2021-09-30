@@ -120,15 +120,15 @@ if (common.ENABLE_DISCORD_EVENTS) {
             if (user && user.roles && user.roles.find(r => r == 'Admins')) {
 
                 if (message.content == '!terrains') {
-                    message.reply.send(common.terrains.join(', '));
+                    message.reply(common.terrains.join(', '));
                 } else if (message.content == '!jets') {
-                    message.reply.send(common.jets.join(', '));
+                    message.reply(common.jets.join(', '));
                 } else if (message.content == '!warbirds') {
-                    message.reply.send(common.warbirds.join(', '));
+                    message.reply(common.warbirds.join(', '));
                 } else if (message.content == '!helis') {
-                    message.reply.send(common.helis.join(', '));
+                    message.reply(common.helis.join(', '));
                 } else if (message.content == '!others') {
-                    message.reply.send(common.others.join(', '));
+                    message.reply(common.others.join(', '));
                 } else if (message.content.indexOf('!addmodule') >= 0) {
 
                     try {
