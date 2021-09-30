@@ -111,7 +111,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
         }
     });
 
-    client.on('message', async (message) => {   
+    client.on('message', async (message) => {
         if (message.author.bot) return;
         
         if (message.channel.type == 'dm') {
@@ -131,7 +131,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
                     message.reply(common.others.join(', '));
                 } else if (message.content.indexOf('!addmodules') >= 0) {
                     const modules = message.content.split("!addmodule")[1].trim().split(",");
-                    modules.forEach(m => {
+                    modules.forEach(async m => {
                         let mod = m.trim();
                         if (_.includes(user.modules, mod)) {
                             message.reply("Module already added.");   
