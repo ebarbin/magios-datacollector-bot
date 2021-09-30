@@ -130,7 +130,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
                 } else if (message.content == '!others') {
                     message.reply(common.others.join(', '));
                 } else if (message.content.indexOf('!addmodules') >= 0) {
-                    const modules = message.content.split("!addmodule")[1].trim().split(",");
+                    const modules = message.content.split("!addmodules")[1].trim().split(",");
                     modules.forEach(async m => {
                         let mod = m.trim();
                         if (_.includes(user.modules, mod)) {
