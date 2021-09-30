@@ -157,14 +157,26 @@ if (common.ENABLE_DISCORD_EVENTS) {
                                 await datasource.updateUser(user);
                                 message.reply("Module added.");
                             } else {
-                                message.reply("Module not exists. Check module name using: !terrains, !jets, !warbirds, !helis, !others");
+                                message.reply("Module not exists. Check module name using: \"!terrains, !jets, !warbirds, !helis, !others\" commands.");
                             }
                         }
 
                     } catch(e) {
-                        message.reply("Fail adding module");
+                        message.reply("Fail adding module: " + module);
                     }
-
+                } else if (message.content.indexOf('!removemodule') >= 0) {
+                    try {
+                        const module = message.content.split("!removemodule")[1].trim();
+                        if (_.includes(user.modules, module)) {
+                            user.modules = user.modules.filter(m => m !== module);
+                            await datasource.updateUser(user);
+                            message.reply("Module removed.");
+                        } else {
+                            message.reply("Fail removing module.");
+                        }
+                    } catch(e) {
+                        message.reply("Fail removing module.");
+                    }
                 } else if (message.content == '!limbo' && user.roles.find(r => r == 'Admins')) {
 
                     let users = await datasource.getAllUsers();
