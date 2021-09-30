@@ -118,8 +118,9 @@ if (common.ENABLE_DISCORD_EVENTS) {
 
             const user = await datasource.getUser(message.author.id);
             if (user && user.roles && user.roles.find(r => r == 'Admins')) {
-
-                if (message.content == '!addmodule') {
+                if (message.content == '!terrains') {
+                    message.channel.send(common.terrains.join(', '));    
+                } else if (message.content == '!addmodule') {
 
                     try {
                         const module = message.content.split("!addmodule")[1].trim();
@@ -142,7 +143,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
                                 user.modules.push(module);
                                 await datasource.updateUser(user);
                             } else {
-                                message.channel.send("Faild adding module.");    
+                                message.channel.send("Faild adding module.");
                             }
                         }
 
