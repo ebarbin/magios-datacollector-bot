@@ -118,7 +118,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
 
             const user = await datasource.getUser(message.author.id);
             if (user && user.roles && user.roles.find(r => r == 'Admins')) {
-                
+
                 if (message.content == '!terrains') {
                     message.channel.send(common.terrains.join(', '));
                 } else if (message.content == '!jets') {
@@ -139,25 +139,30 @@ if (common.ENABLE_DISCORD_EVENTS) {
                             if (_.includes(common.terrains, module)) {
                                 user.modules.push(module);
                                 await datasource.updateUser(user);
+                                message.reply("Module added.");
                             } else if (_.includes(common.jets, module)) {
                                 user.modules.push(module);
                                 await datasource.updateUser(user);
+                                message.reply("Module added.");
                             } else if (_.includes(common.warbirds, module)) {
                                 user.modules.push(module);
                                 await datasource.updateUser(user);
+                                message.reply("Module added.");
                             } else if (_.includes(common.helis, module)) {
                                 user.modules.push(module);
                                 await datasource.updateUser(user);
+                                message.reply("Module added.");
                             } else if (_.includes(common.others, module)) {
                                 user.modules.push(module);
                                 await datasource.updateUser(user);
+                                message.reply("Module added.");
                             } else {
-                                message.channel.send("Faild adding module.");
+                                message.channel.send("Fail adding module.");
                             }
                         }
 
                     } catch(e) {
-                        message.channel.send("Faild adding module");
+                        message.channel.send("Fail adding module");
                     }
 
                 } else if (message.content == '!limbo') {
