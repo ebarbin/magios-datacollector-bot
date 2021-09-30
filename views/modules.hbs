@@ -1,0 +1,105 @@
+<style>
+    th.terrains, td.terrains {
+        background-color:rgba(0, 174, 255, 0.775);
+    }
+    th.jets, td.jets {
+        background-color:rgba(0, 255, 64, 0.816);
+    }
+    th.warbirds, td.warbirds {
+        background-color:rgba(255, 145, 0, 0.809);
+    }
+    th.helis, td.helis {
+        background-color:rgba(255, 89, 0, 0.789);
+    }
+    th.others, td.others {
+        background-color:rgba(255, 217, 0, 0.755);
+    }
+</style>
+{{> menu}}
+<div class="content">
+    <h1>Modules (Magios, Newjoiner) ({{users.length}})</h1>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">username</th>
+          {{#each terrains}}
+            <th class="terrains" scope="col">{{this}}</th>
+          {{/each}}
+          {{#each jets}}
+            <th class="jets" scope="col">{{this}}</th>
+          {{/each}}
+          {{#each warbirds}}
+            <th class="warbirds" scope="col">{{this}}</th>
+          {{/each}}
+          {{#each helis}}
+            <th class="helis" scope="col">{{this}}</th>
+          {{/each}}
+          {{#each others}}
+            <th class="others" scope="col">{{this}}</th>
+          {{/each}}
+        </tr>
+      </thead>
+      <tbody>
+        {{#each users}}
+            <tr>
+                <td><img class="rounded-circle" width="30" src="https://cdn.discordapp.com/avatars/{{this.id}}/{{this.avatar}}"></td>
+                <td >{{this.username}}</td>
+                
+                <td class="terrains">{{#if this.terrains_0}}<b>{{this.terrains_0}}</b>{{else}}{{this.terrains_0}}{{/if}}</td>
+                <td class="terrains">{{#if this.terrains_1}}<b>{{this.terrains_1}}</b>{{else}}{{this.terrains_1}}{{/if}}</td>
+                <td class="terrains">{{#if this.terrains_2}}<b>{{this.terrains_2}}</b>{{else}}{{this.terrains_2}}{{/if}}</td>
+                <td class="terrains">{{#if this.terrains_3}}<b>{{this.terrains_3}}</b>{{else}}{{this.terrains_3}}{{/if}}</td>
+                <td class="terrains">{{#if this.terrains_4}}<b>{{this.terrains_4}}</b>{{else}}{{this.terrains_4}}{{/if}}</td>
+
+                <td class="jets">{{#if this.jets_0}}<b>{{this.jets_0}}</b>{{else}}{{this.jets_0}}{{/if}}</td>
+                <td class="jets">{{#if this.jets_1}}<b>{{this.jets_1}}</b>{{else}}{{this.jets_1}}{{/if}}</td>
+                <td class="jets">{{#if this.jets_2}}<b>{{this.jets_2}}</b>{{else}}{{this.jets_2}}{{/if}}</td>
+                <td class="jets">{{#if this.jets_3}}<b>{{this.jets_3}}</b>{{else}}{{this.jets_3}}{{/if}}</td>
+                <td class="jets">{{#if this.jets_4}}<b>{{this.jets_4}}</b>{{else}}{{this.jets_4}}{{/if}}</td>
+                <td class="jets">{{#if this.jets_5}}<b>{{this.jets_5}}</b>{{else}}{{this.jets_5}}{{/if}}</td>
+                <td class="jets">{{#if this.jets_6}}<b>{{this.jets_6}}</b>{{else}}{{this.jets_6}}{{/if}}</td>
+                <td class="jets">{{#if this.jets_7}}<b>{{this.jets_7}}</b>{{else}}{{this.jets_7}}{{/if}}</td>
+                <td class="jets">{{#if this.jets_8}}<b>{{this.jets_8}}</b>{{else}}{{this.jets_8}}{{/if}}</td>
+                <td class="jets">{{#if this.jets_9}}<b>{{this.jets_9}}</b>{{else}}{{this.jets_9}}{{/if}}</td>
+                <td class="jets">{{#if this.jets_10}}<b>{{this.jets_10}}</b>{{else}}{{this.jets_10}}{{/if}}</td>
+                <td class="jets">{{#if this.jets_11}}<b>{{this.jets_11}}</b>{{else}}{{this.jets_11}}{{/if}}</td>
+                <td class="jets">{{#if this.jets_12}}<b>{{this.jets_12}}</b>{{else}}{{this.jets_12}}{{/if}}</td>
+                <td class="jets">{{#if this.jets_13}}<b>{{this.jets_13}}</b>{{else}}{{this.jets_13}}{{/if}}</td>
+                <td class="jets">{{#if this.jets_14}}<b>{{this.jets_14}}</b>{{else}}{{this.jets_14}}{{/if}}</td>
+                <td class="jets">{{#if this.jets_15}}<b>{{this.jets_15}}</b>{{else}}{{this.jets_15}}{{/if}}</td>
+                <td class="jets">{{#if this.jets_16}}<b>{{this.jets_16}}</b>{{else}}{{this.jets_16}}{{/if}}</td>
+                <td class="jets">{{#if this.jets_17}}<b>{{this.jets_17}}</b>{{else}}{{this.jets_17}}{{/if}}</td>
+                <td class="jets">{{#if this.jets_18}}<b>{{this.jets_18}}</b>{{else}}{{this.jets_18}}{{/if}}</td>
+                <td class="jets">{{#if this.jets_19}}<b>{{this.jets_19}}</b>{{else}}{{this.jets_19}}{{/if}}</td>
+                <td class="jets">{{#if this.jets_20}}<b>{{this.jets_20}}</b>{{else}}{{this.jets_20}}{{/if}}</td>
+                <td class="jets">{{#if this.jets_21}}<b>{{this.jets_21}}</b>{{else}}{{this.jets_21}}{{/if}}</td>
+                <td class="jets">{{#if this.jets_22}}<b>{{this.jets_22}}</b>{{else}}{{this.jets_22}}{{/if}}</td>
+
+                <td class="warbirds">{{#if this.warbirds_0}}<b>{{this.warbirds_0}}</b>{{else}}{{this.warbirds_0}}{{/if}}</td>
+                <td class="warbirds">{{#if this.warbirds_1}}<b>{{this.warbirds_1}}</b>{{else}}{{this.warbirds_1}}{{/if}}</td>
+                <td class="warbirds">{{#if this.warbirds_2}}<b>{{this.warbirds_2}}</b>{{else}}{{this.warbirds_2}}{{/if}}</td>
+                <td class="warbirds">{{#if this.warbirds_3}}<b>{{this.warbirds_3}}</b>{{else}}{{this.warbirds_3}}{{/if}}</td>
+                <td class="warbirds">{{#if this.warbirds_4}}<b>{{this.warbirds_4}}</b>{{else}}{{this.warbirds_4}}{{/if}}</td>
+                <td class="warbirds">{{#if this.warbirds_5}}<b>{{this.warbirds_5}}</b>{{else}}{{this.warbirds_5}}{{/if}}</td>
+                <td class="warbirds">{{#if this.warbirds_6}}<b>{{this.warbirds_6}}</b>{{else}}{{this.warbirds_6}}{{/if}}</td>
+                <td class="warbirds">{{#if this.warbirds_7}}<b>{{this.warbirds_7}}</b>{{else}}{{this.warbirds_7}}{{/if}}</td>
+
+                <td class="helis">{{#if this.helis_0}}<b>{{this.helis_0}}</b>{{else}}{{this.helis_0}}{{/if}}</td>
+                <td class="helis">{{#if this.helis_1}}<b>{{this.helis_1}}</b>{{else}}{{this.helis_1}}{{/if}}</td>
+                <td class="helis">{{#if this.helis_2}}<b>{{this.helis_2}}</b>{{else}}{{this.helis_2}}{{/if}}</td>
+                <td class="helis">{{#if this.helis_3}}<b>{{this.helis_3}}</b>{{else}}{{this.helis_3}}{{/if}}</td>
+                <td class="helis">{{#if this.helis_4}}<b>{{this.helis_4}}</b>{{else}}{{this.helis_4}}{{/if}}</td>
+                <td class="helis">{{#if this.helis_5}}<b>{{this.helis_5}}</b>{{else}}{{this.helis_5}}{{/if}}</td>
+
+                <td class="others">{{#if this.others_0}}<b>{{this.others_0}}</b>{{else}}{{this.others_0}}{{/if}}</td>
+                <td class="others">{{#if this.others_1}}<b>{{this.others_1}}</b>{{else}}{{this.others_1}}{{/if}}</td>
+                <td class="others">{{#if this.others_2}}<b>{{this.others_2}}</b>{{else}}{{this.others_2}}{{/if}}</td>
+                <td class="others">{{#if this.others_3}}<b>{{this.others_3}}</b>{{else}}{{this.others_3}}{{/if}}</td>
+                <td class="others">{{#if this.others_4}}<b>{{this.others_4}}</b>{{else}}{{this.others_4}}{{/if}}</td>
+                <td class="others">{{#if this.others_5}}<b>{{this.others_5}}</b>{{else}}{{this.others_5}}{{/if}}</td>
+            </tr>
+        {{/each}}
+      </tbody>
+    </table>
+</div>

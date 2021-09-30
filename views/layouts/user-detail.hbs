@@ -64,15 +64,14 @@
 
 <script>
 
-  
-  const exampleModal = document.getElementById('modalForm')
+  const exampleModal = document.getElementById('modalForm');
+
   exampleModal.addEventListener('show.bs.modal', function (event) {
-    // Button that triggered the modal
+    
     const button = event.relatedTarget;
-    // Extract info from data-bs-* attributes
+
     const username = button.getAttribute('data-bs-user-name');
     const avatar = button.getAttribute('data-bs-user-avatar');
-
     const userId = button.getAttribute('data-bs-user-id');
     const joinDate = button.getAttribute('data-bs-user-joinDate');
     const roles = button.getAttribute('data-bs-user-roles');
@@ -92,6 +91,6 @@
     exampleModal.querySelector('.lastServerAccessIp').textContent = lastServerAccessIp;
     exampleModal.querySelector('.lastTextChannelName').textContent = lastTextChannelName;
     
-    
   });
+  
 </script>

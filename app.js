@@ -218,6 +218,66 @@ app.get('/server-status', async (req, res) =>{
     res.status(200).render('server-status', {server1Status: servers[0].status, server2Status: servers[1].status });
 });
 
+app.get('/modules', async (req, res) =>{
+    const all = await datasource.getAllUsers();
+    let users = all.filter(u => u.roles && u.roles.find(r => r == 'Magios' || r == 'NewJoiner' ));
+
+    const results = [];
+    let result;
+    let i;
+    users.forEach(u => {
+        result = {id: u.id, username: u.username, avatar: u.avatar};
+
+        i = 0;
+        common.terrains.forEach(t => {
+            result['terrains_'+i] = false;
+            if (_.includes(u.modules, t)) {
+                result['terrains_'+i] = true;
+            }
+            i++;
+        });
+
+        i = 0;
+        common.jets.forEach(t => {
+            result['jets_'+i] = false;
+            if (_.includes(u.modules, t)) {
+                result['jets_'+i] = true;
+            }
+            i++;
+        });
+
+        i = 0;
+        common.warbirds.forEach(t => {
+            result['warbirds_'+i] = false;
+            if (_.includes(u.modules, t)) {
+                result['warbirds_'+i] = true;
+            }
+            i++;
+        });
+
+        i = 0;
+        common.helis.forEach(t => {
+            result['helis_'+i] = false;
+            if (_.includes(u.modules, t)) {
+                result['helis_'+i] = true;
+            }
+            i++;
+        });
+
+        i = 0;
+        common.others.forEach(t => {
+            result['others_'+i] = false;
+            if (_.includes(u.modules, t)) {
+                result['others_'+i] = true;
+            }
+            i++;
+        });
+        results.push(result);
+    })
+
+    res.status(200).render('modules', {users: results, terrains: common.terrains, jets: common.jets, warbirds: common.warbirds, helis: common.helis, others: common.others });
+});
+
 const fileUpload = require('express-fileupload');
 app.use(fileUpload());
 
