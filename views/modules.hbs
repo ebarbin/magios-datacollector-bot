@@ -5,6 +5,7 @@
     }
 
     th.normal, td.normal {
+        text-align: center;
         border: 1px solid #000000;
     }
     th.terrains, td.terrains {
@@ -72,6 +73,8 @@
           {{#each others}}
             <th class="others" scope="col">{{this}}</th>
           {{/each}}
+          <th scope="col"></th>
+          <td scope="col"></td>
         </tr>
       </thead>
       <tbody>
@@ -132,6 +135,9 @@
                 <td class="others">{{#if this.others_3}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
                 <td class="others">{{#if this.others_4}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
                 <td class="others">{{#if this.others_5}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+
+                <td class="normal"><b>{{this.username}}</b></td>
+                <td class="normal"><img class="rounded-circle" width="30" src="https://cdn.discordapp.com/avatars/{{this.id}}/{{this.avatar}}"></td>
             </tr>
         {{/each}}
       </tbody>
