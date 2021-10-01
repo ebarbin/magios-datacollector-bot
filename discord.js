@@ -135,25 +135,25 @@ if (common.ENABLE_DISCORD_EVENTS) {
                         if (_.includes(common.terrains, m)) myterrains.push(m);
                     });
                     message.reply(myterrains.join(', '));
-                } else if (message.content == '!jets') {
+                } else if (message.content == '!myjets') {
                     const jets = [];
                     user.modules.forEach(m => {
                         if (_.includes(common.jets, m)) jets.push(m);
                     });
                     message.reply(jets.join(', '));
-                }  else if (message.content == '!warbirds') {
+                }  else if (message.content == '!mywarbirds') {
                     const warbirds = [];
                     user.modules.forEach(m => {
                         if (_.includes(common.warbirds, m)) warbirds.push(m);
                     });
                     message.reply(warbirds.join(', '));
-                }  else if (message.content == '!helis') {
+                }  else if (message.content == '!myhelis') {
                     const helis = [];
                     user.modules.forEach(m => {
                         if (_.includes(common.helis, m)) helis.push(m);
                     });
                     message.reply(helis.join(', '));
-                }  else if (message.content == '!others') {
+                }  else if (message.content == '!myothers') {
                     const others = [];
                     user.modules.forEach(m => {
                         if (_.includes(common.others, m)) others.push(m);
