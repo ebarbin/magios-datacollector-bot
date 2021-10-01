@@ -117,7 +117,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
         if (message.channel.type == 'dm') {
 
             const user = await datasource.getUser(message.author.id);
-            if (user && user.roles && user.roles.find(r => r == 'Magios' || r == 'NewJoiner' || r == 'Admins')) {
+            if (user /*&& user.roles && user.roles.find(r => r == 'Magios' || r == 'NewJoiner' || r == 'Admins')*/) {
 
                 if (message.content == '!terrains') {
                     message.reply(common.terrains.join(', '));
@@ -129,12 +129,42 @@ if (common.ENABLE_DISCORD_EVENTS) {
                     message.reply(common.helis.join(', '));
                 } else if (message.content == '!others') {
                     message.reply(common.others.join(', '));
+                } else if (message.content == '!myterrains') {
+                    const myterrains = [];
+                    user.modules.forEach(m => {
+                        if (_.includes(common.terrains, m)) myterrains.push(m);
+                    });
+                    message.reply(myterrains.join(', '));
+                } else if (message.content == '!jets') {
+                    const jets = [];
+                    user.modules.forEach(m => {
+                        if (_.includes(common.jets, m)) jets.push(m);
+                    });
+                    message.reply(jets.join(', '));
+                }  else if (message.content == '!warbirds') {
+                    const warbirds = [];
+                    user.modules.forEach(m => {
+                        if (_.includes(common.warbirds, m)) warbirds.push(m);
+                    });
+                    message.reply(warbirds.join(', '));
+                }  else if (message.content == '!helis') {
+                    const helis = [];
+                    user.modules.forEach(m => {
+                        if (_.includes(common.helis, m)) helis.push(m);
+                    });
+                    message.reply(helis.join(', '));
+                }  else if (message.content == '!others') {
+                    const others = [];
+                    user.modules.forEach(m => {
+                        if (_.includes(common.others, m)) others.push(m);
+                    });
+                    message.reply(others.join(', '));
                 } else if (message.content.indexOf('!addmodules') >= 0) {
                     const modules = message.content.split("!addmodules")[1].trim().split(",");
                     modules.forEach(async m => {
                         let mod = m.trim();
                         if (_.includes(user.modules, mod)) {
-                            message.reply("Module already added.");   
+                            message.reply("Module already added.")  
                         } else {
                             if (_.includes(common.terrains, mod)) {
                                 user.modules.push(mod);
