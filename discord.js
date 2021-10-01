@@ -134,31 +134,36 @@ if (common.ENABLE_DISCORD_EVENTS) {
                     user.modules.forEach(m => {
                         if (_.includes(common.terrains, m)) myterrains.push(m);
                     });
-                    message.reply(myterrains.join(', '));
+                    if (myterrains.length > 0) message.reply(myterrains.join(', '));
+                    else message.reply('No terrains added yet.');
                 } else if (message.content == '!myjets') {
                     const jets = [];
                     user.modules.forEach(m => {
                         if (_.includes(common.jets, m)) jets.push(m);
                     });
-                    message.reply(jets.join(', '));
+                    if (jets.length > 0) message.reply(jets.join(', '));
+                    else message.reply('No jets added yet.');
                 }  else if (message.content == '!mywarbirds') {
                     const warbirds = [];
                     user.modules.forEach(m => {
                         if (_.includes(common.warbirds, m)) warbirds.push(m);
                     });
-                    message.reply(warbirds.join(', '));
+                    if (warbirds.length > 0) message.reply(warbirds.join(', '));
+                    else message.reply('No warbirds added yet.');
                 }  else if (message.content == '!myhelis') {
                     const helis = [];
                     user.modules.forEach(m => {
                         if (_.includes(common.helis, m)) helis.push(m);
                     });
-                    message.reply(helis.join(', '));
+                    if (helis.length > 0) message.reply(helis.join(', '));
+                    else message.reply('No helis added yet.');
                 }  else if (message.content == '!myothers') {
                     const others = [];
                     user.modules.forEach(m => {
                         if (_.includes(common.others, m)) others.push(m);
                     });
-                    message.reply(others.join(', '));
+                    if (others.length > 0) message.reply(others.join(', '));
+                    else message.reply('No others added yet.');
                 } else if (message.content.indexOf('!addmodules') >= 0) {
                     const modules = message.content.split("!addmodules")[1].trim().split(",");
                     modules.forEach(async m => {
