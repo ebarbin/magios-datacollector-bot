@@ -1,31 +1,62 @@
 <style>
     table {
-        font-size: smaller;
+        font-size: small;
+        border: 1px solid
+    }
+
+    th.normal, td.normal {
+        border: 1px solid #000000;
     }
     th.terrains, td.terrains {
+        text-align: center;
+        border: 1px solid #000000;
         background-color:rgba(0, 174, 255, 0.775);
     }
     th.jets, td.jets {
+        text-align: center;
+        border: 1px solid #000000;
         background-color:rgba(0, 255, 64, 0.816);
     }
     th.warbirds, td.warbirds {
+        text-align: center;
+        border: 1px solid #000000;
         background-color:rgba(255, 145, 0, 0.809);
     }
     th.helis, td.helis {
+        text-align: center;
+        border: 1px solid #000000;
         background-color:rgba(255, 89, 0, 0.789);
     }
     th.others, td.others {
+        text-align: center;
+        border: 1px solid #000000;
         background-color:rgba(255, 217, 0, 0.755);
     }
+    .table-fixed {
+        width: 100%;
+    }
+    .table-fixed thead {
+        position: sticky;
+        position: -webkit-sticky;
+        top: 0;
+        z-index: 999
+    }
+    .table-fixed thead th {
+        position: sticky;
+        position: -webkit-sticky;
+        top: 0;
+        z-index: 999;
+    }
+
 </style>
 {{> menu}}
 <div class="content">
     <h1>Modules (Magios, Newjoiner) ({{users.length}})</h1>
-    <table class="table table-striped">
+    <table class="table table-striped table-fixed">
       <thead>
         <tr>
           <th scope="col"></th>
-          <th scope="col">username</th>
+          <td scope="col"></td>
           {{#each terrains}}
             <th class="terrains" scope="col">{{this}}</th>
           {{/each}}
@@ -46,61 +77,61 @@
       <tbody>
         {{#each users}}
             <tr>
-                <td><img class="rounded-circle" width="30" src="https://cdn.discordapp.com/avatars/{{this.id}}/{{this.avatar}}"></td>
-                <td >{{this.username}}</td>
+                <td class="normal"><img class="rounded-circle" width="30" src="https://cdn.discordapp.com/avatars/{{this.id}}/{{this.avatar}}"></td>
+                <td class="normal"><b>{{this.username}}</b></td>
                 
-                <td class="terrains">{{#if this.terrains_0}}<b>{{this.terrains_0}}</b>{{else}}{{this.terrains_0}}{{/if}}</td>
-                <td class="terrains">{{#if this.terrains_1}}<b>{{this.terrains_1}}</b>{{else}}{{this.terrains_1}}{{/if}}</td>
-                <td class="terrains">{{#if this.terrains_2}}<b>{{this.terrains_2}}</b>{{else}}{{this.terrains_2}}{{/if}}</td>
-                <td class="terrains">{{#if this.terrains_3}}<b>{{this.terrains_3}}</b>{{else}}{{this.terrains_3}}{{/if}}</td>
-                <td class="terrains">{{#if this.terrains_4}}<b>{{this.terrains_4}}</b>{{else}}{{this.terrains_4}}{{/if}}</td>
+                <td class="terrains">{{#if this.terrains_0}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="terrains">{{#if this.terrains_1}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="terrains">{{#if this.terrains_2}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="terrains">{{#if this.terrains_3}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="terrains">{{#if this.terrains_4}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
 
-                <td class="jets">{{#if this.jets_0}}<b>{{this.jets_0}}</b>{{else}}{{this.jets_0}}{{/if}}</td>
-                <td class="jets">{{#if this.jets_1}}<b>{{this.jets_1}}</b>{{else}}{{this.jets_1}}{{/if}}</td>
-                <td class="jets">{{#if this.jets_2}}<b>{{this.jets_2}}</b>{{else}}{{this.jets_2}}{{/if}}</td>
-                <td class="jets">{{#if this.jets_3}}<b>{{this.jets_3}}</b>{{else}}{{this.jets_3}}{{/if}}</td>
-                <td class="jets">{{#if this.jets_4}}<b>{{this.jets_4}}</b>{{else}}{{this.jets_4}}{{/if}}</td>
-                <td class="jets">{{#if this.jets_5}}<b>{{this.jets_5}}</b>{{else}}{{this.jets_5}}{{/if}}</td>
-                <td class="jets">{{#if this.jets_6}}<b>{{this.jets_6}}</b>{{else}}{{this.jets_6}}{{/if}}</td>
-                <td class="jets">{{#if this.jets_7}}<b>{{this.jets_7}}</b>{{else}}{{this.jets_7}}{{/if}}</td>
-                <td class="jets">{{#if this.jets_8}}<b>{{this.jets_8}}</b>{{else}}{{this.jets_8}}{{/if}}</td>
-                <td class="jets">{{#if this.jets_9}}<b>{{this.jets_9}}</b>{{else}}{{this.jets_9}}{{/if}}</td>
-                <td class="jets">{{#if this.jets_10}}<b>{{this.jets_10}}</b>{{else}}{{this.jets_10}}{{/if}}</td>
-                <td class="jets">{{#if this.jets_11}}<b>{{this.jets_11}}</b>{{else}}{{this.jets_11}}{{/if}}</td>
-                <td class="jets">{{#if this.jets_12}}<b>{{this.jets_12}}</b>{{else}}{{this.jets_12}}{{/if}}</td>
-                <td class="jets">{{#if this.jets_13}}<b>{{this.jets_13}}</b>{{else}}{{this.jets_13}}{{/if}}</td>
-                <td class="jets">{{#if this.jets_14}}<b>{{this.jets_14}}</b>{{else}}{{this.jets_14}}{{/if}}</td>
-                <td class="jets">{{#if this.jets_15}}<b>{{this.jets_15}}</b>{{else}}{{this.jets_15}}{{/if}}</td>
-                <td class="jets">{{#if this.jets_16}}<b>{{this.jets_16}}</b>{{else}}{{this.jets_16}}{{/if}}</td>
-                <td class="jets">{{#if this.jets_17}}<b>{{this.jets_17}}</b>{{else}}{{this.jets_17}}{{/if}}</td>
-                <td class="jets">{{#if this.jets_18}}<b>{{this.jets_18}}</b>{{else}}{{this.jets_18}}{{/if}}</td>
-                <td class="jets">{{#if this.jets_19}}<b>{{this.jets_19}}</b>{{else}}{{this.jets_19}}{{/if}}</td>
-                <td class="jets">{{#if this.jets_20}}<b>{{this.jets_20}}</b>{{else}}{{this.jets_20}}{{/if}}</td>
-                <td class="jets">{{#if this.jets_21}}<b>{{this.jets_21}}</b>{{else}}{{this.jets_21}}{{/if}}</td>
-                <td class="jets">{{#if this.jets_22}}<b>{{this.jets_22}}</b>{{else}}{{this.jets_22}}{{/if}}</td>
+                <td class="jets">{{#if this.jets_0}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="jets">{{#if this.jets_1}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="jets">{{#if this.jets_2}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="jets">{{#if this.jets_3}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="jets">{{#if this.jets_4}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="jets">{{#if this.jets_5}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="jets">{{#if this.jets_6}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="jets">{{#if this.jets_7}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="jets">{{#if this.jets_8}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="jets">{{#if this.jets_9}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="jets">{{#if this.jets_10}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="jets">{{#if this.jets_11}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="jets">{{#if this.jets_12}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="jets">{{#if this.jets_13}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="jets">{{#if this.jets_14}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="jets">{{#if this.jets_15}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="jets">{{#if this.jets_16}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="jets">{{#if this.jets_17}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="jets">{{#if this.jets_18}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="jets">{{#if this.jets_19}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="jets">{{#if this.jets_20}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="jets">{{#if this.jets_21}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="jets">{{#if this.jets_22}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
 
-                <td class="warbirds">{{#if this.warbirds_0}}<b>{{this.warbirds_0}}</b>{{else}}{{this.warbirds_0}}{{/if}}</td>
-                <td class="warbirds">{{#if this.warbirds_1}}<b>{{this.warbirds_1}}</b>{{else}}{{this.warbirds_1}}{{/if}}</td>
-                <td class="warbirds">{{#if this.warbirds_2}}<b>{{this.warbirds_2}}</b>{{else}}{{this.warbirds_2}}{{/if}}</td>
-                <td class="warbirds">{{#if this.warbirds_3}}<b>{{this.warbirds_3}}</b>{{else}}{{this.warbirds_3}}{{/if}}</td>
-                <td class="warbirds">{{#if this.warbirds_4}}<b>{{this.warbirds_4}}</b>{{else}}{{this.warbirds_4}}{{/if}}</td>
-                <td class="warbirds">{{#if this.warbirds_5}}<b>{{this.warbirds_5}}</b>{{else}}{{this.warbirds_5}}{{/if}}</td>
-                <td class="warbirds">{{#if this.warbirds_6}}<b>{{this.warbirds_6}}</b>{{else}}{{this.warbirds_6}}{{/if}}</td>
-                <td class="warbirds">{{#if this.warbirds_7}}<b>{{this.warbirds_7}}</b>{{else}}{{this.warbirds_7}}{{/if}}</td>
+                <td class="warbirds">{{#if this.warbirds_0}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="warbirds">{{#if this.warbirds_1}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="warbirds">{{#if this.warbirds_2}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="warbirds">{{#if this.warbirds_3}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="warbirds">{{#if this.warbirds_4}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="warbirds">{{#if this.warbirds_5}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="warbirds">{{#if this.warbirds_6}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="warbirds">{{#if this.warbirds_7}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
 
-                <td class="helis">{{#if this.helis_0}}<b>{{this.helis_0}}</b>{{else}}{{this.helis_0}}{{/if}}</td>
-                <td class="helis">{{#if this.helis_1}}<b>{{this.helis_1}}</b>{{else}}{{this.helis_1}}{{/if}}</td>
-                <td class="helis">{{#if this.helis_2}}<b>{{this.helis_2}}</b>{{else}}{{this.helis_2}}{{/if}}</td>
-                <td class="helis">{{#if this.helis_3}}<b>{{this.helis_3}}</b>{{else}}{{this.helis_3}}{{/if}}</td>
-                <td class="helis">{{#if this.helis_4}}<b>{{this.helis_4}}</b>{{else}}{{this.helis_4}}{{/if}}</td>
-                <td class="helis">{{#if this.helis_5}}<b>{{this.helis_5}}</b>{{else}}{{this.helis_5}}{{/if}}</td>
+                <td class="helis">{{#if this.helis_0}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="helis">{{#if this.helis_1}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="helis">{{#if this.helis_2}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="helis">{{#if this.helis_3}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="helis">{{#if this.helis_4}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="helis">{{#if this.helis_5}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
 
-                <td class="others">{{#if this.others_0}}<b>{{this.others_0}}</b>{{else}}{{this.others_0}}{{/if}}</td>
-                <td class="others">{{#if this.others_1}}<b>{{this.others_1}}</b>{{else}}{{this.others_1}}{{/if}}</td>
-                <td class="others">{{#if this.others_2}}<b>{{this.others_2}}</b>{{else}}{{this.others_2}}{{/if}}</td>
-                <td class="others">{{#if this.others_3}}<b>{{this.others_3}}</b>{{else}}{{this.others_3}}{{/if}}</td>
-                <td class="others">{{#if this.others_4}}<b>{{this.others_4}}</b>{{else}}{{this.others_4}}{{/if}}</td>
-                <td class="others">{{#if this.others_5}}<b>{{this.others_5}}</b>{{else}}{{this.others_5}}{{/if}}</td>
+                <td class="others">{{#if this.others_0}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="others">{{#if this.others_1}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="others">{{#if this.others_2}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="others">{{#if this.others_3}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="others">{{#if this.others_4}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
+                <td class="others">{{#if this.others_5}}<image width="20" src="/images/green.png">{{else}}<image width="20" src="/images/red.png">{{/if}}</td>
             </tr>
         {{/each}}
       </tbody>
