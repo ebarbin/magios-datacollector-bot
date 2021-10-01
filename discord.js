@@ -158,7 +158,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
                     user.modules.forEach(m => {
                         if (_.includes(common.others, m)) others.push(m);
                     });
-                    message.reply(others.join(', '));
+                    message.reply(others.join(', ')).then(() => message.delete());
                 } else if (message.content.indexOf('!addmodules') >= 0) {
                     const modules = message.content.split("!addmodules")[1].trim().split(",");
                     modules.forEach(async m => {
