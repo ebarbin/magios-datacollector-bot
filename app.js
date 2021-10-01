@@ -221,7 +221,7 @@ app.get('/server-status', async (req, res) =>{
 app.get('/modules', async (req, res) =>{
     const all = await datasource.getAllUsers();
     let users = all.filter(u => u.roles && u.roles.find(r => r == 'Magios' || r == 'NewJoiner' ));
-
+    users = _.sortBy(users, ['username'], ['asc']);
     const results = [];
     let result;
     let i;
