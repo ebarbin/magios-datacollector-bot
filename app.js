@@ -151,7 +151,7 @@ app.get('/oauth/redirect', async (req, res) => {
 
     const user = await datasource.findUserByUsername(username);
     
-    if (user && user.roles.find(r => r == 'Admins')) {
+    if (user && user.roles.find(r => r == 'Admins' || r == 'Magios' || r == 'NewJoiner')) {
         res.cookie('AuthToken', access_token);
         res.cookie('user', JSON.stringify(user));
         res.redirect('/');
