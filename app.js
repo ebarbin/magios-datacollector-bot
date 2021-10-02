@@ -1,9 +1,8 @@
 require('dotenv').config();
 
 const express = require('express');
-const expressHbs = require('express-handlebars');
+const cors = require('cors');
 const bodyParser = require('body-parser');
-const path = require('path');
 const _ = require('lodash');
 const moment = require('moment-timezone');
 const btoa = require('btoa');
@@ -14,24 +13,26 @@ const { URLSearchParams } = require('url');
 const discordModule = require('./discord');
 const common = require('./common');
 const datasource = require('./postgres');
-const cron = require('./cron');
 
 const TAG = '[magios-datacollector-bot]';
 
 const PORT = process.env.PORT || 3000;
 const app = express();
 
-app.engine('hbs', expressHbs({ layoutsDir:'views/layouts/',  partialsDir:'views/layouts/', extname:'hbs', defaultLayout:'main' }));
+app.use(cors());
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+    next();
+});
 
-app.set('view engine', 'hbs')
-app.set('views', 'views');
+app.use(express.static(process.cwd() + "/angular/my-app/dist/my-app/"));
 
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
-app.use('/images',express.static(path.join(__dirname, '/assets/images')));
-app.use('/js',express.static(path.join(__dirname, '/assets/javascripts')));
-app.use('/css',express.static(path.join(__dirname, '/assets/stylesheets')));
 
 app.use((req, res, next) => {
 
@@ -107,6 +108,73 @@ app.get('/api/server-alive/:serverId', async  (req, res) => {
     res.json({response: serverStatus});
 });
 
+app.get('/api/modules', async (req, res) => {
+    res.json({terrains: common.terrains, jets: common.jets, warbirds: common.warbirds, helis: common.helis, others: common.others });
+});
+
+app.get('/api/modules/user', async (req, res) => {
+    const all = await datasource.getAllUsers();
+    let users = all.filter(u => u.roles && u.roles.find(r => r == 'Magios' || r == 'NewJoiner' ));
+    users = _.sortBy(users, ['username'], ['asc']);
+
+    res.json({users: users});
+});
+
+app.put('/api/modules/user/status/:userId', async (req, res) => {
+    const userId = req.params.userId;
+    const user = await datasource.getUser(userId);
+    if (!user.status) user.status = true;
+    else user.status = false;
+    await datasource.updateUser(user);
+    res.json({user: user});
+});
+
+app.put('/api/modules/user/country/:userId', async (req, res) => {
+    const userId = req.params.userId;
+    const country = req.body.country;
+    const user = await datasource.getUser(userId);
+    user.country = country;
+    await datasource.updateUser(user);
+    res.json({user: user});
+});
+
+app.put('/api/modules/user/:userId', async (req, res) => {
+
+    const userId = req.params.userId;
+    const moduleKey = req.body.module;
+    const index = parseInt(req.body.index);
+    const flag = req.body.flag;
+
+    let module;
+    switch(moduleKey) {
+        case 'terrains':
+            module = common.terrains[index];
+            break;
+        case 'jets':
+            module = common.jets[index];
+            break;
+        case 'warbirds':
+            module = common.warbirds[index];
+            break;
+        case 'helis':
+            module = common.helis[index];
+            break;
+        case 'others':
+            module = common.others[index];
+            break;
+    }
+
+    const user = await datasource.getUser(userId);
+    if (flag) {
+        user.modules.push(module);
+    } else {
+        user.modules = user.modules.filter(m => m !== module);
+    }
+    await datasource.updateUser(user);
+
+    res.json({user: user});
+});
+
 app.post('/api/server-alive/:serverId', async  (req, res) => {
     console.log(TAG + ' - Server ' + req.params.serverId + ' is alive.');
 
@@ -169,11 +237,14 @@ app.get('/not-allow', async (req, res) =>{
     res.status(200).render('not-allow');
 });
 
+
 app.get('/', async (req, res) => {
 
-    let all = await datasource.getAllUsers();
+    /*let all = await datasource.getAllUsers();
     all = _.sortBy(all, [ u => { return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); }], ['asc']);
-    res.status(200).render('user-list', {users: all, title: 'All'});
+    res.status(200).render('user-list', {users: all, title: 'All'});*/
+
+    res.sendFile('index.html');
 });
 
 app.get('/magios', async (req, res) =>{
@@ -219,6 +290,7 @@ app.get('/server-status', async (req, res) =>{
 });
 
 app.get('/modules', async (req, res) =>{
+
     const all = await datasource.getAllUsers();
     let users = all.filter(u => u.roles && u.roles.find(r => r == 'Magios' || r == 'NewJoiner' ));
     users = _.sortBy(users, ['username'], ['asc']);

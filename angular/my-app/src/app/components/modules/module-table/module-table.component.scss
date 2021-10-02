@@ -1,0 +1,56 @@
+table {
+    font-size: small;
+    border: 1px solid
+}
+th.status {
+    text-align: center;
+    border: 1px solid #000000;
+}
+th.normal, td.normal {
+    text-align: center;
+    border: 1px solid #000000;
+}
+th.terrains, td.terrains {
+    text-align: center;
+    border: 1px solid #000000;
+    background-color:rgba(0, 174, 255, 0.775);
+}
+th.jets, td.jets {
+    text-align: center;
+    border: 1px solid #000000;
+    background-color:rgba(0, 255, 64, 0.816);
+    
+}
+th.warbirds, td.warbirds {
+    text-align: center;
+    border: 1px solid #000000;
+    background-color:rgba(255, 145, 0, 0.809);
+}
+th.helis, td.helis {
+    text-align: center;
+    border: 1px solid #000000;
+    background-color:rgba(255, 89, 0, 0.789);
+}
+th.others, td.others {
+    text-align: center;
+    border: 1px solid #000000;
+    background-color:rgba(255, 217, 0, 0.755);
+}
+td.terrains, td.jets, td.warbirds, td.helis, td.others {
+    cursor:pointer;
+}
+.table-fixed {
+    width: 100%;
+}
+.table-fixed thead {
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+    z-index: 999
+}
+.table-fixed thead th {
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+    z-index: 999;
+}
