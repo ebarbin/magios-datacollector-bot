@@ -109,7 +109,27 @@ app.get('/api/server-alive/:serverId', async  (req, res) => {
 });
 
 app.get('/api/modules', async (req, res) => {
-    res.json({terrains: common.terrains, jets: common.jets, warbirds: common.warbirds, helis: common.helis, others: common.others });
+    const terrains = [];
+    for (let i = 0; i < common.terrains.length; i++)
+        terrains.push({id: i, name: common.terrains[i], visible: true});
+
+    const jets = [];
+    for (let i = 0; i < common.jets.length; i++)
+        jets.push({id: i, name: common.jets[i], visible: true});
+
+    const warbirds = [];
+    for (let i = 0; i < common.warbirds.length; i++)
+        warbirds.push({id: i, name: common.warbirds[i], visible: true});
+
+    const helis = [];
+    for (let i = 0; i < common.helis.length; i++)
+        helis.push({id: i, name: common.helis[i], visible: true});
+
+    const others = [];
+    for (let i = 0; i < common.others.length; i++)
+        others.push({id: i, name: common.others[i], visible: true});
+
+    res.json({terrains: terrains, jets: jets, warbirds: warbirds, helis: helis, others: others });
 });
 
 app.get('/api/modules/user', async (req, res) => {
@@ -239,11 +259,6 @@ app.get('/not-allow', async (req, res) =>{
 
 
 app.get('/', async (req, res) => {
-
-    /*let all = await datasource.getAllUsers();
-    all = _.sortBy(all, [ u => { return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); }], ['asc']);
-    res.status(200).render('user-list', {users: all, title: 'All'});*/
-
     res.sendFile('index.html');
 });
 
