@@ -15,7 +15,6 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { Option1Component } from './components/option1/option1.component';
-import { Option2Component } from './components/option2/option2.component';
 import { WelcomeComponent } from './components/welcome/welcome.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { UserHeaderComponent } from './components/user-header/user-header.component';
@@ -24,6 +23,8 @@ import { MenuComponent } from './components/menu/menu.component';
 import { ModuleTableComponent } from './components/modules/module-table/module-table.component';
 import { ModuleState } from './states/module.state';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FilterDialogComponent } from './components/modules/filter-dialog/filter-dialog.component';
+import { ShowHideDialogComponent } from './components/modules/show-hide-dialog/show-hide-dialog.component';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -49,12 +50,13 @@ export const ngxsLoggerConfig = {
   declarations: [
     AppComponent,
     Option1Component,
-    Option2Component,
     WelcomeComponent,
     UserHeaderComponent,
     ModulesComponent,
     MenuComponent,
     ModuleTableComponent,
+    FilterDialogComponent,
+    ShowHideDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -77,7 +79,7 @@ export const ngxsLoggerConfig = {
     NgbModule,
     FontAwesomeModule
   ],
-  providers: [],
+  providers: [FilterDialogComponent, ShowHideDialogComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

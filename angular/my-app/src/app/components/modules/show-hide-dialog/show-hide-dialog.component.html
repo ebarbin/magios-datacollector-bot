@@ -1,0 +1,37 @@
+<h2 mat-dialog-title>{{'Show/hide' | translate}}</h2>
+<mat-dialog-content class="mat-typography">
+  <h3>{{'Check/uncheck to show or hide modules' | translate}}</h3>
+    <div class="row">
+        
+            <div *ngFor="let cat of categories">
+                <section class="example-section">
+                    <span class="example-list-section">
+                    <mat-checkbox class="example-margin"
+                                    [checked]="cat.allComplete"
+                                    [color]="cat.color"
+                                    [indeterminate]="someComplete(cat)"
+                                    (change)="setAll($event.checked, cat)">
+                        {{cat.name}}
+                    </mat-checkbox>
+                    </span>
+                    <span class="example-list-section">
+                    <ul>
+                        <li *ngFor="let value of cat.values">
+                        <mat-checkbox [(ngModel)]="value.completed"
+                                        [color]="value.color"
+                                        (ngModelChange)="updateAllComplete(cat)">
+                            {{value?.name}}
+                        </mat-checkbox>
+                        </li>
+                    </ul>
+                    </span>
+                </section>
+            </div>
+        
+    </div>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button cdkFocusInitial (click)="onAccept()">{{'Accept' | translate}}</button>
+</mat-dialog-actions>

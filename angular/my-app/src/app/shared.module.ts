@@ -13,6 +13,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { MatBadgeModule } from '@angular/material/badge';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
     declarations: [],
@@ -29,6 +31,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
         MatSelectModule,
         MatBadgeModule,
         FontAwesomeModule,
+        MatDialogModule,
+        MatCheckboxModule,
         BlockUIModule.forRoot(),
         ToastrModule.forRoot({
           timeOut: 1500,
@@ -47,9 +51,11 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
         MatTableModule,
         MatListModule,
         MatSlideToggleModule,
+        MatDialogModule,
         MatBadgeModule,
         MatSelectModule,
         BlockUIModule,
+        MatCheckboxModule,
         ToastrModule,
         FontAwesomeModule
     ]

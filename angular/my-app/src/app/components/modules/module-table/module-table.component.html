@@ -1,4 +1,3 @@
-
     <table class="table table-striped table-fixed">
         <thead>
             <tr>
@@ -6,11 +5,21 @@
                 <td scope="col"></td>
                 <th class="status" scope="col">{{'Country' | translate}}</th>
                 <th class="status" scope="col">{{'User status' | translate}}</th>
-                <th *ngFor="let terrain of modules.terrains" class="terrains" scope="col">{{terrain}}</th>
-                <th *ngFor="let jet of modules.jets" class="jets" scope="col">{{jet}}</th>
-                <th *ngFor="let warbird of modules.warbirds" class="warbirds" scope="col">{{warbird}}</th>
-                <th *ngFor="let heli of modules.helis" class="helis" scope="col">{{heli}}</th>
-                <th *ngFor="let other of modules.others" class="others" scope="col">{{other}}</th>
+                <ng-container *ngFor="let terrain of modules.terrains">
+                    <th *ngIf="terrain.visible" class="terrains" scope="col">{{terrain.name}}</th>
+                </ng-container>
+                <ng-container *ngFor="let jet of modules.jets">
+                    <th *ngIf="jet.visible" class="jets" scope="col">{{jet.name}}</th>
+                </ng-container>
+                <ng-container *ngFor="let warbird of modules.warbirds">
+                    <th *ngIf="warbird.visible" class="warbirds" scope="col">{{warbird.name}}</th>
+                </ng-container>
+                <ng-container *ngFor="let heli of modules.helis">
+                    <th *ngIf="heli.visible" class="helis" scope="col">{{heli.name}}</th>
+                </ng-container>
+                <ng-container *ngFor="let other of modules.others">
+                    <th *ngIf="other.visible" class="others" scope="col">{{other.name}}</th>
+                </ng-container>
                 <th scope="col"></th>
                 <td scope="col"></td>
             </tr>
@@ -29,59 +38,59 @@
                 <td class="normal" (click)="onToogleStatus(user)">
                     <mat-slide-toggle color="primary" [checked]="user.status"  placement="top" [ngbTooltip]="user.status ? 'Activo' : 'Inactivo'"></mat-slide-toggle>
                 </td>
-                <td class="terrains" (click)="onToggleValue(user, 'terrains_0')"><img width="20" *ngIf="user.terrains_0" src="/assets/images/green.png"><img width="20" *ngIf="!user.terrains_0" src="/assets/images/red.png"></td>
-                <td class="terrains" (click)="onToggleValue(user, 'terrains_1')"><img width="20" *ngIf="user.terrains_1" src="/assets/images/green.png"><img width="20" *ngIf="!user.terrains_1" src="/assets/images/red.png"></td>
-                <td class="terrains" (click)="onToggleValue(user, 'terrains_2')"><img width="20" *ngIf="user.terrains_2" src="/assets/images/green.png"><img width="20" *ngIf="!user.terrains_2" src="/assets/images/red.png"></td>
-                <td class="terrains" (click)="onToggleValue(user, 'terrains_3')"><img width="20" *ngIf="user.terrains_3" src="/assets/images/green.png"><img width="20" *ngIf="!user.terrains_3" src="/assets/images/red.png"></td>
-                <td class="terrains" (click)="onToggleValue(user, 'terrains_4')"><img width="20" *ngIf="user.terrains_4" src="/assets/images/green.png"><img width="20" *ngIf="!user.terrains_4" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.terrains[0].visible" class="terrains" (click)="onToggleValue(user, 'terrains_0')"><img width="20" *ngIf="user.terrains_0" src="/assets/images/green.png"><img width="20" *ngIf="!user.terrains_0" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.terrains[1].visible" class="terrains" (click)="onToggleValue(user, 'terrains_1')"><img width="20" *ngIf="user.terrains_1" src="/assets/images/green.png"><img width="20" *ngIf="!user.terrains_1" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.terrains[2].visible" class="terrains" (click)="onToggleValue(user, 'terrains_2')"><img width="20" *ngIf="user.terrains_2" src="/assets/images/green.png"><img width="20" *ngIf="!user.terrains_2" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.terrains[3].visible" class="terrains" (click)="onToggleValue(user, 'terrains_3')"><img width="20" *ngIf="user.terrains_3" src="/assets/images/green.png"><img width="20" *ngIf="!user.terrains_3" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.terrains[4].visible" class="terrains" (click)="onToggleValue(user, 'terrains_4')"><img width="20" *ngIf="user.terrains_4" src="/assets/images/green.png"><img width="20" *ngIf="!user.terrains_4" src="/assets/images/red.png"></td>
 
-                <td class="jets" (click)="onToggleValue(user, 'jets_0')"><img width="20" *ngIf="user.jets_0" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_0" src="/assets/images/red.png"></td>
-                <td class="jets" (click)="onToggleValue(user, 'jets_1')"><img width="20" *ngIf="user.jets_1" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_1" src="/assets/images/red.png"></td>
-                <td class="jets" (click)="onToggleValue(user, 'jets_2')"><img width="20" *ngIf="user.jets_2" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_2" src="/assets/images/red.png"></td>
-                <td class="jets" (click)="onToggleValue(user, 'jets_3')"><img width="20" *ngIf="user.jets_3" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_3" src="/assets/images/red.png"></td>
-                <td class="jets" (click)="onToggleValue(user, 'jets_4')"><img width="20" *ngIf="user.jets_4" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_4" src="/assets/images/red.png"></td>
-                <td class="jets" (click)="onToggleValue(user, 'jets_5')"><img width="20" *ngIf="user.jets_5" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_5" src="/assets/images/red.png"></td>
-                <td class="jets" (click)="onToggleValue(user, 'jets_6')"><img width="20" *ngIf="user.jets_6" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_6" src="/assets/images/red.png"></td>
-                <td class="jets" (click)="onToggleValue(user, 'jets_7')"><img width="20" *ngIf="user.jets_7" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_7" src="/assets/images/red.png"></td>
-                <td class="jets" (click)="onToggleValue(user, 'jets_8')"><img width="20" *ngIf="user.jets_8" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_8" src="/assets/images/red.png"></td>
-                <td class="jets" (click)="onToggleValue(user, 'jets_9')"><img width="20" *ngIf="user.jets_9" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_9" src="/assets/images/red.png"></td>
-                <td class="jets" (click)="onToggleValue(user, 'jets_10')"><img width="20" *ngIf="user.jets_10" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_10" src="/assets/images/red.png"></td>
-                <td class="jets" (click)="onToggleValue(user, 'jets_11')"><img width="20" *ngIf="user.jets_11" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_11" src="/assets/images/red.png"></td>
-                <td class="jets" (click)="onToggleValue(user, 'jets_12')" ><img width="20" *ngIf="user.jets_12" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_12" src="/assets/images/red.png"></td>
-                <td class="jets" (click)="onToggleValue(user, 'jets_13')"><img width="20" *ngIf="user.jets_13" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_13" src="/assets/images/red.png"></td>
-                <td class="jets" (click)="onToggleValue(user, 'jets_14')"><img width="20" *ngIf="user.jets_14" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_14" src="/assets/images/red.png"></td>
-                <td class="jets" (click)="onToggleValue(user, 'jets_15')"><img width="20" *ngIf="user.jets_15" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_15" src="/assets/images/red.png"></td>
-                <td class="jets" (click)="onToggleValue(user, 'jets_16')"><img width="20" *ngIf="user.jets_16" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_16" src="/assets/images/red.png"></td>
-                <td class="jets" (click)="onToggleValue(user, 'jets_17')"><img width="20" *ngIf="user.jets_17" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_17" src="/assets/images/red.png"></td>
-                <td class="jets" (click)="onToggleValue(user, 'jets_18')"><img width="20" *ngIf="user.jets_18" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_18" src="/assets/images/red.png"></td>
-                <td class="jets" (click)="onToggleValue(user, 'jets_19')"><img width="20" *ngIf="user.jets_19" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_19" src="/assets/images/red.png"></td>
-                <td class="jets" (click)="onToggleValue(user, 'jets_20')"><img width="20" *ngIf="user.jets_20" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_20" src="/assets/images/red.png"></td>
-                <td class="jets" (click)="onToggleValue(user, 'jets_21')"><img width="20" *ngIf="user.jets_21" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_21" src="/assets/images/red.png"></td>
-                <td class="jets" (click)="onToggleValue(user, 'jets_22')"><img width="20" *ngIf="user.jets_22" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_22" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.jets[0].visible" class="jets" (click)="onToggleValue(user, 'jets_0')"><img width="20" *ngIf="user.jets_0" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_0" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.jets[1].visible" class="jets" (click)="onToggleValue(user, 'jets_1')"><img width="20" *ngIf="user.jets_1" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_1" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.jets[2].visible" class="jets" (click)="onToggleValue(user, 'jets_2')"><img width="20" *ngIf="user.jets_2" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_2" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.jets[3].visible" class="jets" (click)="onToggleValue(user, 'jets_3')"><img width="20" *ngIf="user.jets_3" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_3" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.jets[4].visible" class="jets" (click)="onToggleValue(user, 'jets_4')"><img width="20" *ngIf="user.jets_4" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_4" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.jets[5].visible" class="jets" (click)="onToggleValue(user, 'jets_5')"><img width="20" *ngIf="user.jets_5" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_5" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.jets[6].visible" class="jets" (click)="onToggleValue(user, 'jets_6')"><img width="20" *ngIf="user.jets_6" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_6" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.jets[7].visible" class="jets" (click)="onToggleValue(user, 'jets_7')"><img width="20" *ngIf="user.jets_7" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_7" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.jets[8].visible" class="jets" (click)="onToggleValue(user, 'jets_8')"><img width="20" *ngIf="user.jets_8" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_8" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.jets[9].visible" class="jets" (click)="onToggleValue(user, 'jets_9')"><img width="20" *ngIf="user.jets_9" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_9" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.jets[10].visible" class="jets" (click)="onToggleValue(user, 'jets_10')"><img width="20" *ngIf="user.jets_10" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_10" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.jets[11].visible" class="jets" (click)="onToggleValue(user, 'jets_11')"><img width="20" *ngIf="user.jets_11" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_11" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.jets[12].visible" class="jets" (click)="onToggleValue(user, 'jets_12')" ><img width="20" *ngIf="user.jets_12" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_12" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.jets[13].visible" class="jets" (click)="onToggleValue(user, 'jets_13')"><img width="20" *ngIf="user.jets_13" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_13" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.jets[14].visible" class="jets" (click)="onToggleValue(user, 'jets_14')"><img width="20" *ngIf="user.jets_14" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_14" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.jets[15].visible" class="jets" (click)="onToggleValue(user, 'jets_15')"><img width="20" *ngIf="user.jets_15" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_15" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.jets[16].visible" class="jets" (click)="onToggleValue(user, 'jets_16')"><img width="20" *ngIf="user.jets_16" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_16" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.jets[17].visible" class="jets" (click)="onToggleValue(user, 'jets_17')"><img width="20" *ngIf="user.jets_17" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_17" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.jets[18].visible" class="jets" (click)="onToggleValue(user, 'jets_18')"><img width="20" *ngIf="user.jets_18" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_18" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.jets[19].visible" class="jets" (click)="onToggleValue(user, 'jets_19')"><img width="20" *ngIf="user.jets_19" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_19" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.jets[20].visible" class="jets" (click)="onToggleValue(user, 'jets_20')"><img width="20" *ngIf="user.jets_20" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_20" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.jets[21].visible" class="jets" (click)="onToggleValue(user, 'jets_21')"><img width="20" *ngIf="user.jets_21" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_21" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.jets[22].visible" class="jets" (click)="onToggleValue(user, 'jets_22')"><img width="20" *ngIf="user.jets_22" src="/assets/images/green.png"><img width="20" *ngIf="!user.jets_22" src="/assets/images/red.png"></td>
 
 
-                <td class="warbirds" (click)="onToggleValue(user, 'warbirds_0')"><img width="20" *ngIf="user.warbirds_0" src="/assets/images/green.png"><img width="20" *ngIf="!user.warbirds_0" src="/assets/images/red.png"></td>
-                <td class="warbirds" (click)="onToggleValue(user, 'warbirds_1')"><img width="20" *ngIf="user.warbirds_1" src="/assets/images/green.png"><img width="20" *ngIf="!user.warbirds_1" src="/assets/images/red.png"></td>
-                <td class="warbirds" (click)="onToggleValue(user, 'warbirds_2')"><img width="20" *ngIf="user.warbirds_2" src="/assets/images/green.png"><img width="20" *ngIf="!user.warbirds_2" src="/assets/images/red.png"></td>
-                <td class="warbirds" (click)="onToggleValue(user, 'warbirds_3')"><img width="20" *ngIf="user.warbirds_3" src="/assets/images/green.png"><img width="20" *ngIf="!user.warbirds_3" src="/assets/images/red.png"></td>
-                <td class="warbirds" (click)="onToggleValue(user, 'warbirds_4')"><img width="20" *ngIf="user.warbirds_4" src="/assets/images/green.png"><img width="20" *ngIf="!user.warbirds_4" src="/assets/images/red.png"></td>
-                <td class="warbirds" (click)="onToggleValue(user, 'warbirds_5')"><img width="20" *ngIf="user.warbirds_5" src="/assets/images/green.png"><img width="20" *ngIf="!user.warbirds_5" src="/assets/images/red.png"></td>
-                <td class="warbirds" (click)="onToggleValue(user, 'warbirds_6')"><img width="20" *ngIf="user.warbirds_6" src="/assets/images/green.png"><img width="20" *ngIf="!user.warbirds_6" src="/assets/images/red.png"></td>
-                <td class="warbirds" (click)="onToggleValue(user, 'warbirds_7')"><img width="20" *ngIf="user.warbirds_7" src="/assets/images/green.png"><img width="20" *ngIf="!user.warbirds_7" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.warbirds[0].visible" class="warbirds" (click)="onToggleValue(user, 'warbirds_0')"><img width="20" *ngIf="user.warbirds_0" src="/assets/images/green.png"><img width="20" *ngIf="!user.warbirds_0" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.warbirds[1].visible" class="warbirds" (click)="onToggleValue(user, 'warbirds_1')"><img width="20" *ngIf="user.warbirds_1" src="/assets/images/green.png"><img width="20" *ngIf="!user.warbirds_1" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.warbirds[2].visible" class="warbirds" (click)="onToggleValue(user, 'warbirds_2')"><img width="20" *ngIf="user.warbirds_2" src="/assets/images/green.png"><img width="20" *ngIf="!user.warbirds_2" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.warbirds[3].visible" class="warbirds" (click)="onToggleValue(user, 'warbirds_3')"><img width="20" *ngIf="user.warbirds_3" src="/assets/images/green.png"><img width="20" *ngIf="!user.warbirds_3" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.warbirds[4].visible" class="warbirds" (click)="onToggleValue(user, 'warbirds_4')"><img width="20" *ngIf="user.warbirds_4" src="/assets/images/green.png"><img width="20" *ngIf="!user.warbirds_4" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.warbirds[5].visible" class="warbirds" (click)="onToggleValue(user, 'warbirds_5')"><img width="20" *ngIf="user.warbirds_5" src="/assets/images/green.png"><img width="20" *ngIf="!user.warbirds_5" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.warbirds[6].visible" class="warbirds" (click)="onToggleValue(user, 'warbirds_6')"><img width="20" *ngIf="user.warbirds_6" src="/assets/images/green.png"><img width="20" *ngIf="!user.warbirds_6" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.warbirds[7].visible" class="warbirds" (click)="onToggleValue(user, 'warbirds_7')"><img width="20" *ngIf="user.warbirds_7" src="/assets/images/green.png"><img width="20" *ngIf="!user.warbirds_7" src="/assets/images/red.png"></td>
 
-                <td class="helis" (click)="onToggleValue(user, 'helis_0')"><img width="20" *ngIf="user.helis_0" src="/assets/images/green.png"><img width="20" *ngIf="!user.helis_0" src="/assets/images/red.png"></td>
-                <td class="helis" (click)="onToggleValue(user, 'helis_1')"><img width="20" *ngIf="user.helis_1" src="/assets/images/green.png"><img width="20" *ngIf="!user.helis_1" src="/assets/images/red.png"></td>
-                <td class="helis" (click)="onToggleValue(user, 'helis_2')"><img width="20" *ngIf="user.helis_2" src="/assets/images/green.png"><img width="20" *ngIf="!user.helis_2" src="/assets/images/red.png"></td>
-                <td class="helis" (click)="onToggleValue(user, 'helis_3')"><img width="20" *ngIf="user.helis_3" src="/assets/images/green.png"><img width="20" *ngIf="!user.helis_3" src="/assets/images/red.png"></td>
-                <td class="helis" (click)="onToggleValue(user, 'helis_4')"><img width="20" *ngIf="user.helis_4" src="/assets/images/green.png"><img width="20" *ngIf="!user.helis_4" src="/assets/images/red.png"></td>
-                <td class="helis" (click)="onToggleValue(user, 'helis_5')"><img width="20" *ngIf="user.helis_5" src="/assets/images/green.png"><img width="20" *ngIf="!user.helis_5" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.helis[0].visible" class="helis" (click)="onToggleValue(user, 'helis_0')"><img width="20" *ngIf="user.helis_0" src="/assets/images/green.png"><img width="20" *ngIf="!user.helis_0" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.helis[1].visible" class="helis" (click)="onToggleValue(user, 'helis_1')"><img width="20" *ngIf="user.helis_1" src="/assets/images/green.png"><img width="20" *ngIf="!user.helis_1" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.helis[2].visible" class="helis" (click)="onToggleValue(user, 'helis_2')"><img width="20" *ngIf="user.helis_2" src="/assets/images/green.png"><img width="20" *ngIf="!user.helis_2" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.helis[3].visible"class="helis" (click)="onToggleValue(user, 'helis_3')"><img width="20" *ngIf="user.helis_3" src="/assets/images/green.png"><img width="20" *ngIf="!user.helis_3" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.helis[4].visible" class="helis" (click)="onToggleValue(user, 'helis_4')"><img width="20" *ngIf="user.helis_4" src="/assets/images/green.png"><img width="20" *ngIf="!user.helis_4" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.helis[5].visible" class="helis" (click)="onToggleValue(user, 'helis_5')"><img width="20" *ngIf="user.helis_5" src="/assets/images/green.png"><img width="20" *ngIf="!user.helis_5" src="/assets/images/red.png"></td>
 
-                <td class="others" (click)="onToggleValue(user, 'others_0')"><img width="20" *ngIf="user.others_0" src="/assets/images/green.png"><img width="20" *ngIf="!user.others_0" src="/assets/images/red.png"></td>
-                <td class="others" (click)="onToggleValue(user, 'others_1')"><img width="20" *ngIf="user.others_1" src="/assets/images/green.png"><img width="20" *ngIf="!user.others_1" src="/assets/images/red.png"></td>
-                <td class="others" (click)="onToggleValue(user, 'others_2')"><img width="20" *ngIf="user.others_2" src="/assets/images/green.png"><img width="20" *ngIf="!user.others_2" src="/assets/images/red.png"></td>
-                <td class="others" (click)="onToggleValue(user, 'others_3')"><img width="20" *ngIf="user.others_3" src="/assets/images/green.png"><img width="20" *ngIf="!user.others_3" src="/assets/images/red.png"></td>
-                <td class="others" (click)="onToggleValue(user, 'others_4')"><img width="20" *ngIf="user.others_4" src="/assets/images/green.png"><img width="20" *ngIf="!user.others_4" src="/assets/images/red.png"></td>
-                <td class="others" (click)="onToggleValue(user, 'others_5')"><img width="20" *ngIf="user.others_5" src="/assets/images/green.png"><img width="20" *ngIf="!user.others_5" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.others[0].visible" class="others" (click)="onToggleValue(user, 'others_0')"><img width="20" *ngIf="user.others_0" src="/assets/images/green.png"><img width="20" *ngIf="!user.others_0" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.others[1].visible" class="others" (click)="onToggleValue(user, 'others_1')"><img width="20" *ngIf="user.others_1" src="/assets/images/green.png"><img width="20" *ngIf="!user.others_1" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.others[2].visible" class="others" (click)="onToggleValue(user, 'others_2')"><img width="20" *ngIf="user.others_2" src="/assets/images/green.png"><img width="20" *ngIf="!user.others_2" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.others[3].visible" class="others" (click)="onToggleValue(user, 'others_3')"><img width="20" *ngIf="user.others_3" src="/assets/images/green.png"><img width="20" *ngIf="!user.others_3" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.others[4].visible" class="others" (click)="onToggleValue(user, 'others_4')"><img width="20" *ngIf="user.others_4" src="/assets/images/green.png"><img width="20" *ngIf="!user.others_4" src="/assets/images/red.png"></td>
+                <td *ngIf="modules.others[5].visible" class="others" (click)="onToggleValue(user, 'others_5')"><img width="20" *ngIf="user.others_5" src="/assets/images/green.png"><img width="20" *ngIf="!user.others_5" src="/assets/images/red.png"></td>
 
                 <td class="normal"><b>{{user.username}}</b></td>
                 <td class="normal"><img class="rounded-circle" width="30" src="https://cdn.discordapp.com/avatars/{{user.id}}/{{user.avatar}}"></td>
@@ -90,6 +99,6 @@
         </tbody>
     </table>
 
-    <a matBadgePosition="before" matBadgeColor="warn" class="float-btn">
-        <fa-icon [icon]="faFilter" class="float-btn-icon"></fa-icon>
+    <a matBadgePosition="before" matBadgeColor="warn" class="float-btn" (click)="onShowHide()">
+        <fa-icon [icon]="faEyeSlash" class="float-btn-icon"></fa-icon>
     </a>

@@ -7,5 +7,9 @@
     "Country":"Pais",
     "User status":"Estado",
     "User status update":"Estado de usuario",
-    "User country update":"Pais actualizado"
+    "User country update":"Pais actualizado",
+    "Show/hide":"Mostrar/Ocultar",
+    "Check/uncheck to show or hide modules":"Marca/desmarca para mostrar u ocultar modulos",
+    "Accept":"Aceptar",
+    "Cancel":"Cancelar"
 }

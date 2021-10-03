@@ -7,5 +7,9 @@
     "Country":"Country",
     "User status":"User status",
     "User status update":"User status changes",
-    "User country update":"User country update"
+    "User country update":"User country update",
+    "Show/hide":"Show/hide",
+    "Check/uncheck to show or hide modules":"Check/uncheck to show or hide modules",
+    "Accept":"Accept",
+    "Cancel":"Cancel"
 }

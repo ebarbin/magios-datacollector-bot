@@ -1,0 +1,41 @@
+<h2 mat-dialog-title>{{'Filters' | translate}}</h2>
+<mat-dialog-content class="mat-typography">
+  <h3>Develop across all platforms</h3>
+  <p>Learn one way to build applications with Angular and reuse your code and abilities to build
+    apps for any deployment target. For web, mobile web, native mobile and native desktop.</p>
+
+    <div class="row">
+        
+            <div *ngFor="let cat of categories">
+                <section class="example-section">
+                    <span class="example-list-section">
+                    <mat-checkbox class="example-margin"
+                                    [checked]="cat.allComplete"
+                                    [color]="cat.color"
+                                    [indeterminate]="someComplete(cat)"
+                                    (change)="setAll($event.checked, cat)">
+                        {{cat.name}}
+                    </mat-checkbox>
+                    </span>
+                    <span class="example-list-section">
+                    <ul>
+                        <li *ngFor="let value of cat.values">
+                        <mat-checkbox [(ngModel)]="value.completed"
+                                        [color]="value.color"
+                                        (ngModelChange)="updateAllComplete(cat)">
+                            {{value?.name}}
+                        </mat-checkbox>
+                        </li>
+                    </ul>
+                    </span>
+                </section>
+            </div>
+        
+    </div>
+
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button>
+</mat-dialog-actions>
