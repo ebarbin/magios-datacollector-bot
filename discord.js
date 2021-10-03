@@ -18,7 +18,7 @@ const client = new DiscordClient({
     intents: [IntentsClient.FLAGS.GUILDS, IntentsClient.FLAGS.GUILD_MESSAGES, IntentsClient.FLAGS.GUILD_MESSAGE_REACTIONS]
 });
 
-const TEMPLATE = fs.readFileSync("assets/templates/template.html", "utf8");
+const TEMPLATE = fs.readFileSync("template.html", "utf8");
 
 const REPORT_CHANNEL_NAME = 'report';
 const SERVER_STATUS_CHANNEL_NAME = 'server-status';
