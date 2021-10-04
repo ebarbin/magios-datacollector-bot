@@ -56,7 +56,7 @@ export const ngxsLoggerConfig = {
     MenuComponent,
     ModuleTableComponent,
     FilterDialogComponent,
-    ShowHideDialogComponent,
+    ShowHideDialogComponent
   ],
   imports: [
     BrowserModule,

@@ -7,7 +7,6 @@ const _ = require('lodash');
 const moment = require('moment-timezone');
 const btoa = require('btoa');
 const fetch = require('node-fetch');
-const cookieParser = require('cookie-parser');
 const { URLSearchParams } = require('url');
 
 const discordModule = require('./discord');
@@ -30,11 +29,10 @@ app.use((req, res, next) => {
 
 app.use(express.static(process.cwd() + "/angular/my-app/dist/my-app/"));
 
-app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
-app.use((req, res, next) => {
+/*app.use((req, res, next) => {
 
     if (req.url.indexOf('/oauth/redirect') >= 0 ||
         req.url.indexOf('/server-alive') >= 0 ||
@@ -51,33 +49,11 @@ app.use((req, res, next) => {
             next();
         }
     }    
-})
+})*/
 
 app.listen(PORT, () => {
     console.log(`${TAG} - WebApp is running on port ${ PORT }.`);
 });
-
-userJoineServer = (req, res) => {
-    const username = req.body.username.trim().toLowerCase();
-    const serverId = req.body.serverId.trim();
-    const ip = req.body.ip.trim();
-
-    datasource.findUserByUsername(username).then(user => {
-        if (!user) {
-            discordModule.sendMessageToReportChannel('Unknown user: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '.');
-            console.log(TAG + ' - Unknown user: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '.');
-        } else {
-            user.lastServerAccess = common.getToDay().format('DD/MM/YYYY HH:mm:ss');
-            user.lastServerId = serverId;
-            user.lastServerAccessIp = ip;
-            discordModule.sendMessageToReportChannel('User: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '. Was updated.');
-            console.log(TAG + ' - User: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '. Was updated.');
-            datasource.updateUser(user);
-        }
-    });
-
-    res.status(200).send();
-}
 
 app.post('/api/user-join-server', (req, res) => {
     const username = req.body.username.trim().toLowerCase();
@@ -212,13 +188,13 @@ app.post('/api/server-alive/:serverId', async  (req, res) => {
     res.status(200).send();
 });
 
-app.get('/oauth/redirect', async (req, res) => {
+app.post('/oauth/redirect', async (req, res) => {
 
     const creds = btoa(process.env.DISCORD_CLIENT_ID + ':' + process.env.DISCORD_AUTH_SECRET);
     
     const params = new URLSearchParams();
     params.append('grant_type', 'authorization_code');
-    params.append('code', req.query.code);
+    params.append('code', req.body.code);
     params.append('redirect_uri', process.env.APP_URL +'/oauth/redirect');
 
     const response = await fetch(process.env.DISCORD_OAUTH + '/token',
@@ -234,29 +210,17 @@ app.get('/oauth/redirect', async (req, res) => {
         { method: 'GET',
         headers: { Authorization: `Bearer ${access_token}`, 'Content-Type': 'application/x-www-form-urlencoded' }
     });
+
     const discordUser =  await response2.json();
     let username = discordUser.username.toLowerCase();
 
     const user = await datasource.findUserByUsername(username);
-    
     if (user && user.roles.find(r => r == 'Admins' || r == 'Magios' || r == 'NewJoiner')) {
-        res.cookie('AuthToken', access_token);
-        res.cookie('user', JSON.stringify(user));
-        res.redirect('/');
+        res.json({allow:true, user: user});
     } else {
-        res.redirect('/not-allow');
+        res.json({allow: false});
     }
 });
-
-app.get('/logout', async (req, res) =>{   
-    res.clearCookie("AuthToken");
-    res.redirect('/');
-});
-
-app.get('/not-allow', async (req, res) =>{   
-    res.status(200).render('not-allow');
-});
-
 
 app.get('/', async (req, res) => {
     res.sendFile('index.html');
@@ -303,12 +267,3 @@ app.get('/server-status', async (req, res) =>{
 
     res.status(200).render('server-status', {server1Status: servers[0], server2Status: servers[1] });
 });
-
-const fileUpload = require('express-fileupload');
-app.use(fileUpload());
-
-app.post('/api/thumbnail-upload', async (req, res) => {
-    let file = req['files'].thumbnail;
-    console.log("File uploaded: ", file.name);
-    res.status(200)
- });

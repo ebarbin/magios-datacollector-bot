@@ -4,7 +4,9 @@
 
 export const environment = {
   production: false,
-  api: 'http://localhost:3000'
+  client_id:'884477338476228608',
+  api: 'http://localhost:3000',
+  oauth_redirect: 'http://localhost:4200/oauth/redirect'
 };
 
 /*

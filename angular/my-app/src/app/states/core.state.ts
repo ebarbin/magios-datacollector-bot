@@ -5,6 +5,7 @@ import { BlockUI, NgBlockUI } from "ng-block-ui";
 import { ToastrService } from "ngx-toastr";
 import { InitAppAction, MessageType, ShowMessageAction } from "../actions/core.action";
 import { environment } from "src/environments/environment";
+import { HttpClient } from "@angular/common/http";
 
 export interface CoreStateModel {
   user: any,
@@ -26,38 +27,32 @@ export class CoreState {
     @BlockUI() blockUI!: NgBlockUI;
 
     constructor(
+        private http: HttpClient,
         private ngZone: NgZone,
         private toastrService: ToastrService,
         private translate: TranslateService) {}
 
     @Action(InitAppAction)
     initAppAction(ctx: StateContext<CoreStateModel>) {
+      
+      if (window.location.href.indexOf('/oauth/redirect') >=0) {
+        const code = window.location.href.split('=')[1];
 
-      let user = {
-        avatar: "7ab409b7aef9ba3a9204048272102ca4",
-        id: "731248994159689818",
-        joinDate: "01/01/2021 13:00:00",
-        joinVoiceChannelCount: 56,
-        lastServerAccess: "27/09/2021 22:00:02",
-        lastServerAccessIp: "191.97.154.106:57084",
-        lastServerId: "2",
-        lastTextChannelDate: "02/10/2021 11:37:45",
-        lastTextChannelName: "general",
-        lastVoiceChannelAccessDate: "29/09/2021 22:12:35",
-        lastVoiceChannelName: "General",
-        modules: ['Syria', 'Persian Gulf', 'Nevada', 'CA', 'F/A-18C', 'JF-17', 'M-2000C', 'AV-8B', 'F-14', 'UH-1H'],
-        msgChannelCount: 510,
-        roles: ['Admins', 'Magios'],
-        username: "emucho [emma]",
-        voiceChannelTotalTime: "0223856456536315062332503943138591695",
+        this.http.post<any>(environment.api + '/oauth/redirect', {code: code }).subscribe((response:any) => {
+          if (response.allow) {
+            localStorage.setItem('user', JSON.stringify(response.user));
+            ctx.patchState({ user: response.user })
+          } else {
+            ctx.dispatch(new ShowMessageAction({msg: 'You are not allow', title: 'Permission', type: MessageType.ERROR}));
+          }
+        });
+
+      } else {
+        const user = localStorage.getItem('user');
+        if (!user) {
+          window.location.href = 'https://discordapp.com/api/oauth2/authorize?client_id='+environment.client_id+'&scope=identify&response_type=code&redirect_uri='+encodeURIComponent(environment.oauth_redirect);
+        }
       }
-
-      if (environment.production) {
-        const value = document.cookie.replace(/(?:(?:^|.*;\s*)user\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-        user = JSON.parse(decodeURIComponent(value));
-      }
-
-      ctx.patchState({ user });
     }
 
     @Action(ShowMessageAction)
