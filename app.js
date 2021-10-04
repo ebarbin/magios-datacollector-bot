@@ -222,8 +222,8 @@ app.post('/oauth/redirect', async (req, res) => {
     }
 });
 
-app.get('/', async (req, res) => {
-    res.sendFile('index.html');
+app.get('/oauth/redirect', async (req, res) => {
+    res.sendFile(__dirname + '/angular/my-app/dist/my-app/index.html');
 });
 
 app.get('/magios', async (req, res) =>{
