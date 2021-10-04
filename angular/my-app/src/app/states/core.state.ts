@@ -3,7 +3,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { Action, Selector, State, StateContext, StateToken } from "@ngxs/store";
 import { BlockUI, NgBlockUI } from "ng-block-ui";
 import { ToastrService } from "ngx-toastr";
-import { InitAppAction, MessageType, ShowMessageAction } from "../actions/core.action";
+import { InitAppAction, LogoutAction, MessageType, ShowMessageAction } from "../actions/core.action";
 import { environment } from "src/environments/environment";
 import { HttpClient } from "@angular/common/http";
 
@@ -44,6 +44,9 @@ export class CoreState {
             ctx.patchState({ user: response.user })
           } else {
             ctx.dispatch(new ShowMessageAction({msg: 'You are not allow', title: 'Permission', type: MessageType.ERROR}));
+            setTimeout(() => {
+              window.location.href = 'https://discordapp.com/api/oauth2/authorize?client_id='+environment.client_id+'&scope=identify&response_type=code&redirect_uri='+encodeURIComponent(environment.oauth_redirect);
+            }, 1000);
           }
         });
 
@@ -51,8 +54,19 @@ export class CoreState {
         const user = localStorage.getItem('user');
         if (!user) {
           window.location.href = 'https://discordapp.com/api/oauth2/authorize?client_id='+environment.client_id+'&scope=identify&response_type=code&redirect_uri='+encodeURIComponent(environment.oauth_redirect);
+        } else {
+          ctx.patchState({ user: JSON.parse(user) })
         }
       }
+    }
+
+    @Action(LogoutAction)
+    logoutAction(ctx: StateContext<CoreStateModel>) {
+      localStorage.removeItem('user');
+      ctx.dispatch(new ShowMessageAction({msg: 'You are going out', title: 'Attention', type: MessageType.WARNING}));
+      setTimeout(() => {
+        window.location.href = 'https://discordapp.com/api/oauth2/authorize?client_id='+environment.client_id+'&scope=identify&response_type=code&redirect_uri='+encodeURIComponent(environment.oauth_redirect);
+      }, 1000);
     }
 
     @Action(ShowMessageAction)

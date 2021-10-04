@@ -32,25 +32,6 @@ app.use(express.static(process.cwd() + "/angular/my-app/dist/my-app/"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
-/*app.use((req, res, next) => {
-
-    if (req.url.indexOf('/oauth/redirect') >= 0 ||
-        req.url.indexOf('/server-alive') >= 0 ||
-        req.url.indexOf('/user-join-server') >= 0 ||
-        req.url.indexOf('/api') >= 0 ||
-        req.url.indexOf('/not-allow') >= 0 ||
-        req.url.indexOf('/logout') >= 0) {
-            next();
-    } else {
-        const authToken = req.cookies['AuthToken'];
-        if (!authToken) {
-            res.redirect(process.env.DISCORD_OAUTH +'/authorize?client_id='+process.env.DISCORD_CLIENT_ID+'&scope=identify&response_type=code&redirect_uri='+encodeURIComponent(process.env.APP_URL +'/oauth/redirect'));    
-        } else {
-            next();
-        }
-    }    
-})*/
-
 app.listen(PORT, () => {
     console.log(`${TAG} - WebApp is running on port ${ PORT }.`);
 });
@@ -86,24 +67,19 @@ app.get('/api/server-alive/:serverId', async  (req, res) => {
 
 app.get('/api/modules', async (req, res) => {
     const terrains = [];
-    for (let i = 0; i < common.terrains.length; i++)
-        terrains.push({id: i, name: common.terrains[i], visible: true});
+    for (let i = 0; i < common.terrains.length; i++) terrains.push({id: i, name: common.terrains[i], visible: true});
 
     const jets = [];
-    for (let i = 0; i < common.jets.length; i++)
-        jets.push({id: i, name: common.jets[i], visible: true});
+    for (let i = 0; i < common.jets.length; i++) jets.push({id: i, name: common.jets[i], visible: true});
 
     const warbirds = [];
-    for (let i = 0; i < common.warbirds.length; i++)
-        warbirds.push({id: i, name: common.warbirds[i], visible: true});
+    for (let i = 0; i < common.warbirds.length; i++) warbirds.push({id: i, name: common.warbirds[i], visible: true});
 
     const helis = [];
-    for (let i = 0; i < common.helis.length; i++)
-        helis.push({id: i, name: common.helis[i], visible: true});
+    for (let i = 0; i < common.helis.length; i++) helis.push({id: i, name: common.helis[i], visible: true});
 
     const others = [];
-    for (let i = 0; i < common.others.length; i++)
-        others.push({id: i, name: common.others[i], visible: true});
+    for (let i = 0; i < common.others.length; i++) others.push({id: i, name: common.others[i], visible: true});
 
     res.json({terrains: terrains, jets: jets, warbirds: warbirds, helis: helis, others: others });
 });
@@ -142,30 +118,17 @@ app.put('/api/modules/user/:userId', async (req, res) => {
     const flag = req.body.flag;
 
     let module;
-    switch(moduleKey) {
-        case 'terrains':
-            module = common.terrains[index];
-            break;
-        case 'jets':
-            module = common.jets[index];
-            break;
-        case 'warbirds':
-            module = common.warbirds[index];
-            break;
-        case 'helis':
-            module = common.helis[index];
-            break;
-        case 'others':
-            module = common.others[index];
-            break;
-    }
+    if (moduleKey == 'terrains') module = common.terrains[index];
+    else if (moduleKey == 'jets') module = common.jets[index];
+    else if (moduleKey == 'warbirds') module = common.warbirds[index];
+    else if (moduleKey == 'helis') module = common.helis[index];
+    else if (moduleKey == 'others') module = common.others[index];
 
     const user = await datasource.getUser(userId);
-    if (flag) {
-        user.modules.push(module);
-    } else {
-        user.modules = user.modules.filter(m => m !== module);
-    }
+
+    if (flag) user.modules.push(module);
+    else user.modules = user.modules.filter(m => m !== module);
+    
     await datasource.updateUser(user);
 
     res.json({user: user});
@@ -212,13 +175,18 @@ app.post('/oauth/redirect', async (req, res) => {
     });
 
     const discordUser =  await response2.json();
-    let username = discordUser.username.toLowerCase();
-
-    const user = await datasource.findUserByUsername(username);
-    if (user && user.roles.find(r => r == 'Admins' || r == 'Magios' || r == 'NewJoiner')) {
-        res.json({allow:true, user: user});
-    } else {
+    
+    if (!discordUser.username) {
         res.json({allow: false});
+    } else {
+        let username = discordUser.username.toLowerCase();
+
+        const user = await datasource.findUserByUsername(username);
+        if (user && user.roles.find(r => r == 'Admins' || r == 'Magios' || r == 'NewJoiner')) {
+            res.json({allow:true, user: user});
+        } else {
+            res.json({allow: false});
+        }
     }
 });
 

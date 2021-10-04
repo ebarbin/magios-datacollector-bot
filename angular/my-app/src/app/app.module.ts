@@ -11,7 +11,7 @@ import { NgxsModule, NgxsModuleOptions } from '@ngxs/store';
 import { environment } from 'src/environments/environment';
 import { NgxsResetPluginModule } from 'ngxs-reset-plugin';
 import { CoreState } from './states/core.state';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { Option1Component } from './components/option1/option1.component';
@@ -79,7 +79,10 @@ export const ngxsLoggerConfig = {
     NgbModule,
     FontAwesomeModule
   ],
-  providers: [FilterDialogComponent, ShowHideDialogComponent],
+  providers: [
+    FilterDialogComponent, 
+    ShowHideDialogComponent
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
