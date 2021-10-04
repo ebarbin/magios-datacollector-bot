@@ -182,7 +182,7 @@ export class ModuleState {
                 return this.modulesService.getModulesUser().pipe(
                     tap(users => {
                         users.forEach((u: any) => {
-                            result = {id: u.id, username: u.username, avatar: u.avatar, status: u.status, country: u.country, refresh: new Date().getTime()};
+                            result = {id: u.id, username: u.username, avatar: u.avatar, status: u.status, country: u.country ? u.country : '', refresh: new Date().getTime()};
         
                             for(let i = 0; i < modules.terrains.length; i++) 
                                 result['terrains_'+i] = u.modules.find((m:any) => m == modules.terrains[i].name) ? true : false;

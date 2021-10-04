@@ -5,6 +5,7 @@
     "Successful operation":"Operación realizada con éxito",
     "Module changes":"Cambio de modulo",
     "Country":"Pais",
+    "User country":"País del usuario",
     "User status":"Estado",
     "User status update":"Estado de usuario",
     "User country update":"Pais actualizado",
@@ -13,5 +14,6 @@
     "Accept":"Aceptar",
     "Cancel":"Cancelar",
     "Attention":"Atención",
-    "You are going out":"Adios!!! Nos vemos pronto, hasta luego."
+    "You are going out":"Adios!!! Nos vemos pronto, hasta luego.",
+    "Empty":"Vacío"
 }

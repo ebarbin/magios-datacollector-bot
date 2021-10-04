@@ -14,7 +14,6 @@ import { CoreState } from './states/core.state';
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { Option1Component } from './components/option1/option1.component';
 import { WelcomeComponent } from './components/welcome/welcome.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { UserHeaderComponent } from './components/user-header/user-header.component';
@@ -49,7 +48,6 @@ export const ngxsLoggerConfig = {
 @NgModule({
   declarations: [
     AppComponent,
-    Option1Component,
     WelcomeComponent,
     UserHeaderComponent,
     ModulesComponent,

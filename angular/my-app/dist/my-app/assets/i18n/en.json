@@ -5,6 +5,7 @@
     "Successful operation":"Successful operation",
     "Module changes":"Module changes",
     "Country":"Country",
+    "User country":"User country",
     "User status":"User status",
     "User status update":"User status changes",
     "User country update":"User country update",
@@ -13,5 +14,6 @@
     "Accept":"Accept",
     "Cancel":"Cancel",
     "Attention":"Attention",
-    "You are going out":"You are going out"
+    "You are going out":"You are going out",
+    "Empty":"Empty"
 }

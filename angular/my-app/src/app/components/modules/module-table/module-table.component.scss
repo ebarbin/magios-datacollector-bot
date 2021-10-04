@@ -2,15 +2,17 @@ table {
     font-size: small;
     border: 1px solid
 }
-th.status {
+th {
+    white-space: nowrap;
     text-align: center;
     border: 1px solid #000000;
 }
-th.normal, td.normal {
+td.normal {
     text-align: center;
     border: 1px solid #000000;
 }
 th.terrains, td.terrains {
+    white-space: nowrap;
     text-align: center;
     border: 1px solid #000000;
     background-color:rgba(0, 174, 255, 0.775);
@@ -19,7 +21,6 @@ th.jets, td.jets {
     text-align: center;
     border: 1px solid #000000;
     background-color:rgba(0, 255, 64, 0.816);
-    
 }
 th.warbirds, td.warbirds {
     text-align: center;
