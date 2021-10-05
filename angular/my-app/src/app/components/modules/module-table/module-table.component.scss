@@ -69,17 +69,18 @@ td.terrains, td.jets, td.warbirds, td.helis, td.others {
 }
 
 .filter-btn {
+    z-index: 1000 !important;
     bottom:120px;	
 	background-color:#910998;
 }
 
-.show-hide-btn {	
+.show-hide-btn {
+    z-index: 1000 !important;
 	bottom:40px;	
 	background-color:#094998;
 }
 
 .float-btn-icon {
-  z-index: 1000;
   line-height: 60px;
   font-size: 30px;
 }
