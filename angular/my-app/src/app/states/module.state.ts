@@ -11,9 +11,9 @@ import { patch, updateItem } from '@ngxs/store/operators';
 import { throwError } from "rxjs";
 
 export interface ModuleStateModel {
-    usersFilter: string[] | null,
-    rolesFilter: string[] | null,
-    statusFilter: string[] | null,
+    usersFilter: string[],
+    rolesFilter: string[],
+    statusFilter: string[],
     countriesFilter: string[],
     modules: any,
     usersModules: any[],
@@ -23,7 +23,7 @@ export interface ModuleStateModel {
 const initialState: ModuleStateModel = {
     usersFilter: [],
     rolesFilter: ['Magios', 'Admins', 'NewJoiner'],
-    statusFilter: ['ACTIVE', 'INACTIVE'],
+    statusFilter: ['ACTIVE'],
     countriesFilter: [],
     modules: {},
     usersModules: [],
@@ -124,18 +124,24 @@ export class ModuleState {
         const { user } = action.payload;
                 
         if (update) {
-            return ctx.setState(
+            ctx.setState(
                 patch({
+                    userModulesAll: updateItem<any>(item => item.id === user.id, user),
                     usersModules: updateItem<any>(item => item.id === user.id, user)
                 })
               );
         } else {
-            return ctx.setState(
+            ctx.setState(
                 patch({
+                    userModulesAll: updateItem<any>(item => item.id === user.id, patch({ refresh: new Date().getTime()})),
                     usersModules: updateItem<any>(item => item.id === user.id, patch({ refresh: new Date().getTime()}))
                 })
               );
         }
+
+        const {usersFilter, rolesFilter, statusFilter, countriesFilter} = ctx.getState();
+        
+        return ctx.dispatch(new ApplyFilterModulesAction({countriesFilter,  statusFilter,  usersFilter, rolesFilter}))
     }
         
     @Action(ToggleModuleValueAction)
@@ -175,7 +181,7 @@ export class ModuleState {
     clearFiltersModulesAction(ctx: StateContext<ModuleStateModel>) {
         const countries = this.store.selectSnapshot(CoreState.getCountries);
         const { userModulesAll } = ctx.getState();
-        ctx.patchState({ countriesFilter: countries, statusFilter: ['ACTIVE', 'INACTIVE'], rolesFilter: ['Magios', 'Admins', 'NewJoiner'], usersModules: userModulesAll});
+        ctx.patchState({ countriesFilter: countries, statusFilter: ['ACTIVE'], rolesFilter: ['Magios', 'Admins', 'NewJoiner'], usersModules: userModulesAll.filter(u => u.status)});
     }
 
     @Action(ApplyFilterModulesAction)
@@ -237,7 +243,7 @@ export class ModuleState {
                             results.push(result);
                         });
         
-                        ctx.patchState({ countriesFilter: countries, usersModules: results, userModulesAll:results, usersFilter: results.map(r => r.username) });
+                        ctx.patchState({ countriesFilter: countries, usersModules: results.filter(u => u.status), userModulesAll:results, usersFilter: results.map(r => r.username) });
                     }),
                     catchError(err => {
                         this.blockUI.stop();

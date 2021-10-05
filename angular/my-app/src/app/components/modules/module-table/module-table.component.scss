@@ -79,6 +79,7 @@ td.terrains, td.jets, td.warbirds, td.helis, td.others {
 }
 
 .float-btn-icon {
+  z-index: 1000;
   line-height: 60px;
   font-size: 30px;
 }

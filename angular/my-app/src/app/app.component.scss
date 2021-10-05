@@ -39,3 +39,13 @@
     background: rgb(34,129,195);
     background: linear-gradient(0deg, rgba(34,129,195,1) 0%, rgba(45,87,253,1) 100%);
   }
+
+  .clickable {
+    cursor: pointer;
+  }
+
+@media (max-width: 640px) {
+  .hiddeable {
+      display: none;
+  }
+}

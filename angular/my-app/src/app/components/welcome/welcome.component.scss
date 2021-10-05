@@ -1,0 +1,26 @@
+.welcome-img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+    width: 80%;
+    box-shadow: 2px 6px 5px 2px #ccc;
+    border-radius: 40px;
+  }
+
+  .footer {
+    border: 1px solid whitesmoke;
+    background: rgba(45,87,253,1);
+    background: linear-gradient(0deg, rgba(45,87,253,1) 0%, rgba(34,129,195,1) 100%);
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    color: white;
+  }
+
+  .footer-content {
+    text-align: right;
+    font-size: smaller;
+    margin-right: 10px;
+  }

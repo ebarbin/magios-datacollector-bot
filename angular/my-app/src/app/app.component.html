@@ -1,32 +1,24 @@
 
 <block-ui>
-
-
   <div class="layout" [class.is-mobile]="mobileQuery.matches">
-
     <mat-toolbar color="primary" class="toolbar">
       <button mat-icon-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></button>
       
-      <img src="/assets/images/logo.png" class="rounded-circle" width="30" [routerLink]="['welcome']">
-      <div [routerLink]="['welcome']">
+      <img src="/assets/images/logo.png" class="hiddeable rounded-circle clickable" width="30" [routerLink]="['welcome']">
+      <div class="hiddeable clickable" [routerLink]="['welcome']">
         <h1 class="app-name">256th -  Stonecutters - Los Magios</h1>
       </div>
+      
       <div class="spacer"></div>
       <app-user-header></app-user-header>      
     </mat-toolbar>
-  
     <mat-sidenav-container class="sidenav-layout" [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
-      <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'"
-                   [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
-
-                   <app-menu [snav]="snav"></app-menu>
+      <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'" [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
+        <app-menu [snav]="snav"></app-menu>
       </mat-sidenav>
-  
       <mat-sidenav-content>
-        <router-outlet></router-outlet>
+          <router-outlet></router-outlet>
       </mat-sidenav-content>
     </mat-sidenav-container>
   </div>
-  
-
 </block-ui>
