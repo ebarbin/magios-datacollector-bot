@@ -194,14 +194,6 @@ app.get('/oauth/redirect', async (req, res) => {
     res.sendFile(__dirname + '/angular/my-app/dist/my-app/index.html');
 });
 
-app.get('/modules', async (req, res) => {
-    res.sendFile(__dirname + '/angular/my-app/dist/my-app/index.html');
-});
-
-app.get('/welcome', async (req, res) => {
-    res.sendFile(__dirname + '/angular/my-app/dist/my-app/index.html');
-});
-
 app.get('/magios', async (req, res) =>{
     const all = await datasource.getAllUsers();
     let magios = all.filter(u => u.roles && u.roles.find(r => r == 'Magios'));
