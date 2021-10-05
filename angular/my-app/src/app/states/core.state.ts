@@ -105,7 +105,7 @@ export class CoreState {
 
     @Selector()
     static getCountries() {
-      return ['Argentina','Bolivia', 'Chile', 'Colombia', 'Cuba', 'Ecuador', 'España', 'Estados Unidos', 'Guatemala', 'Uruguay']
+      return ['','Argentina','Bolivia', 'Chile', 'Colombia', 'Cuba', 'Ecuador', 'España', 'Estados Unidos', 'Guatemala', 'Uruguay']
     }
 
 }

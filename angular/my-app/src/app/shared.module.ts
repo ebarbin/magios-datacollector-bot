@@ -16,7 +16,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDividerModule } from '@angular/material/divider';
-
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 @NgModule({
     declarations: [],
     imports: [ 
@@ -35,6 +35,7 @@ import { MatDividerModule } from '@angular/material/divider';
         MatDialogModule,
         MatCheckboxModule,
         MatDividerModule,
+        MatAutocompleteModule,
         BlockUIModule.forRoot(),
         ToastrModule.forRoot({
           timeOut: 1500,
@@ -57,6 +58,7 @@ import { MatDividerModule } from '@angular/material/divider';
         MatDividerModule,
         MatBadgeModule,
         MatSelectModule,
+        MatAutocompleteModule,
         BlockUIModule,
         MatCheckboxModule,
         ToastrModule,

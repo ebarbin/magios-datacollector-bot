@@ -24,6 +24,7 @@ import { ModuleState } from './states/module.state';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FilterDialogComponent } from './components/modules/filter-dialog/filter-dialog.component';
 import { ShowHideDialogComponent } from './components/modules/show-hide-dialog/show-hide-dialog.component';
+import { RolePipe } from './pipes/role.pipe';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -54,7 +55,8 @@ export const ngxsLoggerConfig = {
     MenuComponent,
     ModuleTableComponent,
     FilterDialogComponent,
-    ShowHideDialogComponent
+    ShowHideDialogComponent,
+    RolePipe
   ],
   imports: [
     BrowserModule,

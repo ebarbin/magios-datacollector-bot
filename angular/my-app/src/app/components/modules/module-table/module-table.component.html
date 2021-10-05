@@ -3,6 +3,7 @@
             <tr>
                 <th scope="col"></th>
                 <th scope="col">{{'Usename' | translate}}</th>
+                <th scope="col">{{'Role' | translate}}</th>
                 <th scope="col">{{'User country' | translate}}</th>
                 <th scope="col">{{'User status' | translate}}</th>
                 <ng-container *ngFor="let terrain of modules.terrains">
@@ -28,11 +29,16 @@
             <tr *ngFor="let user of users">
                 <td class="normal"><img class="rounded-circle" width="30" src="https://cdn.discordapp.com/avatars/{{user.id}}/{{user.avatar}}"></td>
                 <td class="normal"><b>{{user.username}}</b></td>
+                <td class="normal" [ngClass]="{'admin': isAdmin(user.roles), 'magio': isMagio(user.roles), 'newjoiner': isNewJoiner(user.roles)}"><b>{{ user.roles | role }}</b></td>
                 <td class="normal">
                     <mat-select [value]="user.country" [ngModel]="user.country"  (ngModelChange)="onChangeCountry($event, user)">
-                    <mat-option value="">--{{'Empty' | translate}}--</mat-option>
                       <mat-option *ngFor="let country of getCountries$ | async" [value]="country">
-                        {{country}}
+                          <ng-container *ngIf="country == ''">
+                            --{{'Empty' | translate}}--
+                          </ng-container>
+                          <ng-container *ngIf="country != ''">
+                            {{country}}
+                          </ng-container>
                       </mat-option>
                     </mat-select>
                 </td>

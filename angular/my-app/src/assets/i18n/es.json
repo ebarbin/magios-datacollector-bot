@@ -24,5 +24,6 @@
     "Countries":"Paises",
     "Clear":"Limpiar",
     "Usename":"Nombre de usuario",
-    "Logout":"Salir"
+    "Logout":"Salir",
+    "Role":"Rol"
 }

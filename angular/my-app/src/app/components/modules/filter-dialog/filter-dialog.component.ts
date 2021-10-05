@@ -13,31 +13,50 @@ import { ModuleState } from 'src/app/states/module.state';
 export class FilterDialogComponent implements OnInit, OnDestroy {
 
   @Select(CoreState.getCountries) getCountries$: Observable<any> | undefined;
+  @Select(ModuleState.getUsers) getUsers$: Observable<any[]> | undefined;
   @Select(ModuleState.getSelectedFilters) getSelectedFilters$: Observable<any> | undefined;
   subs: Subscription | undefined;
 
-  activeFilter = 'ALL';
-  selectedCountries: string[] = [];
+  statusFilter: string[] = [];
+  rolesFilter: string[] = [];
 
+  selectedCountries: string[] = [];
+  selectedUsers: string[] = [];
+  
   constructor(private store: Store, private dialogRef: MatDialogRef<FilterDialogComponent>) {}
 
   ngOnInit(): void {
     this.subs = this.getSelectedFilters$?.subscribe(value => {
       this.selectedCountries = value.countriesFilter;
-      this.activeFilter = value.statusFilter;
+      this.selectedUsers = value.usersFilter;
+      this.statusFilter = value.statusFilter;
+      this.rolesFilter = value.rolesFilter;
     });
   }
 
-  onStatusFilterChange(value: string) {
-    this.activeFilter = value;
+  onStatusFilterChange(values: string[]) {
+    this.statusFilter = values;
   }
 
   onCountriesFilterChange(values: string[]) {
     this.selectedCountries = values;
   }
 
+  onUsersFilterChange(values: string[]) {
+    this.selectedUsers = values;
+  }
+
+  onRolesFilterChange(values: string[]) {
+    this.rolesFilter = values;
+  }
+
   onAccept() {
-    this.store.dispatch(new ApplyFilterModulesAction({countriesFilter: this.selectedCountries, statusFilter: this.activeFilter}));
+    this.store.dispatch(new ApplyFilterModulesAction({
+      countriesFilter: this.selectedCountries, 
+      statusFilter: this.statusFilter, 
+      usersFilter: this.selectedUsers,
+      rolesFilter: this.rolesFilter
+    }));
     this.dialogRef.close();
   }
 

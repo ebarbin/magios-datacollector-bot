@@ -24,5 +24,6 @@
     "Countries":"Countries",
     "Clear":"Clear",
     "Usename":"Usename",
-    "Logout":"Logout"
+    "Logout":"Logout",
+    "Role":"Role"
 }

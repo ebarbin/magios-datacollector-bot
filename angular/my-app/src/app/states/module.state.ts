@@ -6,12 +6,14 @@ import { MessageType, ShowMessageAction } from "../actions/core.action";
 import { ModulesService } from "../services/modules.service";
 import { CoreState } from "./core.state";
 import { ApplyFilterModulesAction, ClearFiltersModulesAction, InitModulesAction, RefreshElementModulesAction, ShowHideModulesAction, ToggleModuleValueAction, ToggleUserStatusValueAction, UpdateCountryUserValueAction } from "../actions/module.action";
-import {includes} from 'lodash';
+import { includes } from 'lodash';
 import { patch, updateItem } from '@ngxs/store/operators';
 import { throwError } from "rxjs";
 
 export interface ModuleStateModel {
-    statusFilter: string,
+    usersFilter: string[] | null,
+    rolesFilter: string[] | null,
+    statusFilter: string[] | null,
     countriesFilter: string[],
     modules: any,
     usersModules: any[],
@@ -19,7 +21,9 @@ export interface ModuleStateModel {
 }
   
 const initialState: ModuleStateModel = {
-    statusFilter: 'ALL',
+    usersFilter: [],
+    rolesFilter: ['Magios', 'Admins', 'NewJoiner'],
+    statusFilter: ['ACTIVE', 'INACTIVE'],
     countriesFilter: [],
     modules: {},
     usersModules: [],
@@ -171,30 +175,35 @@ export class ModuleState {
     clearFiltersModulesAction(ctx: StateContext<ModuleStateModel>) {
         const countries = this.store.selectSnapshot(CoreState.getCountries);
         const { userModulesAll } = ctx.getState();
-        ctx.patchState({ countriesFilter: countries, statusFilter: 'ALL', usersModules: userModulesAll});
+        ctx.patchState({ countriesFilter: countries, statusFilter: ['ACTIVE', 'INACTIVE'], rolesFilter: ['Magios', 'Admins', 'NewJoiner'], usersModules: userModulesAll});
     }
 
     @Action(ApplyFilterModulesAction)
     applyFilterModulesAction(ctx: StateContext<ModuleStateModel>, action: ApplyFilterModulesAction) {
         const { userModulesAll } = ctx.getState();
-        const { countriesFilter, statusFilter } =  action.payload;
+        const { countriesFilter, statusFilter, usersFilter, rolesFilter } =  action.payload;
 
         const results: any[] = [];
-        let countryFlag;
-        let statusFlag;
+        let countryFlag, statusFlag, userFlag, roleFlag;
+        
         userModulesAll.forEach(u => {
+            if (rolesFilter.length > 2) roleFlag = true;
+            else if (u.roles.length > 1) roleFlag = includes(rolesFilter, 'Admins');
+            else roleFlag = includes(rolesFilter, u.roles[0]);
+            
+            userFlag = includes(usersFilter, u.username);
             countryFlag = includes(countriesFilter, u.country);
-            statusFlag = statusFilter == 'ACTIVE' && u.status || statusFilter == 'INACTIVE' && !u.status || statusFilter == 'ALL';
-            if (countryFlag && statusFlag) results.push(u);
+            statusFlag = statusFilter.length > 1 || (statusFilter[0] == 'ACTIVE' && u.status) || (statusFilter[0] == 'INACTIVE' && !u.status);
+            if (roleFlag && userFlag && countryFlag && statusFlag) results.push(u);
         });
-        ctx.patchState({ countriesFilter, statusFilter, usersModules: results});
+
+        ctx.patchState({ countriesFilter, statusFilter, usersModules: results, usersFilter: usersFilter, rolesFilter: rolesFilter});
     }
 
     @Action(InitModulesAction)
     initModulesAction(ctx: StateContext<ModuleStateModel>) {
 
         const countries = this.store.selectSnapshot(CoreState.getCountries);
-        ctx.patchState({countriesFilter: countries});
 
         this.blockUI.start();
         
@@ -208,7 +217,7 @@ export class ModuleState {
                 return this.modulesService.getModulesUser().pipe(
                     tap(users => {
                         users.forEach((u: any) => {
-                            result = {id: u.id, username: u.username, avatar: u.avatar, status: u.status == true ? true: false, country: u.country ? u.country : '', refresh: new Date().getTime()};
+                            result = {id: u.id, username: u.username, roles: u.roles, avatar: u.avatar, status: u.status == true ? true: false, country: u.country ? u.country : '', refresh: new Date().getTime()};
         
                             for(let i = 0; i < modules.terrains.length; i++) 
                                 result['terrains_'+i] = u.modules.find((m:any) => m == modules.terrains[i].name) ? true : false;
@@ -228,7 +237,7 @@ export class ModuleState {
                             results.push(result);
                         });
         
-                        ctx.patchState({ usersModules: results, userModulesAll:results });
+                        ctx.patchState({ countriesFilter: countries, usersModules: results, userModulesAll:results, usersFilter: results.map(r => r.username) });
                     }),
                     catchError(err => {
                         this.blockUI.stop();
@@ -265,8 +274,17 @@ export class ModuleState {
     }
 
     @Selector()
-    static getSelectedFilters(state: ModuleStateModel) {
-      return { statusFilter: state.statusFilter, countriesFilter: state.countriesFilter };
+    static getUsers(state: ModuleStateModel) {
+      return state.userModulesAll.map(u => u.username);
     }
 
+    @Selector()
+    static getSelectedFilters(state: ModuleStateModel) {
+      return { 
+          statusFilter: state.statusFilter, 
+          countriesFilter: state.countriesFilter,
+          usersFilter: state.usersFilter,
+          rolesFilter: state.rolesFilter
+        };
+    }
 }

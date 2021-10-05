@@ -8,6 +8,8 @@ import { faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { MatDialog } from '@angular/material/dialog';
 import { FilterDialogComponent } from '../filter-dialog/filter-dialog.component';
 import { ShowHideDialogComponent } from '../show-hide-dialog/show-hide-dialog.component';
+import { includes } from 'lodash';
+
 @Component({
   selector: 'app-module-table',
   templateUrl: './module-table.component.html',
@@ -34,6 +36,18 @@ export class ModuleTableComponent implements OnInit {
 
   onToogleStatus(user:any){
     this.store.dispatch(new ToggleUserStatusValueAction({user}))
+  }
+
+  isAdmin(roles: string[]) {
+    return includes(roles, 'Admins');
+  }
+
+  isMagio(roles: string[]) {
+    return includes(roles, 'Magios') && !includes(roles, 'Admins');
+  }
+
+  isNewJoiner(roles: string[]) {
+    return includes(roles, 'NewJoiner');
   }
 
   onChangeCountry(country:any, user:any) {
