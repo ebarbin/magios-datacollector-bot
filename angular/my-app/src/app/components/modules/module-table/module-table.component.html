@@ -2,7 +2,7 @@
         <thead>
             <tr>
                 <th scope="col"></th>
-                <th scope="col"></th>
+                <th scope="col">{{'Usename' | translate}}</th>
                 <th scope="col">{{'User country' | translate}}</th>
                 <th scope="col">{{'User status' | translate}}</th>
                 <ng-container *ngFor="let terrain of modules.terrains">
@@ -20,7 +20,7 @@
                 <ng-container *ngFor="let other of modules.others">
                     <th *ngIf="other.visible" class="others" scope="col">{{other.name}}</th>
                 </ng-container>
-                <th scope="col"></th>
+                <th scope="col">{{'Usename' | translate}}</th>
                 <th scope="col"></th>
             </tr>
         </thead>
