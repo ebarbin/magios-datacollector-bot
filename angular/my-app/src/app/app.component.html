@@ -6,7 +6,11 @@
 
     <mat-toolbar color="primary" class="toolbar">
       <button mat-icon-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></button>
-      <h1 class="app-name">Los Magios</h1>
+      
+      <img src="/assets/images/logo.png" class="rounded-circle" width="30" [routerLink]="['welcome']">
+      <div [routerLink]="['welcome']">
+        <h1 class="app-name">256th -  Stonecutters - Los Magios</h1>
+      </div>
       <div class="spacer"></div>
       <app-user-header></app-user-header>      
     </mat-toolbar>

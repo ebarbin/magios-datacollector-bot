@@ -3,6 +3,7 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { LogoutAction } from 'src/app/actions/core.action';
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-menu',
@@ -11,6 +12,8 @@ import { LogoutAction } from 'src/app/actions/core.action';
 })
 export class MenuComponent implements OnInit {
 
+  faSignOutAlt = faSignOutAlt;
+  
   @Input() snav: MatSidenav | undefined;
 
   constructor(private store: Store, private router: Router) { }

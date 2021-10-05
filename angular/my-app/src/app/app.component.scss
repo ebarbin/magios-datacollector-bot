@@ -33,3 +33,9 @@
   .spacer {
     flex: 1 1 auto;
   }
+
+  .toolbar {
+    border: 1px solid whitesmoke;
+    background: rgb(34,129,195);
+    background: linear-gradient(0deg, rgba(34,129,195,1) 0%, rgba(45,87,253,1) 100%);
+  }

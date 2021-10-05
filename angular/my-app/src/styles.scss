@@ -10,3 +10,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 // or import a bootstrap 4 alert styled design (SASS ONLY)
 // should be after your bootstrap imports, it uses bs4 variables, mixins, functions
 @import '~ngx-toastr/toastr-bs4-alert';
+
+.mat-drawer-inner-container {
+    border-left: 10px solid darkgrey !important;
+}
