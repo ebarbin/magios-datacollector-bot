@@ -16,6 +16,9 @@ import { ShowHideDialogComponent } from '../show-hide-dialog/show-hide-dialog.co
 export class ModuleTableComponent implements OnInit {
 
   faEyeSlash = faEyeSlash;
+  faFilter = faFilter;
+
+  
   @Select(CoreState.getCountries) getCountries$: Observable<any> | undefined;
 
   @Input() modules: any;
@@ -38,18 +41,10 @@ export class ModuleTableComponent implements OnInit {
   }
 
   onFilter() {
-    const dialogRef = this.dialog.open(FilterDialogComponent);
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
+    this.dialog.open(FilterDialogComponent);
   }
 
   onShowHide() {
-    const dialogRef = this.dialog.open(ShowHideDialogComponent);
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
+    this.dialog.open(ShowHideDialogComponent);
   }
 }

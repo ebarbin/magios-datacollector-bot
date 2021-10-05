@@ -55,3 +55,30 @@ td.terrains, td.jets, td.warbirds, td.helis, td.others {
     top: 0;
     z-index: 999;
 }
+
+.float-btn {
+    position:fixed;
+	width:60px;
+	height:60px;
+    right:25px;
+    color:#FFF;
+	border-radius:50px;
+	text-align:center;
+	box-shadow: 2px 2px 3px #999;
+    cursor: pointer;
+}
+
+.filter-btn {
+    bottom:120px;	
+	background-color:#910998;
+}
+
+.show-hide-btn {	
+	bottom:40px;	
+	background-color:#094998;
+}
+
+.float-btn-icon {
+  line-height: 60px;
+  font-size: 30px;
+}

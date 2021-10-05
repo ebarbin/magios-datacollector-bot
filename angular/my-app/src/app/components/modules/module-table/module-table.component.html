@@ -100,6 +100,10 @@
         </tbody>
     </table>
 
-    <a matBadgePosition="before" matBadgeColor="warn" class="float-btn" (click)="onShowHide()">
+    <a matBadgePosition="before" matBadgeColor="warn" class="float-btn filter-btn" (click)="onFilter()">
+        <fa-icon [icon]="faFilter" class="float-btn-icon"></fa-icon>
+    </a>
+    
+    <a matBadgePosition="before" matBadgeColor="warn" class="float-btn show-hide-btn" (click)="onShowHide()">
         <fa-icon [icon]="faEyeSlash" class="float-btn-icon"></fa-icon>
     </a>

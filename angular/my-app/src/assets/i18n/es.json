@@ -15,5 +15,12 @@
     "Cancel":"Cancelar",
     "Attention":"Atención",
     "You are going out":"Adios!!! Nos vemos pronto, hasta luego.",
-    "Empty":"Vacío"
+    "Empty":"Vacío",
+    "All":"Todos",
+    "Actives":"Activos",
+    "Inactives":"Inactivos",
+    "Filters":"Filtros",
+    "Select filters":"Seleccione los filtros según considere:",
+    "Countries":"Paises",
+    "Clear":"Limpiar"
 }

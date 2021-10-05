@@ -15,5 +15,12 @@
     "Cancel":"Cancel",
     "Attention":"Attention",
     "You are going out":"You are going out",
-    "Empty":"Empty"
+    "Empty":"Empty",
+    "All":"All",
+    "Actives":"Active",
+    "Inactives":"Inactive",
+    "Filters":"Filters",
+    "Select filters":"Select filters",
+    "Countries":"Countries",
+    "Clear":"Clear"
 }

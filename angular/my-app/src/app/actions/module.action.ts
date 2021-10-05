@@ -26,3 +26,11 @@ export class ShowHideModulesAction {
     static readonly type = '[Module] Show hide modules';
     constructor(public payload: { categories: any}) {}
 }
+export class ApplyFilterModulesAction {
+    static readonly type = '[Module] Apply filter modules';
+    constructor(public payload: { countriesFilter: string[], statusFilter: string}) {}
+}
+
+export class ClearFiltersModulesAction {
+    static readonly type = '[Module] Clear filters modules';
+}

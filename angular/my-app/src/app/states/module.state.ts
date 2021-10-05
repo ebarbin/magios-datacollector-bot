@@ -5,19 +5,25 @@ import { catchError, finalize, switchMap, tap } from "rxjs/operators";
 import { MessageType, ShowMessageAction } from "../actions/core.action";
 import { ModulesService } from "../services/modules.service";
 import { CoreState } from "./core.state";
-import { InitModulesAction, RefreshElementModulesAction, ShowHideModulesAction, ToggleModuleValueAction, ToggleUserStatusValueAction, UpdateCountryUserValueAction } from "../actions/module.action";
-
+import { ApplyFilterModulesAction, ClearFiltersModulesAction, InitModulesAction, RefreshElementModulesAction, ShowHideModulesAction, ToggleModuleValueAction, ToggleUserStatusValueAction, UpdateCountryUserValueAction } from "../actions/module.action";
+import {includes} from 'lodash';
 import { patch, updateItem } from '@ngxs/store/operators';
 import { throwError } from "rxjs";
 
 export interface ModuleStateModel {
-    modules: any
-    usersModules: any[]
+    statusFilter: string,
+    countriesFilter: string[],
+    modules: any,
+    usersModules: any[],
+    userModulesAll: any[]
 }
   
 const initialState: ModuleStateModel = {
+    statusFilter: 'ALL',
+    countriesFilter: [],
     modules: {},
-    usersModules: []
+    usersModules: [],
+    userModulesAll: []
 };
 
 const CORE_STATE_TOKEN = new StateToken<ModuleStateModel>('module');
@@ -34,7 +40,6 @@ export class ModuleState {
     constructor(
         private store: Store,
         private modulesService: ModulesService) {}
-
         
     @Action(ToggleUserStatusValueAction)
     toggleUserStatusValueAction(ctx: StateContext<ModuleStateModel>, action: ToggleUserStatusValueAction) {
@@ -71,13 +76,12 @@ export class ModuleState {
     updateCountryUserValueAction(ctx: StateContext<ModuleStateModel>, action: UpdateCountryUserValueAction) {
 
         const myUser = this.store.selectSnapshot(CoreState.getUser);
-        const { user } = action.payload;
+        const { user, country } = action.payload;
 
         if (this.allowOperation(myUser, user)) {
             
             this.blockUI.start();
-            
-            const {country} = action.payload;
+
             const clone = {...user};
             clone.country = country;
 
@@ -96,9 +100,8 @@ export class ModuleState {
         }
     }
 
-    
     @Action(ShowHideModulesAction)
-    ShowHideModulesAction(ctx: StateContext<ModuleStateModel>, action: ShowHideModulesAction) {
+    showHideModulesAction(ctx: StateContext<ModuleStateModel>, action: ShowHideModulesAction) {
         const { categories } = action.payload;
         const updatedModules = {
             terrains: categories[0].values.map((v:any) => { return {id: v.id, name: v.name, visible: v.completed} }),
@@ -130,15 +133,12 @@ export class ModuleState {
               );
         }
     }
-    
         
     @Action(ToggleModuleValueAction)
     toggleModuleValueAction(ctx: StateContext<ModuleStateModel>, action: ToggleModuleValueAction) {
 
         const myUser = this.store.selectSnapshot(CoreState.getUser);
-        const { user } = action.payload;
-        const { field } = action.payload;
-        
+        const { user, field } = action.payload;
 
         if (this.allowOperation(myUser, user)) {
             this.blockUI.start();
@@ -167,8 +167,34 @@ export class ModuleState {
         }
     }
 
+    @Action(ClearFiltersModulesAction)
+    clearFiltersModulesAction(ctx: StateContext<ModuleStateModel>) {
+        const countries = this.store.selectSnapshot(CoreState.getCountries);
+        const { userModulesAll } = ctx.getState();
+        ctx.patchState({ countriesFilter: countries, statusFilter: 'ALL', usersModules: userModulesAll});
+    }
+
+    @Action(ApplyFilterModulesAction)
+    applyFilterModulesAction(ctx: StateContext<ModuleStateModel>, action: ApplyFilterModulesAction) {
+        const { userModulesAll } = ctx.getState();
+        const { countriesFilter, statusFilter } =  action.payload;
+
+        const results: any[] = [];
+        let countryFlag;
+        let statusFlag;
+        userModulesAll.forEach(u => {
+            countryFlag = includes(countriesFilter, u.country);
+            statusFlag = statusFilter == 'ACTIVE' && u.status || statusFilter == 'INACTIVE' && !u.status || statusFilter == 'ALL';
+            if (countryFlag && statusFlag) results.push(u);
+        });
+        ctx.patchState({ countriesFilter, statusFilter, usersModules: results});
+    }
+
     @Action(InitModulesAction)
     initModulesAction(ctx: StateContext<ModuleStateModel>) {
+
+        const countries = this.store.selectSnapshot(CoreState.getCountries);
+        ctx.patchState({countriesFilter: countries});
 
         this.blockUI.start();
         
@@ -182,7 +208,7 @@ export class ModuleState {
                 return this.modulesService.getModulesUser().pipe(
                     tap(users => {
                         users.forEach((u: any) => {
-                            result = {id: u.id, username: u.username, avatar: u.avatar, status: u.status, country: u.country ? u.country : '', refresh: new Date().getTime()};
+                            result = {id: u.id, username: u.username, avatar: u.avatar, status: u.status == true ? true: false, country: u.country ? u.country : '', refresh: new Date().getTime()};
         
                             for(let i = 0; i < modules.terrains.length; i++) 
                                 result['terrains_'+i] = u.modules.find((m:any) => m == modules.terrains[i].name) ? true : false;
@@ -202,7 +228,7 @@ export class ModuleState {
                             results.push(result);
                         });
         
-                        ctx.patchState({usersModules: results})
+                        ctx.patchState({ usersModules: results, userModulesAll:results });
                     }),
                     catchError(err => {
                         this.blockUI.stop();
@@ -237,4 +263,10 @@ export class ModuleState {
     static getModules(state: ModuleStateModel) {
       return state.modules;
     }
+
+    @Selector()
+    static getSelectedFilters(state: ModuleStateModel) {
+      return { statusFilter: state.statusFilter, countriesFilter: state.countriesFilter };
+    }
+
 }
