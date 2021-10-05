@@ -14,7 +14,8 @@ export class ModulesComponent implements OnInit {
 
   @Select(ModuleState.getModules) getModules$: Observable<any> | undefined;
   @Select(ModuleState.getUsersModules) getUsersModules$: Observable<any> | undefined;
-  
+  @Select(ModuleState.getAllUsernames) getAllUsernames$: Observable<any> | undefined;
+
   constructor(private store: Store) { }
 
   ngOnInit(): void {

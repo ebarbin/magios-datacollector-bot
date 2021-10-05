@@ -11,7 +11,7 @@ import { patch, updateItem } from '@ngxs/store/operators';
 import { throwError } from "rxjs";
 
 export interface ModuleStateModel {
-    usersFilter: string[],
+    userFilter: string,
     rolesFilter: string[],
     statusFilter: string[],
     countriesFilter: string[],
@@ -21,7 +21,7 @@ export interface ModuleStateModel {
 }
   
 const initialState: ModuleStateModel = {
-    usersFilter: [],
+    userFilter: '',
     rolesFilter: ['Magios', 'Admins', 'NewJoiner'],
     statusFilter: ['ACTIVE'],
     countriesFilter: [],
@@ -139,9 +139,9 @@ export class ModuleState {
               );
         }
 
-        const {usersFilter, rolesFilter, statusFilter, countriesFilter} = ctx.getState();
+        const {userFilter, rolesFilter, statusFilter, countriesFilter} = ctx.getState();
         
-        return ctx.dispatch(new ApplyFilterModulesAction({countriesFilter,  statusFilter,  usersFilter, rolesFilter}))
+        return ctx.dispatch(new ApplyFilterModulesAction({countriesFilter,  statusFilter,  userFilter, rolesFilter}))
     }
         
     @Action(ToggleModuleValueAction)
@@ -187,7 +187,7 @@ export class ModuleState {
     @Action(ApplyFilterModulesAction)
     applyFilterModulesAction(ctx: StateContext<ModuleStateModel>, action: ApplyFilterModulesAction) {
         const { userModulesAll } = ctx.getState();
-        const { countriesFilter, statusFilter, usersFilter, rolesFilter } =  action.payload;
+        const { countriesFilter, statusFilter, userFilter, rolesFilter } =  action.payload;
 
         const results: any[] = [];
         let countryFlag, statusFlag, userFlag, roleFlag;
@@ -197,13 +197,14 @@ export class ModuleState {
             else if (u.roles.length > 1) roleFlag = includes(rolesFilter, 'Admins');
             else roleFlag = includes(rolesFilter, u.roles[0]);
             
-            userFlag = includes(usersFilter, u.username);
+            userFlag = userFilter == '' || userFilter.toLowerCase() == u.username.toLowerCase()
+            
             countryFlag = includes(countriesFilter, u.country);
             statusFlag = statusFilter.length > 1 || (statusFilter[0] == 'ACTIVE' && u.status) || (statusFilter[0] == 'INACTIVE' && !u.status);
             if (roleFlag && userFlag && countryFlag && statusFlag) results.push(u);
         });
 
-        ctx.patchState({ countriesFilter, statusFilter, usersModules: results, usersFilter: usersFilter, rolesFilter: rolesFilter});
+        ctx.patchState({ countriesFilter, statusFilter, usersModules: results, userFilter: userFilter, rolesFilter: rolesFilter});
     }
 
     @Action(InitModulesAction)
@@ -243,7 +244,7 @@ export class ModuleState {
                             results.push(result);
                         });
         
-                        ctx.patchState({ countriesFilter: countries, usersModules: results.filter(u => u.status), userModulesAll:results, usersFilter: results.map(r => r.username) });
+                        ctx.patchState({ countriesFilter: countries, usersModules: results.filter(u => u.status), userModulesAll:results });
                     }),
                     catchError(err => {
                         this.blockUI.stop();
@@ -280,7 +281,7 @@ export class ModuleState {
     }
 
     @Selector()
-    static getUsers(state: ModuleStateModel) {
+    static getAllUsernames(state: ModuleStateModel) {
       return state.userModulesAll.map(u => u.username);
     }
 
@@ -289,7 +290,7 @@ export class ModuleState {
       return { 
           statusFilter: state.statusFilter, 
           countriesFilter: state.countriesFilter,
-          usersFilter: state.usersFilter,
+          userFilter: state.userFilter,
           rolesFilter: state.rolesFilter
         };
     }

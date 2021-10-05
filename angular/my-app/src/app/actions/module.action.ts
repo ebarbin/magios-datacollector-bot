@@ -28,7 +28,7 @@ export class ShowHideModulesAction {
 }
 export class ApplyFilterModulesAction {
     static readonly type = '[Module] Apply filter modules';
-    constructor(public payload: { countriesFilter: string[], statusFilter: string[], usersFilter: string[], rolesFilter: string[]}) {}
+    constructor(public payload: { countriesFilter: string[], statusFilter: string[], userFilter: string, rolesFilter: string[]}) {}
 }
 
 export class ClearFiltersModulesAction {

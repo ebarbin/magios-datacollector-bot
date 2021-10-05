@@ -21,6 +21,11 @@ postgresClient.connect().then(() => {
     console.log(TAG + ' - Error connecting database.');
 });
 
+const removeUser = async (user) => {
+    const query = { text: 'DELETE FROM magios2 WHERE id = $1', values: [user.id] };
+    await postgresClient.query(query);
+}
+
 const updateUser = async (user) => {
     const query = { text: 'UPDATE magios2 SET username = $2, data = $3 WHERE id = $1', values: [user.id, user.username, JSON.stringify(user)] };
     await postgresClient.query(query);
@@ -112,6 +117,7 @@ const createDataBase = async () => {
  //   await postgresClient.query(query);
 }
 
+exports.removeUser = removeUser;
 exports.updateUser = updateUser;
 exports.saveUser = saveUser;
 exports.findUserByUsername = findUserByUsername;

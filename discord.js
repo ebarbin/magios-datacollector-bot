@@ -42,10 +42,22 @@ client.login(process.env.DISCORD_BOT_TOKEN);
 
         console.log(TAG + ' - Discord bot is connected.')
 
-        await checkNewUserAtStartup();
+        await checkNewUserAndCreate();
+        await checkLeftUsersAndRemove();
     });
 
 if (common.ENABLE_DISCORD_EVENTS) {
+
+    client.on('guildMemberRemove', async member => {
+        const user = member.user;
+        if (!user.bot) {
+            let dataBaseUser = await datasource.getUser(user.id);
+            if (dataBaseUser) {
+                await datasource.removeUser(dataBaseUser);
+                sendMessageToReportChannel('The user "' + dataBaseUser.username + '" left the group.');
+            }
+        }
+    });
 
     client.on('guildMemberAdd', async member => {
         const user = member.user;
@@ -631,7 +643,27 @@ getUserRoles = (member) => {
     return roles;
 }
 
-checkNewUserAtStartup = () => { 
+checkLeftUsersAndRemove = () => {
+    return new Promise(async (resolve, reject) => {
+        const allUsers = await datasource.getAllUsers();
+        let user;
+        GUILD.members.fetch().then((members) => {
+            members.forEach((member) => {
+                allUsers.forEach(u => {
+                    if (u.id == member.user.id) u.exists = true;
+                })
+            })
+            const toRemove = allUsers.filter(u => !u.exists);
+            toRemove.forEach(async u => {
+                await datasource.removeUser(u);
+                sendMessageToReportChannel('The user "' + u.username + '" was removed.');
+            })
+            resolve();
+        })
+    })
+}
+
+checkNewUserAndCreate = () => { 
     return new Promise((resolve, reject) => {
         GUILD.members.fetch().then((members) => {
             members.forEach((member) => {
@@ -716,4 +748,5 @@ exports.sendMessageToReportChannel = sendMessageToReportChannel;
 exports.cleanOldEvents = cleanOldEvents;
 exports.sendServerStatus = sendServerStatus;
 exports.cleanServerStatus = cleanServerStatus;
-exports.checkNewUserAtStartup = checkNewUserAtStartup;
+exports.checkNewUserAndCreate = checkNewUserAndCreate;
+exports.checkLeftUsersAndRemove = checkLeftUsersAndRemove;

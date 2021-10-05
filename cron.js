@@ -38,5 +38,6 @@ cron.schedule('*/10 * * * *', async () => {
 
 cron.schedule('*/180 * * * *', async () => {
     console.log(TAG + ' - Checking users data and upate - Running a task every 3 hours.');
-    await discordModule.checkNewUserAtStartup();
+    await discordModule.checkNewUserAndCreate();
+    await discordModule.checkLeftUsersAndRemove();
 });

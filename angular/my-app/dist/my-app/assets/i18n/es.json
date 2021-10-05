@@ -26,5 +26,7 @@
     "Usename":"Nombre de usuario",
     "Logout":"Salir",
     "Role":"Rol",
-    "Welcome":"Bienvenido"
+    "Welcome":"Bienvenido",
+    "Select one":"Seleccione uno",
+    "Users":"Usuarios"
 }

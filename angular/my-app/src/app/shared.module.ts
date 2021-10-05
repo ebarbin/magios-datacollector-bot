@@ -10,18 +10,21 @@ import { BlockUIModule } from 'ng-block-ui';
 import { ToastrModule } from 'ngx-toastr';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSelectModule } from '@angular/material/select';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatBadgeModule } from '@angular/material/badge';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatInputModule } from '@angular/material/input';
+
 @NgModule({
     declarations: [],
     imports: [ 
         CommonModule,
         FormsModule,
+        ReactiveFormsModule,
         MatToolbarModule,
         MatIconModule,
         MatButtonModule,
@@ -35,6 +38,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
         MatDialogModule,
         MatCheckboxModule,
         MatDividerModule,
+        MatInputModule,
         MatAutocompleteModule,
         BlockUIModule.forRoot(),
         ToastrModule.forRoot({
@@ -47,11 +51,13 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     ],
     exports:[
         FormsModule,
+        ReactiveFormsModule,
         MatToolbarModule,
         MatIconModule,
         MatButtonModule,
         MatSidenavModule,
         MatTableModule,
+        MatInputModule,
         MatListModule,
         MatSlideToggleModule,
         MatDialogModule,

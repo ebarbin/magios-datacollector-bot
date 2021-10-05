@@ -3,6 +3,21 @@
     <h3>{{'Select filters' | translate}}</h3>
     <div class="row">
         
+        <form class="example-form">
+            <mat-form-field class="filter-element">
+                <mat-label>{{'Users' | translate}}</mat-label>
+              <input type="text"
+                     placeholder="{{'Select one' | translate}}" matInput
+                     [formControl]="myControl"
+                     [matAutocomplete]="auto">
+              <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onUsersFilterChange($event)">
+                <mat-option *ngFor="let user of filteredOptions$ | async" [value]="user">
+                  {{user}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+        </form>
+
         <mat-form-field class="filter-element">
             <mat-label>{{'User status' | translate}}</mat-label>
             <mat-select [value]="statusFilter" [ngModel]="statusFilter" multiple (ngModelChange)="onStatusFilterChange($event)">
@@ -27,13 +42,6 @@
                 <mat-option value="NewJoiner">
                     {{'NewJoiner' | translate}}
                 </mat-option>
-            </mat-select>
-        </mat-form-field>
-
-        <mat-form-field class="filter-element">
-            <mat-label>{{'Users' | translate}}</mat-label>
-            <mat-select [value]="selectedUsers" [ngModel]="selectedUsers" multiple (ngModelChange)="onUsersFilterChange($event)">
-              <mat-option *ngFor="let user of getUsers$ | async" [value]="user">{{user}}</mat-option>
             </mat-select>
         </mat-form-field>
 

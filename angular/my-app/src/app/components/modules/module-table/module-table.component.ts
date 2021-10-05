@@ -25,6 +25,7 @@ export class ModuleTableComponent implements OnInit {
 
   @Input() modules: any;
   @Input() users: any;
+  @Input() allUsernames :string[] | undefined
 
   constructor(private store: Store, public dialog: MatDialog) { }
 
@@ -55,7 +56,7 @@ export class ModuleTableComponent implements OnInit {
   }
 
   onFilter() {
-    this.dialog.open(FilterDialogComponent);
+    this.dialog.open(FilterDialogComponent, {data: this.allUsernames});
   }
 
   onShowHide() {
