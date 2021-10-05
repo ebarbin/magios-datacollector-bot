@@ -15,6 +15,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
     declarations: [],
@@ -33,6 +34,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
         FontAwesomeModule,
         MatDialogModule,
         MatCheckboxModule,
+        MatDividerModule,
         BlockUIModule.forRoot(),
         ToastrModule.forRoot({
           timeOut: 1500,
@@ -52,6 +54,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
         MatListModule,
         MatSlideToggleModule,
         MatDialogModule,
+        MatDividerModule,
         MatBadgeModule,
         MatSelectModule,
         BlockUIModule,
