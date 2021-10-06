@@ -74,7 +74,7 @@ export class FilterDialogComponent implements OnInit, OnDestroy {
     this.store.dispatch(new ApplyFilterModulesAction({
       countriesFilter: this.selectedCountries, 
       statusFilter: this.statusFilter, 
-      userFilter: this.selectedUser,
+      userFilter: this.selectedUser == this.myControl.value ? this.selectedUser : '',
       rolesFilter: this.rolesFilter
     }));
     this.dialogRef.close();
