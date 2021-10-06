@@ -676,6 +676,7 @@ checkNewUserAndCreate = () => {
                             datasource.saveUser(newUser);
                             sendMessageToReportChannel('The user "' + newUser.username + '" was created.');
                         } else {
+                            dbUser.username = member.user.username.toLowerCase();
                             dbUser.roles = roles;
                             datasource.updateUser(dbUser);
                         }
