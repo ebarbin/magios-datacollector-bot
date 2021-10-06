@@ -1,4 +1,5 @@
 require('dotenv').config();
+require('./cron');
 
 const express = require('express');
 const cors = require('cors');
@@ -10,6 +11,7 @@ const fetch = require('node-fetch');
 const { URLSearchParams } = require('url');
 
 const discordModule = require('./discord');
+
 const common = require('./common');
 const datasource = require('./postgres');
 
