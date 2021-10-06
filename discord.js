@@ -65,7 +65,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
             let dataBaseUser = await datasource.getUser(user.id);
             if (!dataBaseUser) {
                 const roles = getUserRoles(member);
-                const newUser = common.createEmptyUser(user);
+                const newUser = common.createEmptyUser(member);
                 newUser.roles = roles;
                 newUser.joinDate = common.getToDay().format('DD/MM/YYYY HH:mm:ss');
                 await datasource.saveUser(newUser);
@@ -91,21 +91,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
         let dataBaseUser = await datasource.getUser(entryData.member.user.id);
         const roles = getUserRoles(entryData.member);
 
-        if (!dataBaseUser) {
-                
-            const newUser = common.createEmptyUser(entryData.member.user);
-            newUser.roles = roles;
-
-            if (join) {
-                newUser.joinVoiceChannelCount = 1;
-                newUser.lastVoiceChannelAccessDate = common.getToDay().format('DD/MM/YYYY HH:mm:ss')
-                newUser.lastVoiceChannelName = entryData.channel.name;
-            }
-
-            await datasource.saveUser(newUser);
-
-        } else {
-
+        if (dataBaseUser) {
             if (join) {
                 dataBaseUser.avatar = entryData.member.user.avatar;
                 dataBaseUser.joinVoiceChannelCount = parseInt(dataBaseUser.joinVoiceChannelCount) + 1
@@ -478,14 +464,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
 
             let dataBaseUser = await datasource.getUser(message.author.id);
 
-            if (!dataBaseUser) {
-
-                const newUser = common.createEmptyUser(joinUser);
-                newUser.lastTextChannelName = message.channel.name;
-                newUser.lastTextChannelDate = common.getToDay().format('DD/MM/YYYY HH:mm:ss');
-                await datasource.saveUser(newUser);
-
-            } else {
+            if (dataBaseUser) {
                 dataBaseUser.avatar = message.author.avatar,
                 dataBaseUser.msgChannelCount = parseInt(dataBaseUser.msgChannelCount) + 1
                 dataBaseUser.lastTextChannelName = message.channel.name;
@@ -666,21 +645,20 @@ checkLeftUsersAndRemove = () => {
 checkNewUserAndCreate = () => { 
     return new Promise((resolve, reject) => {
         GUILD.members.fetch().then((members) => {
-            members.forEach((member) => {
+            members.forEach(async (member) => {
                 if (!member.user.bot) {
                     const roles = getUserRoles(member);
-                    datasource.getUser(member.user.id).then(dbUser => {
-                        if (!dbUser) {
-                            const newUser = common.createEmptyUser(member.user);
-                            newUser.roles = roles;
-                            datasource.saveUser(newUser);
-                            sendMessageToReportChannel('The user "' + newUser.username + '" was created.');
-                        } else {
-                            dbUser.username = member.user.username.toLowerCase();
-                            dbUser.roles = roles;
-                            datasource.updateUser(dbUser);
-                        }
-                    })
+                    const dbUser = await datasource.getUser(member.user.id);
+                    if (!dbUser) {
+                        const newUser = common.createEmptyUser(member);
+                        newUser.roles = roles;
+                        await datasource.saveUser(newUser);
+                        sendMessageToReportChannel('The user "' + newUser.username + '" was created.');
+                    } else {                    
+                        dbUser.username = member.displayName.toLowerCase();
+                        dbUser.roles = roles;
+                        datasource.updateUser(dbUser);
+                    }
                 }
             })
             resolve();

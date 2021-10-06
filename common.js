@@ -7,11 +7,11 @@ const getToDay = () => {
     return moment.tz('America/Argentina/Buenos_Aires');
 }
 
-const createEmptyUser = (user) => {
+const createEmptyUser = (member) => {
     return {
-        id: user.id,
-        avatar: user.avatar,
-        username: user.username.toLowerCase(),
+        id: member.user.id,
+        avatar: member.user.avatar,
+        username: member.displayName.toLowerCase(),
         joinDate: getToDay().format('DD/MM/YYYY HH:mm:ss'),
         voiceChannelTotalTime: 0,
         joinVoiceChannelCount: 0,
@@ -20,6 +20,8 @@ const createEmptyUser = (user) => {
         lastVoiceChannelName: null,
         lastTextChannelName: null,
         lastTextChannelDate: null,
+        status: true,
+        country: '',
         modules: []
     }
 }

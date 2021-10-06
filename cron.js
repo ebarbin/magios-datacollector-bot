@@ -7,7 +7,7 @@ const common = require('./common');;
 
 const TAG = '[magios-datacollector-bot]';
 
-console.log(TAG + ' - Cron module is started');
+console.log(TAG + ' - Cron module is started.');
 
 cron.schedule('*/120 * * * *', () => {
     console.log(TAG + ' - Cleaning old events - Running a task every 2 hours.');
