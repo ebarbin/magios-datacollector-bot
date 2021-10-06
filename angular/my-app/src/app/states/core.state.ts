@@ -105,7 +105,20 @@ export class CoreState {
 
     @Selector()
     static getCountries() {
-      return ['','Argentina','Bolivia', 'Chile', 'Colombia', 'Cuba', 'Ecuador', 'España', 'Estados Unidos', 'Guatemala', 'Uruguay']
+      return [
+        { name:'', code:'', css:'' },
+        { name:'Argentina', code:'ar', css:'flag-icon-ar' },
+        { name:'Bolivia', code:'bo', css:'flag-icon-bo' },
+        { name:'Chile', code:'cl', css:'flag-icon-cl' },
+        { name:'Colombia', code:'co', css:'flag-icon-co' },
+        { name:'Cuba', code:'cu', css:'flag-icon-cu' },
+        { name:'Ecuador', code:'ec', css:'flag-icon-ec' },
+        { name:'España', code:'es', css:'flag-icon-es' },
+        { name:'Estados Unidos', code:'us', css:'flag-icon-us' },
+        { name:'Guatemala', code:'gt', css:'flag-icon-gt' },
+        { name:'Mexico', code:'mx', css:'flag-icon-mx' },
+        { name:'Uruguay', code:'uy', css:'flag-icon-uy' }
+      ]
     }
 
 }

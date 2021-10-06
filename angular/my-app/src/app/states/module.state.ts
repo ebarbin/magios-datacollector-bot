@@ -181,7 +181,7 @@ export class ModuleState {
     clearFiltersModulesAction(ctx: StateContext<ModuleStateModel>) {
         const countries = this.store.selectSnapshot(CoreState.getCountries);
         const { userModulesAll } = ctx.getState();
-        ctx.patchState({ countriesFilter: countries, statusFilter: ['ACTIVE'], rolesFilter: ['Magios', 'Admins', 'NewJoiner'], usersModules: userModulesAll.filter(u => u.status)});
+        ctx.patchState({ countriesFilter: countries.map(c => c.name), statusFilter: ['ACTIVE'], rolesFilter: ['Magios', 'Admins', 'NewJoiner'], usersModules: userModulesAll.filter(u => u.status)});
     }
 
     @Action(ApplyFilterModulesAction)
@@ -244,7 +244,7 @@ export class ModuleState {
                             results.push(result);
                         });
         
-                        ctx.patchState({ countriesFilter: countries, usersModules: results.filter(u => u.status), userModulesAll:results });
+                        ctx.patchState({ countriesFilter: countries.map(c => c.name), usersModules: results.filter(u => u.status), userModulesAll:results });
                     }),
                     catchError(err => {
                         this.blockUI.stop();

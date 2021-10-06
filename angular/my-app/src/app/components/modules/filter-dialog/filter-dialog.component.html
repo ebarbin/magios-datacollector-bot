@@ -48,12 +48,12 @@
         <mat-form-field class="filter-element">
             <mat-label>{{'Countries' | translate}}</mat-label>
             <mat-select [value]="selectedCountries" [ngModel]="selectedCountries" multiple (ngModelChange)="onCountriesFilterChange($event)">
-              <mat-option *ngFor="let country of getCountries$ | async" [value]="country">
-                <ng-container *ngIf="country == ''">
+              <mat-option *ngFor="let country of getCountries$ | async" [value]="country.name">
+                <ng-container *ngIf="country.code == ''">
                     {{'Empty' | translate}}
                   </ng-container>
-                  <ng-container *ngIf="country != ''">
-                    {{country}}
+                  <ng-container *ngIf="country.code != ''">
+                    {{country.name}}&nbsp;<span class="flag-icon {{country.css}} flag-icon-squared"></span>
                   </ng-container>
                 </mat-option>
             </mat-select>

@@ -19,7 +19,6 @@ export class ModuleTableComponent implements OnInit {
 
   faEyeSlash = faEyeSlash;
   faFilter = faFilter;
-
   
   @Select(CoreState.getCountries) getCountries$: Observable<any> | undefined;
 
