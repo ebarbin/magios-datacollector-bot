@@ -687,8 +687,9 @@ sendServerStatus = (server) => {
         } else {
             embed.setTitle('Servidor ' + server.id +': OFFLINE').setColor('#c90000');
         }
-        SERVER_STATUS_CHANNEL.send(embed);
-        resolve();
+        SERVER_STATUS_CHANNEL.send(embed).then(() => {
+            resolve();
+        })
     })
 }
 
@@ -704,14 +705,17 @@ cleanOldEvents = () => {
                         const originalMsg = m.channel.messages.cache.find(msg => msg.id == msgId);
                         const msgDate = moment(m.createdAt);
                         const rightNow = common.getToDay();
+
                         if (rightNow.diff(msgDate, 'hours') >= 24) {
                             quantity++;
                             m.delete();
                             if (originalMsg) {
                                 originalMsg.delete();  
                             }
-                            const eventName = originalMsg.title.split(":calendar_spiral:")[1].trim().split('**')[1];
-                            sendMessageToReportChannel('The event "' + eventName + '" was removed.');
+                            console.log('originalMsg ' + originalMsg);
+                            console.log('embed ' + originalMsg);
+                            const eventName = originalMsg.embeds[0].title.split(":calendar_spiral:")[1].trim().split('**')[1]
+                            sendMessageToReportChannel('The old event "' + eventName + '" was removed.');
                         }
                     }
                 }
