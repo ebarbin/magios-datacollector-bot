@@ -681,8 +681,8 @@ cleanServerStatus = () => {
     })
 }
 
-notifyOwner = async (server) => {
-    return new Promise((resolve, reject) => {
+notifyOwner = (server) => {
+    return new Promise(async (resolve, reject) => {
         const allMembers = await GUILD.members.fetch();
         const ownerMember = allMembers.find(m => m.user.id == server.owner);
         await ownerMember.user.send('Server ' + server.id + ' is OFFLINE. Please check pick it up. Thanks!');
