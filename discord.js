@@ -681,6 +681,16 @@ cleanServerStatus = () => {
     })
 }
 
+notifyOwner = (server) => {
+    return new Promise((resolve, reject) => {
+        const allMembers = await GUILD.members.fetch();
+        const ownerMember = allMembers.find(m => m.user.id == server.owner);
+        await ownerMember.user.send('Server ' + server.id + ' is OFFLINE. Please check pick it up. Thanks!');
+        await sendMessageToReportChannel('The owner "' + ownerMember.displayName + '" was notified.');
+        resolve();
+    })
+}
+
 sendServerStatus = (server) => {
     return new Promise((resolve, reject) => {
         const embed = new MessageEmbed().setTimestamp();
@@ -735,3 +745,4 @@ exports.sendServerStatus = sendServerStatus;
 exports.cleanServerStatus = cleanServerStatus;
 exports.checkNewUserAndCreate = checkNewUserAndCreate;
 exports.checkLeftUsersAndRemove = checkLeftUsersAndRemove;
+exports.notifyOwner = notifyOwner;

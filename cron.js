@@ -33,11 +33,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
                 server.updated = common.getToDay().format('DD/MM/YYYY HH:mm:ss');
                 await datasource.updateServerStatus(server);
                 console.log(TAG + ' - Server ' + server.id + ' status was reported to discord as online = ' + server.status);
-
-                const allMembers = await GUILD.members.fetch();
-                const ownerMember = allMembers.find(m => m.user.id == server.owner);
-                await ownerMember.user.send('Server ' + server.id + ' is OFFLINE. Please check pick it up. Thanks!');
-                await discordModule.sendMessageToReportChannel('The owner "' + ownerMember.displayName + '" was notified.');
+                await discordModule.notifyOwner(server);
             }
             await discordModule.sendServerStatus(server);
         });
