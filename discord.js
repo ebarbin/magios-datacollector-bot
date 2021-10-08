@@ -37,7 +37,7 @@ client.login(process.env.DISCORD_BOT_TOKEN);
     client.once('ready', async () => {
         REPORT_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === REPORT_CHANNEL_NAME);
         EVENTOS_CALENDARIO_CHANNEL = client.channels.cache.find(channel => channel.name === EVENTOS_CALENDARIO_CHANNEL_NAME);
-        SERVER_STATUS_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'SERVER-DATA' && channel.name === SERVER_STATUS_CHANNEL_NAME);
+        SERVER_STATUS_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'SERVER DATA' && channel.name === SERVER_STATUS_CHANNEL_NAME);
         GUILD = client.guilds.cache.find((g) => g.id === GUILD_ID );
 
         console.log(TAG + ' - Discord bot is connected.')
