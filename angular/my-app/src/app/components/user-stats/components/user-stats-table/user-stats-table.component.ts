@@ -9,14 +9,32 @@ import * as moment from 'moment';
 })
 export class UserStatsTableComponent implements OnInit {
 
+  fieldEditable = false;
+  userIdSelected = '';
+  fieldSelected = '';
+  input:any;
+
   @Input() users: any;
   sortedUsers: any[] = [];
   
   constructor() {}
 
   ngOnInit(): void {
-    moment();
     this.sortedUsers = this.users.slice();
+  }
+
+  onApplyChange(event: any) {
+    console.log(this.input);
+    this.fieldEditable = false;
+    this.fieldSelected = '';
+    this.userIdSelected = '';
+  }
+
+  onEditField(user:any, field: string) {
+    this.userIdSelected = user.id;
+    this.fieldSelected = field;
+    this.fieldEditable = !this.fieldEditable;
+    this.input = user[field];
   }
 
   sortData(sort: Sort) {

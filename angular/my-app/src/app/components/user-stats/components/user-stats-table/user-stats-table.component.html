@@ -25,21 +25,79 @@
       <td class="normal"><img *ngIf="user.avatar" class="rounded-circle" width="30" src="https://cdn.discordapp.com/avatars/{{user.id}}/{{user.avatar}}"></td>
       <td class="normal"><b>{{user.username}}</b></td>
       <td class="normal"><app-role [user]="user"></app-role></td>
-      <td class="normal"><span *ngIf="user.joinDate">{{user.joinDate | amLocal | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}</span></td>
-
+      <td class="normal" (dblclick)="onEditField(user, 'joinDate')">
+        <ng-container *ngIf="fieldEditable && fieldSelected == 'joinDate' && user.id == userIdSelected">
+          <mat-form-field>
+            <input matInput readonly [matDatepicker]="picker" [(ngModel)]="input" [ngModelOptions]="{standalone: true}" [value]="user.voiceChannelTotalTime" (dateChange)="onApplyChange($event)">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </ng-container>
+        <ng-container *ngIf="!fieldEditable || fieldSelected != 'joinDate'">
+          <span *ngIf="user.joinDate">
+            {{user.joinDate | amLocal | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}
+          </span>
+        </ng-container>
+      </td>
       <td class="normal">{{user.lastTextChannelName}}</td>
-      <td class="normal"><span *ngIf="user.lastTextChannelDate">{{user.lastTextChannelDate | amLocal | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}</span></td>
+      <td class="normal" (dblclick)="onEditField(user, 'lastTextChannelDate')">
+        <ng-container *ngIf="fieldEditable && fieldSelected == 'lastTextChannelDate' && user.id == userIdSelected">
+          <mat-form-field>
+            <input matInput readonly [matDatepicker]="picker" [(ngModel)]="input" [ngModelOptions]="{standalone: true}" [value]="user.lastTextChannelDate" (dateChange)="onApplyChange($event)">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </ng-container>
+        <ng-container *ngIf="!fieldEditable || fieldSelected != 'lastTextChannelDate'">
+          <span *ngIf="user.lastTextChannelDate">
+            {{user.lastTextChannelDate | amLocal | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}
+          </span>
+        </ng-container>
+      </td>
       <td class="normal">{{user.msgChannelCount}}</td>
 
       <td class="normal">{{user.lastServerId}}</td>
-      <td class="normal"><span *ngIf="user.lastServerAccess">{{user.lastServerAccess | amLocal | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}</span></td>
+      <td class="normal" (dblclick)="onEditField(user, 'lastServerAccess')">
+        <ng-container *ngIf="fieldEditable && fieldSelected == 'lastServerAccess' && user.id == userIdSelected">
+          <mat-form-field>
+            <input matInput readonly [matDatepicker]="picker" [(ngModel)]="input" [ngModelOptions]="{standalone: true}" [value]="user.lastServerAccess" (dateChange)="onApplyChange($event)">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </ng-container>
+        <ng-container *ngIf="!fieldEditable || fieldSelected != 'lastServerAccess'">
+          <span *ngIf="user.lastServerAccess">
+            {{user.lastServerAccess | amLocal | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}
+          </span>
+        </ng-container>
+      </td>
       <td class="normal">{{user.lastServerAccessIp}}</td>
-
       <td class="normal">{{user.lastVoiceChannelName}}</td>
-      <td class="normal"><span *ngIf="user.lastVoiceChannelAccessDate">{{user.lastVoiceChannelAccessDate | amLocal | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}</span></td>
+      <td class="normal" (dblclick)="onEditField(user, 'lastVoiceChannelAccessDate')">
+        <ng-container *ngIf="fieldEditable && fieldSelected == 'lastVoiceChannelAccessDate' && user.id == userIdSelected">
+          <mat-form-field>
+            <input matInput readonly [matDatepicker]="picker" [(ngModel)]="input" [ngModelOptions]="{standalone: true}" [value]="user.lastVoiceChannelAccessDate" (dateChange)="onApplyChange($event)">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </ng-container>
+        <ng-container *ngIf="!fieldEditable || fieldSelected != 'lastVoiceChannelAccessDate'">
+          <span *ngIf="user.lastVoiceChannelAccessDate">
+            {{user.lastVoiceChannelAccessDate | amLocal | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}
+          </span>
+        </ng-container>
+      </td>
       <td class="normal">{{user.joinVoiceChannelCount}}</td>
-      
-      <td class="normal">{{user.voiceChannelTotalTime}}</td>
+      <td class="normal" (dblclick)="onEditField(user, 'voiceChannelTotalTime')">
+        <ng-container *ngIf="fieldEditable && fieldSelected == 'voiceChannelTotalTime' && user.id == userIdSelected">
+            <mat-form-field>
+              <input type="number" [ngModelOptions]="{standalone: true}" [(ngModel)]="input" matInput value="{{user.voiceChannelTotalTime}}" (keydown.enter)="onApplyChange($event)">
+            </mat-form-field>
+        </ng-container>
+        <ng-container *ngIf="!fieldEditable">
+          {{user.voiceChannelTotalTime}}
+        </ng-container>
+      </td>
     </tr>
   </tbody>
 </table>

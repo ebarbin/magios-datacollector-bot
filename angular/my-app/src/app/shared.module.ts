@@ -18,11 +18,25 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
-
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { RoleComponent } from './components/role/role.component';
 import { RolePipe } from './pipes/role.pipe';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSortModule } from '@angular/material/sort';
+import { DateAdapter as CoreDateAdapter, MAT_DATE_FORMATS as CORE_MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
+
+export const MOMENTJS_DATE_FORMAT = {
+  parse: {
+      dateInput: 'DD.MM.YYYY',
+  },
+  display: {
+      dateInput: 'DD/MM/YYYY',
+      monthYearLabel: 'MMMM YYYY',
+      dateA11yLabel: 'DD/MM/YYYY',
+      monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 
 @NgModule({
     declarations: [
@@ -41,6 +55,7 @@ import { MatSortModule } from '@angular/material/sort';
         MatListModule,
         MatTableModule,
         MatSlideToggleModule,
+        MatDatepickerModule,
         MatSelectModule,
         MatBadgeModule,
         FontAwesomeModule,
@@ -76,6 +91,7 @@ import { MatSortModule } from '@angular/material/sort';
         MatDividerModule,
         MatBadgeModule,
         MatSelectModule,
+        MatDatepickerModule,
         MatAutocompleteModule,
         BlockUIModule,
         MatCheckboxModule,
@@ -83,6 +99,11 @@ import { MatSortModule } from '@angular/material/sort';
         FontAwesomeModule,
         RoleComponent,
         RolePipe
+    ],
+    providers: [
+      { provide: MAT_DATE_LOCALE, useValue: 'es-AR' },
+      { provide: CoreDateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+      { provide: CORE_MAT_DATE_FORMATS, useValue: MOMENTJS_DATE_FORMAT},
     ]
 })
 export class SharedModule { }

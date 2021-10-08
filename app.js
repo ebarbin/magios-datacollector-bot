@@ -45,14 +45,14 @@ app.post('/api/user-join-server', (req, res) => {
 
     datasource.findUserByUsername(username).then(user => {
         if (!user) {
-            discordModule.sendMessageToReportChannel('Unknown user: "' + username + '" with ip: ' + ip + ' has logged in at Server ' + serverId + '.');
-            console.log(TAG + ' - Unknown user: "' + username + '" with ip: ' + ip + ' has logged in at Server ' + serverId + '.');
+            discordModule.sendMessageToReportChannel('Unknown user "' + username + '" with ip ' + ip + ' has logged at Server ' + serverId + '.');
+            console.log(TAG + ' - Unknown user: "' + username + '" with ip: ' + ip + ' has logged in Server ' + serverId + '.');
         } else {
             user.lastServerAccess = common.getToDay().format('DD/MM/YYYY HH:mm:ss');
             user.lastServerId = serverId;
             user.lastServerAccessIp = ip;
-            discordModule.sendMessageToReportChannel('User: "' + username + '" with ip: ' + ip + ' has logged in at Server ' + serverId + '.');
-            console.log(TAG + ' - User: "' + username + '" with ip: ' + ip + ' has logged in at Server ' + serverId + '.');
+            discordModule.sendMessageToReportChannel('The user "' + username + '" with ip ' + ip + ' has logged in Server ' + serverId + '.');
+            console.log(TAG + ' - The user: "' + username + '" with ip: ' + ip + ' has logged in Server ' + serverId + '.');
             datasource.updateUser(user);
         }
     });
