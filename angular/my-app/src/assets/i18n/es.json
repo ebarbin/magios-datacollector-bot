@@ -28,5 +28,17 @@
     "Role":"Rol",
     "Welcome":"Bienvenido",
     "Select one":"Seleccione uno",
-    "Users":"Usuarios"
+    "Users":"Usuarios",
+    "User stats":"Discord + Server (info)",
+    "Join date":"Join date",
+    "Last text channel name":"Last text channel name",
+    "Last text channel date":"Last text channel date",
+    "Msg channel count":"Msg channel count",
+    "Last server id": "Last server id",
+    "Last server access": "Last server access",
+    "Last server access ip": "Last server access ip",
+    "Last voice channel name": "Last voice channel name",
+    "Last voice channel access date":"Last voice channel access date",
+    "Join voice channel count":"Join voice channel count",
+    "Voice channel total time":"Join voice channel count"
 }

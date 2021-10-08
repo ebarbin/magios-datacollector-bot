@@ -1,0 +1,1 @@
+<span [ngClass]="{'admin': isAdmin(user.roles), 'magio': isMagio(user.roles), 'newjoiner': isNewJoiner(user.roles)}"><b>{{ user.roles | role }}</b></span>

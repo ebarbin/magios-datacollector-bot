@@ -45,14 +45,14 @@ app.post('/api/user-join-server', (req, res) => {
 
     datasource.findUserByUsername(username).then(user => {
         if (!user) {
-            discordModule.sendMessageToReportChannel('Unknown user: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '.');
-            console.log(TAG + ' - Unknown user: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '.');
+            discordModule.sendMessageToReportChannel('Unknown user: "' + username + '" with ip: ' + ip + ' has logged in at Server ' + serverId + '.');
+            console.log(TAG + ' - Unknown user: "' + username + '" with ip: ' + ip + ' has logged in at Server ' + serverId + '.');
         } else {
             user.lastServerAccess = common.getToDay().format('DD/MM/YYYY HH:mm:ss');
             user.lastServerId = serverId;
             user.lastServerAccessIp = ip;
-            discordModule.sendMessageToReportChannel('User: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '. Was updated.');
-            console.log(TAG + ' - User: ' + username + ' with ip: ' + ip + ' has logged in at Server ' + serverId + '. Was updated.');
+            discordModule.sendMessageToReportChannel('User: "' + username + '" with ip: ' + ip + ' has logged in at Server ' + serverId + '.');
+            console.log(TAG + ' - User: "' + username + '" with ip: ' + ip + ' has logged in at Server ' + serverId + '.');
             datasource.updateUser(user);
         }
     });
@@ -136,6 +136,11 @@ app.put('/api/modules/user/:userId', async (req, res) => {
     res.json({user: user});
 });
 
+app.get('/api/users', async (req, res) =>{
+    const all = await datasource.getAllUsers();
+    res.json({users: all});
+});
+
 app.post('/api/server-alive/:serverId', async  (req, res) => {
     console.log(TAG + ' - Server ' + req.params.serverId + ' is alive.');
 
@@ -204,38 +209,6 @@ app.get('/welcome', async (req, res) => {
     res.sendFile(__dirname + '/angular/my-app/dist/my-app/index.html');
 });
 
-app.get('/magios', async (req, res) =>{
-    const all = await datasource.getAllUsers();
-    let magios = all.filter(u => u.roles && u.roles.find(r => r == 'Magios'));
-    magios = _.sortBy(magios, [ u => { return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); }], ['asc']);
-
-    res.status(200).render('user-list', {title: 'Magios', users: magios });
-});
-
-app.get('/newjoiners', async (req, res) =>{
-    const all = await datasource.getAllUsers();
-    let newJoiner = all.filter(u => u.roles && u.roles.find(r => r == 'NewJoiner'));
-    newJoiner = _.sortBy(newJoiner, [ u => { return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); }], ['asc']);
-
-    res.status(200).render('user-list', {title: 'NewJoiner', users: newJoiner });
-});
-
-app.get('/limbo', async (req, res) =>{
-    const all = await datasource.getAllUsers();
-    let limbo = all.filter(u => u.roles && u.roles.find(r => r == 'Limbo'));
-    limbo = _.sortBy(limbo, [ u => { return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); }], ['asc']);
-
-    res.status(200).render('user-list', {title:'Limbo', users: limbo});
-});
-
-app.get('/norole', async (req, res) =>{
-    const all = await datasource.getAllUsers();
-    let norole = all.filter(u => !u.roles || u.roles == '');
-    norole = _.sortBy(norole, [ u => { return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); }], ['asc']);
-
-    res.status(200).render('user-list', {title:'No role', users: norole });
-});
-
 app.get('/server-status', async (req, res) =>{
     const all = await datasource.getAllUsers();
     let norole = all.filter(u => !u.roles || u.roles == '');
@@ -245,3 +218,10 @@ app.get('/server-status', async (req, res) =>{
 
     res.status(200).render('server-status', {server1Status: servers[0], server2Status: servers[1] });
 });
+
+/*
+const request = require("request");
+
+request.get("file:///C:/Users/EBarbin/Downloads/gui_de_DCS.html", (err, res, body) => {
+  console.log(body);
+});*/

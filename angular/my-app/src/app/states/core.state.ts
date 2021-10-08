@@ -6,6 +6,7 @@ import { ToastrService } from "ngx-toastr";
 import { InitAppAction, LogoutAction, MessageType, ShowMessageAction } from "../actions/core.action";
 import { environment } from "src/environments/environment";
 import { HttpClient } from "@angular/common/http";
+import { includes } from 'lodash';
 
 export interface CoreStateModel {
   user: any,
@@ -101,6 +102,11 @@ export class CoreState {
     @Selector()
     static getUser(state: CoreStateModel) {
       return state.user;
+    }
+
+    @Selector([CoreState.getUser])
+    static isAdmin(user: any) {
+      return includes(user.roles, 'Admins');
     }
 
     @Selector()

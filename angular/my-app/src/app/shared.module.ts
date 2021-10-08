@@ -19,11 +19,20 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 
+import { RoleComponent } from './components/role/role.component';
+import { RolePipe } from './pipes/role.pipe';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSortModule } from '@angular/material/sort';
+
 @NgModule({
-    declarations: [],
+    declarations: [
+    RoleComponent,
+    RolePipe
+  ],
     imports: [ 
         CommonModule,
         FormsModule,
+        BrowserAnimationsModule,
         ReactiveFormsModule,
         MatToolbarModule,
         MatIconModule,
@@ -39,6 +48,7 @@ import { MatInputModule } from '@angular/material/input';
         MatCheckboxModule,
         MatDividerModule,
         MatInputModule,
+        MatSortModule,
         MatAutocompleteModule,
         BlockUIModule.forRoot(),
         ToastrModule.forRoot({
@@ -51,6 +61,7 @@ import { MatInputModule } from '@angular/material/input';
     ],
     exports:[
         FormsModule,
+        BrowserAnimationsModule,
         ReactiveFormsModule,
         MatToolbarModule,
         MatIconModule,
@@ -58,6 +69,7 @@ import { MatInputModule } from '@angular/material/input';
         MatSidenavModule,
         MatTableModule,
         MatInputModule,
+        MatSortModule,
         MatListModule,
         MatSlideToggleModule,
         MatDialogModule,
@@ -68,7 +80,9 @@ import { MatInputModule } from '@angular/material/input';
         BlockUIModule,
         MatCheckboxModule,
         ToastrModule,
-        FontAwesomeModule
+        FontAwesomeModule,
+        RoleComponent,
+        RolePipe
     ]
 })
 export class SharedModule { }

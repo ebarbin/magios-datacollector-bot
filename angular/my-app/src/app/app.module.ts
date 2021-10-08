@@ -11,7 +11,8 @@ import { NgxsModule, NgxsModuleOptions } from '@ngxs/store';
 import { environment } from 'src/environments/environment';
 import { NgxsResetPluginModule } from 'ngxs-reset-plugin';
 import { CoreState } from './states/core.state';
-import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { UserStatsState } from './states/user-stats.state';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { WelcomeComponent } from './components/welcome/welcome.component';
@@ -24,7 +25,9 @@ import { ModuleState } from './states/module.state';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FilterDialogComponent } from './components/modules/filter-dialog/filter-dialog.component';
 import { ShowHideDialogComponent } from './components/modules/show-hide-dialog/show-hide-dialog.component';
-import { RolePipe } from './pipes/role.pipe';
+import { UserStatsComponent } from './components/user-stats/user-stats.component';
+import { UserStatsTableComponent } from './components/user-stats/components/user-stats-table/user-stats-table.component';
+import { MomentModule } from 'ngx-moment';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -56,7 +59,8 @@ export const ngxsLoggerConfig = {
     ModuleTableComponent,
     FilterDialogComponent,
     ShowHideDialogComponent,
-    RolePipe
+    UserStatsComponent,
+    UserStatsTableComponent
   ],
   imports: [
     BrowserModule,
@@ -64,6 +68,11 @@ export const ngxsLoggerConfig = {
     BrowserAnimationsModule,
     SharedModule,
     HttpClientModule,
+    MomentModule.forRoot({
+      relativeTimeThresholdOptions: {
+        'm': 59
+      }
+    }),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -72,7 +81,7 @@ export const ngxsLoggerConfig = {
       },
       defaultLanguage: 'es'
     }),
-    NgxsModule.forRoot([CoreState, ModuleState], ngxsConfig),
+    NgxsModule.forRoot([CoreState, ModuleState, UserStatsState], ngxsConfig),
     NgxsRouterPluginModule.forRoot(),
     NgxsResetPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot(ngxsLoggerConfig),

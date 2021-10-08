@@ -15,3 +15,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     border-left: 10px solid darkgrey !important;
     border-right: 2px solid darkgrey !important;
 }
+
+.mat-sort-header-container {
+    display:inline-flex !important;
+}

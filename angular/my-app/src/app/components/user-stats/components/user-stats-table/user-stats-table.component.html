@@ -1,0 +1,45 @@
+<table class="table table-striped table-fixed" matSort (matSortChange)="sortData($event)">
+  <thead>
+      <tr>
+          <th scope="col">({{sortedUsers.length}})</th>
+          <th mat-sort-header="username" scope="col">{{'Usename' | translate}}</th>
+          <th mat-sort-header="roles" scope="col">{{'Role' | translate}}</th>
+          <th mat-sort-header="joinDate" scope="col">{{'Join date' | translate}}</th>
+          
+          <th mat-sort-header="lastTextChannelName"scope="col">{{'Last text channel name' | translate}}</th>
+          <th mat-sort-header="lastTextChannelDate" scope="col">{{'Last text channel date' | translate}}</th>
+          <th mat-sort-header="msgChannelCount"scope="col">{{'Msg channel count' | translate}}</th>
+          
+          <th mat-sort-header="lastServerId"scope="col">{{'Last server id' | translate}}</th>
+          <th mat-sort-header="lastServerAccess"scope="col">{{'Last server access' | translate}}</th>
+          <th mat-sort-header="lastServerAccessIp"scope="col">{{'Last server access ip' | translate}}</th>
+
+          <th mat-sort-header="lastVoiceChannelName" scope="col">{{'Last voice channel name' | translate}}</th>
+          <th mat-sort-header="lastVoiceChannelAccessDate" scope="col">{{'Last voice channel access date' | translate}}</th>
+          <th mat-sort-header="joinVoiceChannelCount" scope="col">{{'Join voice channel count' | translate}}</th>
+          <th mat-sort-header="voiceChannelTotalTime" scope="col">{{'Voice channel total time' | translate}}</th>
+      </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of sortedUsers">
+      <td class="normal"><img *ngIf="user.avatar" class="rounded-circle" width="30" src="https://cdn.discordapp.com/avatars/{{user.id}}/{{user.avatar}}"></td>
+      <td class="normal"><b>{{user.username}}</b></td>
+      <td class="normal"><app-role [user]="user"></app-role></td>
+      <td class="normal"><span *ngIf="user.joinDate">{{user.joinDate | amLocal | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}</span></td>
+
+      <td class="normal">{{user.lastTextChannelName}}</td>
+      <td class="normal"><span *ngIf="user.lastTextChannelDate">{{user.lastTextChannelDate | amLocal | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}</span></td>
+      <td class="normal">{{user.msgChannelCount}}</td>
+
+      <td class="normal">{{user.lastServerId}}</td>
+      <td class="normal"><span *ngIf="user.lastServerAccess">{{user.lastServerAccess | amLocal | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}</span></td>
+      <td class="normal">{{user.lastServerAccessIp}}</td>
+
+      <td class="normal">{{user.lastVoiceChannelName}}</td>
+      <td class="normal"><span *ngIf="user.lastVoiceChannelAccessDate">{{user.lastVoiceChannelAccessDate | amLocal | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}</span></td>
+      <td class="normal">{{user.joinVoiceChannelCount}}</td>
+      
+      <td class="normal">{{user.voiceChannelTotalTime}}</td>
+    </tr>
+  </tbody>
+</table>

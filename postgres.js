@@ -15,7 +15,7 @@ const postgresClient = new PostgresClient({
 
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
 
-postgresClient.connect().then(() => {
+postgresClient.connect().then(async() => {
     console.log(TAG + ' - Database is connected.');
 }).catch(err => {
     console.log(TAG + ' - Error connecting database.');
@@ -81,7 +81,7 @@ const updateServerStatus = async (server) => {
     const query = { text: 'UPDATE server_status SET status = $2, updated = $3 WHERE id = $1', values: [server.id, server.status, server.updated ] };
     const res = await postgresClient.query(query);
 }
-
+ 'ALTER TABLE server_status ADD owner text'
 const getServerStatus = async () => {
     try {
         const query =  { text: 'SELECT * FROM server_status ORDER BY id ASC' };

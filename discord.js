@@ -100,7 +100,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
             } else {
                 const now = common.getToDay();
                 const lastVoiceChannelAccessDate = moment(dataBaseUser.lastVoiceChannelAccessDate, 'DD/MM/YYYY HH:mm:ss');
-                dataBaseUser.voiceChannelTotalTime = dataBaseUser.voiceChannelTotalTime + now.diff(lastVoiceChannelAccessDate, 'seconds');
+                dataBaseUser.voiceChannelTotalTime = dataBaseUser.voiceChannelTotalTime + now.diff(lastVoiceChannelAccessDate, 'minutes');
                 dataBaseUser.avatar = entryData.member.user.avatar;
             }
             

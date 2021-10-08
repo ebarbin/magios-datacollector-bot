@@ -1,9 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
-import { Store } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
 import { LogoutAction } from 'src/app/actions/core.action';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { CoreState } from 'src/app/states/core.state';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-menu',
@@ -11,6 +13,8 @@ import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit {
+
+  @Select(CoreState.isAdmin) isAdmin$: Observable<boolean> | undefined;
 
   faSignOutAlt = faSignOutAlt;
   

@@ -27,9 +27,9 @@
         </thead>
         <tbody>
             <tr *ngFor="let user of users">
-                <td class="normal"><img class="rounded-circle" width="30" src="https://cdn.discordapp.com/avatars/{{user.id}}/{{user.avatar}}"></td>
+                <td class="normal"><img *ngIf="user.avatar" class="rounded-circle" width="30" src="https://cdn.discordapp.com/avatars/{{user.id}}/{{user.avatar}}"></td>
                 <td class="normal"><b>{{user.username}}</b></td>
-                <td class="normal" [ngClass]="{'admin': isAdmin(user.roles), 'magio': isMagio(user.roles), 'newjoiner': isNewJoiner(user.roles)}"><b>{{ user.roles | role }}</b></td>
+                <td class="normal"><app-role [user]="user"></app-role></td>
                 <td class="normal">
                     <mat-select [value]="user.country" [ngModel]="user.country" (ngModelChange)="onChangeCountry($event, user)">
                       <mat-option *ngFor="let country of getCountries$ | async" [value]="country.name">
