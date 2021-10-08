@@ -21,7 +21,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
         }) ;
     });
 
-    cron.schedule('*/10 * * * *', async () => {
+    cron.schedule('*/1 * * * *', async () => {
         console.log(TAG + ' - Checking server status - Running a task every 10 minutes.');
         await discordModule.cleanServerStatus();
 
