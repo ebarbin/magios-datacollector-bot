@@ -54,7 +54,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
             let dataBaseUser = await datasource.getUser(user.id);
             if (dataBaseUser) {
                 await datasource.removeUser(dataBaseUser);
-                sendMessageToReportChannel('The user "' + dataBaseUser.username + '" left the group.');
+                await sendMessageToReportChannel('The user "' + dataBaseUser.username + '" left the group.');
             }
         }
     });
@@ -69,7 +69,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
                 newUser.roles = roles;
                 newUser.joinDate = common.getToDay().format('DD/MM/YYYY HH:mm:ss');
                 await datasource.saveUser(newUser);
-                sendMessageToReportChannel('The user "' + newUser.username + '" was created.');
+                await sendMessageToReportChannel('The user "' + newUser.username + '" was created.');
             }
         }
     });
@@ -635,7 +635,7 @@ checkLeftUsersAndRemove = () => {
             const toRemove = allUsers.filter(u => !u.exists);
             toRemove.forEach(async u => {
                 await datasource.removeUser(u);
-                sendMessageToReportChannel('The user "' + u.username + '" was removed.');
+                await sendMessageToReportChannel('The user "' + u.username + '" was removed.');
             })
             resolve();
         })
@@ -653,7 +653,7 @@ checkNewUserAndCreate = () => {
                         const newUser = common.createEmptyUser(member);
                         newUser.roles = roles;
                         await datasource.saveUser(newUser);
-                        sendMessageToReportChannel('The user "' + newUser.username + '" was created.');
+                        await sendMessageToReportChannel('The user "' + newUser.username + '" was created.');
                     } else {                    
                         dbUser.username = member.displayName.toLowerCase();
                         dbUser.roles = roles;
@@ -667,7 +667,9 @@ checkNewUserAndCreate = () => {
 }
 
 sendMessageToReportChannel = (msg) => {
-    REPORT_CHANNEL.send(msg);
+    return new Promise((resolve, reject) => {
+        REPORT_CHANNEL.send(msg).then(() => resolve());
+    })
 }
 
 cleanServerStatus = () => {
@@ -697,7 +699,7 @@ cleanOldEvents = () => {
     return new Promise((resolve, reject) => {
         let quantity = 0;
         EVENTOS_CALENDARIO_CHANNEL.messages.fetch({ limit: 100 }).then(messages => {
-            messages.forEach(m => {
+            messages.forEach(async m => {
                 if (m.author.bot && m.author.username == 'sesh' && m.embeds && m.embeds.length > 0) {
                     const embed = m.embeds[0];
                     if (embed.title.indexOf('is starting now!') >= 0) {
@@ -715,7 +717,7 @@ cleanOldEvents = () => {
                             console.log('originalMsg ' + originalMsg);
                             console.log('embed ' + originalMsg);
                             const eventName = originalMsg.embeds[0].title.split(":calendar_spiral:")[1].trim().split('**')[1]
-                            sendMessageToReportChannel('The old event "' + eventName + '" was removed.');
+                            await sendMessageToReportChannel('The old event "' + eventName + '" was removed.');
                         }
                     }
                 }
