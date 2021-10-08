@@ -681,7 +681,7 @@ cleanServerStatus = () => {
     })
 }
 
-notifyOwner = (server) => {
+notifyOwner = async (server) => {
     return new Promise((resolve, reject) => {
         const allMembers = await GUILD.members.fetch();
         const ownerMember = allMembers.find(m => m.user.id == server.owner);
