@@ -78,7 +78,7 @@ const getAllUsers = async () => {
 }
 
 const updateServerStatus = async (server) => {
-    const query = { text: 'UPDATE server_status SET status = $2, updated = $3 WHERE id = $1', values: [server.id, server.status, server.updated ] };
+    const query = { text: 'UPDATE server_status SET status = $2, updated = $3, notified = $4 WHERE id = $1', values: [server.id, server.status, server.updated, server.notified ] };
     const res = await postgresClient.query(query);
 }
  'ALTER TABLE server_status ADD owner text'
