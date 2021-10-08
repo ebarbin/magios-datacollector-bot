@@ -146,7 +146,7 @@ app.post('/api/server-alive/:serverId', async  (req, res) => {
 
     const updated = req.body.updated.trim();
 
-    await datasource.updateServerStatus({id: req.params.serverId, status: true, updated: updated});
+    await datasource.updateServerStatus({id: req.params.serverId, status: true, updated: updated, notified: false});
 
     await discordModule.cleanServerStatus();
     const servers = await datasource.getServerStatus();

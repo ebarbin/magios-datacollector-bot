@@ -34,8 +34,9 @@ if (common.ENABLE_DISCORD_EVENTS) {
                 await datasource.updateServerStatus(server);
                 console.log(TAG + ' - Server ' + server.id + ' status was reported to discord as OFFLINE.');
             }
-            if (!server.status) {
+            if (!server.status && !server.notified) {
                 console.log(TAG + ' - Server ' + server.id + ' status still OFFLINE.');
+                server.notified = true;
                 await discordModule.notifyOwner(server);
             }
             await discordModule.sendServerStatus(server);
