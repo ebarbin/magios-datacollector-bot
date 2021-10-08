@@ -152,7 +152,7 @@ app.post('/api/server-alive/:serverId', async  (req, res) => {
     const servers = await datasource.getServerStatus();
     servers.forEach(async server => {
         await discordModule.sendServerStatus(server);
-        console.log(TAG + ' - Server ' + server.id + ' status was reported to discord as online = ' + server.status);
+        console.log(TAG + ' - Server ' + server.id + ' status was reported to discord as ONLINE.');
     });
     
     res.status(200).send();

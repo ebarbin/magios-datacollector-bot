@@ -32,7 +32,10 @@ if (common.ENABLE_DISCORD_EVENTS) {
                 server.status = false;
                 server.updated = common.getToDay().format('DD/MM/YYYY HH:mm:ss');
                 await datasource.updateServerStatus(server);
-                console.log(TAG + ' - Server ' + server.id + ' status was reported to discord as online = ' + server.status);
+                console.log(TAG + ' - Server ' + server.id + ' status was reported to discord as OFFLINE.');
+            }
+            if (!server.status) {
+                console.log(TAG + ' - Server ' + server.id + ' status still OFFLINE.');
                 await discordModule.notifyOwner(server);
             }
             await discordModule.sendServerStatus(server);
