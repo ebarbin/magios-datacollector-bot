@@ -5,7 +5,7 @@ import { catchError, finalize, switchMap, tap } from "rxjs/operators";
 import { MessageType, ShowMessageAction } from "../actions/core.action";
 import { ModulesService } from "../services/modules.service";
 import { CoreState } from "./core.state";
-import { ApplyFilterModulesAction, ClearFiltersModulesAction, InitModulesAction, RefreshElementModulesAction, ShowHideModulesAction, ToggleModuleValueAction, ToggleUserStatusValueAction, UpdateCountryUserValueAction } from "../actions/module.action";
+import { ApplyFilterModulesAction, ClearFiltersModulesAction, InitModulesAction, RefreshElementModulesAction, ShowHideModulesAction, SortUsersModuleAction, ToggleModuleValueAction, ToggleUserStatusValueAction, UpdateCountryUserValueAction } from "../actions/module.action";
 import { includes } from 'lodash';
 import { patch, updateItem } from '@ngxs/store/operators';
 import { throwError } from "rxjs";
@@ -75,6 +75,42 @@ export class ModuleState {
     private allowOperation(myUser: any, user: any) {
         return myUser.roles.find((r:string)=> r == 'Admins') || myUser.id == user;
     }
+    
+    @Action(SortUsersModuleAction)
+    sortUsersModuleAction(ctx: StateContext<ModuleStateModel>, action: SortUsersModuleAction) {
+        const {sort}  = action.payload;
+        const {usersModules} = ctx.getState()
+        const data = usersModules.slice();
+        let sortedData;
+        if (!sort.active || sort.direction === '') {
+            sortedData = data; 
+        } else {
+            sortedData = data.sort((a:any, b:any) => {
+                const isAsc = sort.direction === 'asc';
+                switch (sort.active) {
+                  case 'username': return this.compare(a.username, b.username, isAsc);
+                  case 'username-bis': return this.compare(a.username, b.username, isAsc);
+                  case 'roles': return this.compareRoles(a.roles, b.roles, isAsc);
+                  default: return 0;
+                }
+              });
+        }
+        ctx.patchState({usersModules: sortedData});
+    }
+    
+    private compare(a: number | string, b: number | string, isAsc: boolean) {
+        if (a == null && b == null) return 0;
+        else if (a == null) return -1 * (isAsc ? 1 : -1);
+        else if (b == null) return 1 * (isAsc ? 1 : -1);
+        return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+      }
+    
+      private compareRoles(a: string[], b: string[], isAsc: boolean) {
+        if ((a == null || a.length == 0) && (b == null || b.length == 0)) return 0;
+        else if (a == null || a.length == 0) return -1 * (isAsc ? 1 : -1);
+        else if (b == null || b.length == 0) return 1 * (isAsc ? 1 : -1);
+        else return (a[0] < b[0] ? -1 : 1) * (isAsc ? 1 : -1);
+      }
 
     @Action(UpdateCountryUserValueAction)
     updateCountryUserValueAction(ctx: StateContext<ModuleStateModel>, action: UpdateCountryUserValueAction) {
