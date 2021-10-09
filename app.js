@@ -203,6 +203,11 @@ app.get('/welcome', async (req, res) => {
     res.sendFile(__dirname + '/angular/my-app/dist/my-app/index.html');
 });
 
+app.get('/userStats', async (req, res) => {
+    res.sendFile(__dirname + '/angular/my-app/dist/my-app/index.html');
+});
+
+
 app.get('/server-status', async (req, res) =>{
     const all = await datasource.getAllUsers();
     let norole = all.filter(u => !u.roles || u.roles == '');
