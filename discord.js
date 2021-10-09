@@ -693,17 +693,16 @@ notifyOwner = (server) => {
 }
 
 sendServerStatus = (server) => {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         const embed = new MessageEmbed().setTimestamp();
         if (server.status) {
             embed.setTitle('Servidor ' + server.id +': ONLINE').setColor('#00830b');
         } else {
             embed.setTitle('Servidor ' + server.id +': OFFLINE').setColor('#c90000');
         }
-        SERVER_STATUS_CHANNEL.send(embed).then(() => {
-            console.log(TAG + ' - Server ' + server.id + ' status was reported to discord as ' + server.status ? 'ONLINE.' : 'OFFLINE.');
-            resolve();
-        })
+        await SERVER_STATUS_CHANNEL.send(embed);
+        console.log(TAG + ' - Server ' + server.id + ' status was reported to discord as ' + server.status ? 'ONLINE.' : 'OFFLINE.');
+        resolve();
     })
 }
 
