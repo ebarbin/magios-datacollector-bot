@@ -12,7 +12,7 @@ const createEmptyUser = (member) => {
         id: member.user.id,
         avatar: member.user.avatar,
         username: member.displayName.toLowerCase(),
-        joinDate: getToDay().format('DD/MM/YYYY HH:mm:ss'),
+        joinDate: moment.unix(member.joinedTimestamp).format('DD/MM/YYYY HH:mm:ss'),
         voiceChannelTotalTime: 0,
         joinVoiceChannelCount: 0,
         msgChannelCount: 0,
