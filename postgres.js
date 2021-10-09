@@ -77,7 +77,7 @@ const getAllUsers = async () => {
       }
 }
 
-const updateServerStatus = async (server) => {
+const updateServer = async (server) => {
     const query = { text: 'UPDATE server_status SET status = $2, updated = $3, notified = $4 WHERE id = $1', values: [server.id, server.status, server.updated, server.notified ] };
     const res = await postgresClient.query(query);
 }
@@ -124,6 +124,6 @@ exports.findUserByUsername = findUserByUsername;
 exports.getUser = getUser;
 exports.getAllUsers = getAllUsers;
 exports.createDataBase = createDataBase;
-exports.updateServerStatus = updateServerStatus;
+exports.updateServer = updateServer;
 exports.getServerStatus = getServerStatus;
 exports.getServerStatusById = getServerStatusById;

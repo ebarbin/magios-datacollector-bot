@@ -21,7 +21,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
         }) ;
     });
 
-    cron.schedule('*/1 * * * *', async () => {
+    cron.schedule('*/10 * * * *', async () => {
         console.log(TAG + ' - Checking server status - Running a task every 10 minutes.');
         await discordModule.cleanServerStatus();
 
@@ -30,16 +30,20 @@ if (common.ENABLE_DISCORD_EVENTS) {
         servers.forEach(async server => {
             if (common.getToDay().diff(moment(server.updated, 'DD/MM/YYYY HH:mm:ss'), 'minutes') > 15) {
                 server.status = false;
-                server.updated = common.getToDay().format('DD/MM/YYYY HH:mm:ss');
-                await datasource.updateServerStatus(server);
-                console.log(TAG + ' - Server ' + server.id + ' status was reported to discord as OFFLINE.');
+                //server.updated = common.getToDay().format('DD/MM/YYYY HH:mm:ss');
+
+                if (!server.notified) {
+                    server.notified = true;
+                    await discordModule.notifyOwner(server);
+                }
+
+            } else {
+                server.status = true;
+                server.notified = false;
             }
-            if (!server.status && !server.notified) {
-                console.log(TAG + ' - Server ' + server.id + ' status still OFFLINE.');
-                server.notified = true;
-                await datasource.updateServerStatus(server);
-                await discordModule.notifyOwner(server);
-            }
+
+            await datasource.updateServer(server);
+
             await discordModule.sendServerStatus(server);
         });
     });
