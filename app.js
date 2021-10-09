@@ -142,18 +142,10 @@ app.get('/api/users', async (req, res) =>{
 });
 
 app.post('/api/server-alive/:serverId', async  (req, res) => {
-    console.log(TAG + ' - Server ' + req.params.serverId + ' is alive.');
-
+    
     const updated = req.body.updated.trim();
     await datasource.updateServer({id: req.params.serverId, status: true, updated: updated, notified: false});
     console.log(TAG + ' - Server ' + req.params.serverId + ' status was updated as ONLINE.');
-
-    /*await discordModule.cleanServerStatus();
-    const servers = await datasource.getServerStatus();
-    servers.forEach(async server => {
-        await discordModule.sendServerStatus(server);
-        console.log(TAG + ' - Server ' + server.id + ' status was reported to discord as ONLINE.');
-    });*/
     
     res.status(200).send();
 });

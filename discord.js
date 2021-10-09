@@ -479,9 +479,10 @@ if (common.ENABLE_DISCORD_EVENTS) {
 
             } else if (message.content == '!clear') {
 
-                REPORT_CHANNEL.messages.fetch().then(ms => { 
-                    ms.forEach(msg => msg.delete() );
-                }).catch();
+                const messages = await REPORT_CHANNEL.messages.fetch();
+                messages.forEach(async ms => {
+                    await msg.delete();
+                })
 
             } else if (message.content == '!list') {
 
