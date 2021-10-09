@@ -49,6 +49,9 @@ if (common.ENABLE_DISCORD_EVENTS) {
 
     cron.schedule('*/1 * * * *', async () => {
 
+        console.log('-------------------------------------------');
+        console.log('-------------------------------------------');
+        
         const servers = await datasource.getServerStatus();
         const _now = common.getToDay();
         console.log('Now: ' + _now.format('DD/MM/YYYY HH:mm:ss'))

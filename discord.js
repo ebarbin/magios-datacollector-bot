@@ -700,7 +700,7 @@ sendServerStatus = (server) => {
             embed.setTitle('Servidor ' + server.id +': OFFLINE').setColor('#c90000');
         }
         await SERVER_STATUS_CHANNEL.send(embed);
-        console.log(TAG + ' - Server ' + server.id + ' status was reported to discord as ' + server.status ? 'ONLINE.' : 'OFFLINE.');
+        console.log(TAG + ' - Server ' + server.id + ' status was reported to discord as ' + (server.status ? 'ONLINE.' : 'OFFLINE.'));
         resolve();
     })
 }
