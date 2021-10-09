@@ -30,7 +30,6 @@ if (common.ENABLE_DISCORD_EVENTS) {
         servers.forEach(async server => {
             if (common.getToDay().diff(moment(server.updated, 'DD/MM/YYYY HH:mm:ss'), 'minutes') > 15) {
                 server.status = false;
-                //server.updated = common.getToDay().format('DD/MM/YYYY HH:mm:ss');
 
                 if (!server.notified) {
                     server.notified = true;
