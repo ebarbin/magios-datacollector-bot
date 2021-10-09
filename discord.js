@@ -674,11 +674,10 @@ sendMessageToReportChannel = (msg) => {
 }
 
 cleanServerStatus = () => {
-    return new Promise((resolve, reject) => {
-        SERVER_STATUS_CHANNEL.messages.fetch({ limit: 100 }).then(ms => { 
-            ms.forEach(msg => msg.delete() );
-            resolve();
-        }).catch(() => reject());
+    return new Promise(async (resolve, reject) => {
+        const messages = await SERVER_STATUS_CHANNEL.messages.fetch({ limit: 100 });
+        messages.forEach( async msg => await msg.delete() );
+        resolve();
     })
 }
 
