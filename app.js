@@ -43,17 +43,17 @@ app.post('/api/user-join-server', (req, res) => {
     const serverId = req.body.serverId.trim();
     const ip = req.body.ip.trim();
 
-    datasource.findUserByUsername(username).then(user => {
+    datasource.findUserByUsername(username).then(async user => {
         if (!user) {
-            discordModule.sendMessageToReportChannel('Unknown user "' + username + '" with ip ' + ip + ' has logged at Server ' + serverId + '.');
+            await discordModule.sendMessageToReportChannel('Unknown user "' + username + '" with ip ' + ip + ' has logged at Server ' + serverId + '.');
             console.log(TAG + ' - Unknown user: "' + username + '" with ip: ' + ip + ' has logged in Server ' + serverId + '.');
         } else {
             user.lastServerAccess = common.getToDay().format('DD/MM/YYYY HH:mm:ss');
             user.lastServerId = serverId;
             user.lastServerAccessIp = ip;
-            discordModule.sendMessageToReportChannel('The user "' + username + '" with ip ' + ip + ' has logged in Server ' + serverId + '.');
+            await  discordModule.sendMessageToReportChannel('The user "' + username + '" with ip ' + ip + ' has logged in Server ' + serverId + '.');
             console.log(TAG + ' - The user: "' + username + '" with ip: ' + ip + ' has logged in Server ' + serverId + '.');
-            datasource.updateUser(user);
+            await datasource.updateUser(user);
         }
     });
 
@@ -182,8 +182,10 @@ app.post('/oauth/redirect', async (req, res) => {
 
         const user = await datasource.findUserByUsername(username);
         if (user && user.roles.find(r => r == 'Admins' || r == 'Magios' || r == 'NewJoiner')) {
+            await discordModule.sendMessageToReportChannel('The user "' + user.username + ' has logged in Magios Web Site.');
             res.json({allow:true, user: user});
         } else {
+            await discordModule.sendMessageToReportChannel('The not authorized user "' + username + '" was trying to login Magios Web Site.');
             res.json({allow: false});
         }
     }
