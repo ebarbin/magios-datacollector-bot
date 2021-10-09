@@ -481,7 +481,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
 
                 const messages = await REPORT_CHANNEL.messages.fetch();
                 messages.forEach(async ms => {
-                    await msg.delete();
+                    await ms.delete();
                 })
 
             } else if (message.content == '!list') {
