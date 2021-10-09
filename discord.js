@@ -657,7 +657,7 @@ checkNewUserAndCreate = () => {
                         await sendMessageToReportChannel('The user "' + newUser.username + '" was created.');
                     } else {                    
                         dbUser.username = member.displayName.toLowerCase();
-                        dbUser.joinDate = moment.unix(member.joinedTimestamp).format('DD/MM/YYYY HH:mm:ss'),
+                        dbUser.joinDate = moment(new Date(member.joinedTimestamp)).format('DD/MM/YYYY HH:mm:ss'),
                         dbUser.roles = roles;
                         datasource.updateUser(dbUser);
                     }
