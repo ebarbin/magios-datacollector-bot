@@ -47,6 +47,20 @@ if (common.ENABLE_DISCORD_EVENTS) {
         });
     });
 
+    cron.schedule('*/1 * * * *', async () => {
+
+        const servers = await datasource.getServerStatus();
+        const _now = common.getToDay();
+        console.log('Now: ' + _now.format('DD/MM/YYYY HH:mm:ss'))
+        servers.forEach(async server => {
+            console.log('-------------------------------------------');
+            console.log('Server ' + server.id);
+            console.log('Last update ' + server.updated);
+            console.log('Status ' + server.status);
+            console.log('Diff ' + _now.diff(moment(server.updated, 'DD/MM/YYYY HH:mm:ss'), 'minutes'));
+        })
+    })
+
     cron.schedule('*/180 * * * *', async () => {
         console.log(TAG + ' - Checking users data and upate - Running a task every 3 hours.');
         await discordModule.checkNewUserAndCreate();
