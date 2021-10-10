@@ -25,6 +25,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSortModule } from '@angular/material/sort';
 import { DateAdapter as CoreDateAdapter, MAT_DATE_FORMATS as CORE_MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { GlobalHttpInterceptor } from './interceptors/global-http.interceptor';
 
 export const MOMENTJS_DATE_FORMAT = {
   parse: {
@@ -101,6 +103,7 @@ export const MOMENTJS_DATE_FORMAT = {
         RolePipe
     ],
     providers: [
+      { provide: HTTP_INTERCEPTORS, useClass: GlobalHttpInterceptor, multi: true  },
       { provide: MAT_DATE_LOCALE, useValue: 'es-AR' },
       { provide: CoreDateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
       { provide: CORE_MAT_DATE_FORMATS, useValue: MOMENTJS_DATE_FORMAT},

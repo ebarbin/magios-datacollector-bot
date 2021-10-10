@@ -4,11 +4,15 @@ import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
 
 @Injectable({ providedIn: 'root' })
-export class UserStatsService {
+export class LoginService {
 
     constructor(private http: HttpClient) {}
 
-    getAllUsers(): Observable<any> {
-        return this.http.get<any[]>(environment.api + '/api/users');   
+    login(code: string): Observable<any> {
+        return this.http.post<any>(environment.api + '/oauth/login', {code: code })
+    }
+
+    logout(): Observable<any> {
+        return this.http.post<any>(environment.api + '/oauth/logout', {});
     }
 }
