@@ -39,7 +39,6 @@ export class GlobalHttpInterceptor implements HttpInterceptor {
   }
 
   private addAuthenticationData(request: HttpRequest<any>, user: any) {
-      console.log(user.id);
     return request.clone({ setHeaders: { userId: user.id } });
   }
 }

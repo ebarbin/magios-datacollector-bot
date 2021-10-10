@@ -85,7 +85,6 @@ export interface UserStatsStateModel {
     @Action(GetAllUsersAction)
     getAllUsersAction(ctx: StateContext<UserStatsStateModel>, action: GetAllUsersAction) {
 
-      console.log(1);
         this.blockUI.start();
 
         return this.userStatsService.getAllUsers().pipe(
