@@ -5,7 +5,6 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const _ = require('lodash');
-const moment = require('moment-timezone');
 const btoa = require('btoa');
 const fetch = require('node-fetch');
 const { URLSearchParams } = require('url');
@@ -19,6 +18,8 @@ const TAG = '[magios-datacollector-bot]';
 
 const PORT = process.env.PORT || 3000;
 const app = express();
+
+let sessions = [];
 
 app.use(cors());
 app.use((req, res, next) => {
@@ -37,6 +38,14 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.listen(PORT, () => {
     console.log(`${TAG} - WebApp is running on port ${ PORT }.`);
 });
+
+checkUserAuth = (req, res, next) => {
+    if (!req.headers.userid) return res.status(401).send();
+    else {
+        if (sessions.find(s => s == req.headers.userid)) next();
+        else return res.status(401).send();
+    }
+}
 
 app.post('/api/user-join-server', (req, res) => {
     const username = req.body.username.trim().toLowerCase();
@@ -67,7 +76,7 @@ app.get('/api/server-alive/:serverId', async  (req, res) => {
     res.json({response: serverStatus});
 });
 
-app.get('/api/modules', async (req, res) => {
+app.get('/api/modules', checkUserAuth, async (req, res) => {
     const terrains = [];
     for (let i = 0; i < common.terrains.length; i++) terrains.push({id: i, name: common.terrains[i], visible: true});
 
@@ -86,7 +95,8 @@ app.get('/api/modules', async (req, res) => {
     res.json({terrains: terrains, jets: jets, warbirds: warbirds, helis: helis, others: others });
 });
 
-app.get('/api/modules/user', async (req, res) => {
+app.get('/api/modules/user', checkUserAuth, async (req, res) => {
+
     const all = await datasource.getAllUsers();
     let users = all.filter(u => u.roles && u.roles.find(r => r == 'Magios' || r == 'NewJoiner' ));
     users = _.sortBy(users, ['username'], ['asc']);
@@ -94,7 +104,7 @@ app.get('/api/modules/user', async (req, res) => {
     res.json({users: users});
 });
 
-app.put('/api/modules/user/status/:userId', async (req, res) => {
+app.put('/api/modules/user/status/:userId', checkUserAuth, async (req, res) => {
     const userId = req.params.userId;
     const user = await datasource.getUser(userId);
     if (!user.status) user.status = true;
@@ -103,7 +113,7 @@ app.put('/api/modules/user/status/:userId', async (req, res) => {
     res.json({user: user});
 });
 
-app.put('/api/modules/user/country/:userId', async (req, res) => {
+app.put('/api/modules/user/country/:userId', checkUserAuth, async (req, res) => {
     const userId = req.params.userId;
     const country = req.body.country;
     const user = await datasource.getUser(userId);
@@ -112,7 +122,7 @@ app.put('/api/modules/user/country/:userId', async (req, res) => {
     res.json({user: user});
 });
 
-app.put('/api/modules/user/:userId', async (req, res) => {
+app.put('/api/modules/user/:userId', checkUserAuth, async (req, res) => {
 
     const userId = req.params.userId;
     const moduleKey = req.body.module;
@@ -136,12 +146,12 @@ app.put('/api/modules/user/:userId', async (req, res) => {
     res.json({user: user});
 });
 
-app.get('/api/users', async (req, res) =>{
+app.get('/api/users', checkUserAuth, async (req, res) =>{
     const all = await datasource.getAllUsers();
     res.json({users: all});
 });
 
-app.post('/api/server-alive/:serverId', async  (req, res) => {
+app.post('/api/server-alive/:serverId', checkUserAuth, async (req, res) => {
     
     const updated = req.body.updated.trim();
     await datasource.updateServer({id: req.params.serverId, status: true, updated: updated, notified: false});
@@ -150,7 +160,7 @@ app.post('/api/server-alive/:serverId', async  (req, res) => {
     res.status(200).send();
 });
 
-app.post('/oauth/redirect', async (req, res) => {
+app.post('/oauth/login', async (req, res) => {
 
     const creds = btoa(process.env.DISCORD_CLIENT_ID + ':' + process.env.DISCORD_AUTH_SECRET);
     
@@ -183,12 +193,18 @@ app.post('/oauth/redirect', async (req, res) => {
         const user = await datasource.findUserByUsername(username);
         if (user && user.roles.find(r => r == 'Admins' || r == 'Magios' || r == 'NewJoiner')) {
             await discordModule.sendMessageToReportChannel('The user "' + user.username + ' has logged in Magios Web Site.');
+            sessions.push(user.id);
             res.json({allow:true, user: user});
         } else {
             await discordModule.sendMessageToReportChannel('The not authorized user "' + username + '" was trying to login Magios Web Site.');
             res.json({allow: false});
         }
     }
+});
+
+app.post('/oauth/logout', (req, res) => {
+    sessions = sessions.filter(s => s != req.headers.userid);
+    res.json();
 });
 
 app.get('/oauth/redirect', async (req, res) => {
@@ -206,21 +222,3 @@ app.get('/welcome', async (req, res) => {
 app.get('/userStats', async (req, res) => {
     res.sendFile(__dirname + '/angular/my-app/dist/my-app/index.html');
 });
-
-
-app.get('/server-status', async (req, res) =>{
-    const all = await datasource.getAllUsers();
-    let norole = all.filter(u => !u.roles || u.roles == '');
-    norole = _.sortBy(norole, [ u => { return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); }], ['asc']);
-
-    const servers = await datasource.getServerStatus();
-
-    res.status(200).render('server-status', {server1Status: servers[0], server2Status: servers[1] });
-});
-
-/*
-const request = require("request");
-
-request.get("file:///C:/Users/EBarbin/Downloads/gui_de_DCS.html", (err, res, body) => {
-  console.log(body);
-});*/
