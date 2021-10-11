@@ -110,6 +110,16 @@ export class CoreState {
     }
 
     @Selector([CoreState.getUser])
+    static hasUser(user: any) {
+      return user != null;
+    }
+
+    @Selector([CoreState.getUser])
+    static isNewUser(user: any) {
+      return user != null && user.roles == null || user.roles.length == 0 || includes(user.roles, 'Limbo');
+    }
+
+    @Selector([CoreState.getUser])
     static isAdmin(user: any) {
       return includes(user.roles, 'Admins');
     }

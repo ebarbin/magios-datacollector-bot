@@ -1,26 +1,23 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { Store } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { MessageType, ShowMessageAction } from '../actions/core.action';
+import { CoreState } from '../states/core.state';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
 
-  constructor(private store: Store) { }
+  @Select(CoreState.hasUser) hasUser$: Observable<boolean> | undefined;
+
+  constructor() { }
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-      const user = localStorage.getItem('user');
-      if (user) {
-        return true;
-      } else {
-        this.store.dispatch(new ShowMessageAction({msg: 'You are not allow', title: 'Permission', type: MessageType.ERROR}));
-        return false;
-      }
+      return this.hasUser$ || false;
   }
   
 }

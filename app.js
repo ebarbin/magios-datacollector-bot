@@ -94,11 +94,14 @@ app.put('/api/modules/user/country/:userId', checkUserAuth, async (req, res) => 
 });
 
 app.put('/api/users/:userId', checkUserAuth, async (req, res) => {
-    //const userId = req.params.userId;
-    //const user = await datasource.getUser(userId);
     const user = req.body;
     await datasource.updateUser(user);
     res.json({user: user});
+});
+
+app.put('/api/register/:userId', checkUserAuth, async (req, res) => {
+    //change role to NewJoiner
+    res.json();
 });
 
 app.put('/api/modules/user/:userId', checkUserAuth, async (req, res) => {
@@ -186,7 +189,7 @@ app.get('/welcome', async (req, res) => {
     res.sendFile(__dirname + '/angular/my-app/dist/my-app/index.html');
 });
 
-app.get('/userStats', async (req, res) => {
+app.get('/user-stats', async (req, res) => {
     res.sendFile(__dirname + '/angular/my-app/dist/my-app/index.html');
 });
 

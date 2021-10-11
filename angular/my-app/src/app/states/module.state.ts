@@ -1,14 +1,15 @@
 import { Injectable } from "@angular/core";
 import { Action, Selector, State, StateContext, StateToken, Store } from "@ngxs/store";
 import { BlockUI, NgBlockUI } from "ng-block-ui";
-import { catchError, finalize, switchMap, tap } from "rxjs/operators";
-import { MessageType, ShowMessageAction } from "../actions/core.action";
+import { finalize, switchMap, tap } from "rxjs/operators";
+import { LogoutAction, MessageType, ShowMessageAction } from "../actions/core.action";
 import { ModulesService } from "../services/modules.service";
 import { CoreState } from "./core.state";
-import { ApplyFilterModulesAction, ClearFiltersModulesAction, InitModulesAction, RefreshElementModulesAction, ShowHideModulesAction, SortUsersModuleAction, ToggleModuleValueAction, ToggleUserStatusValueAction, UpdateCountryUserValueAction } from "../actions/module.action";
+import { ApplyFilterModulesAction, ClearFiltersModulesAction, InitModulesAction, RefreshElementModulesAction, RegisterUserAction, ShowHideModulesAction, SortUsersModuleAction, ToggleModuleValueAction, ToggleUserStatusValueAction, UpdateCountryUserValueAction } from "../actions/module.action";
 import { includes } from 'lodash';
 import { patch, updateItem } from '@ngxs/store/operators';
-import { throwError } from "rxjs";
+import { of, zip } from "rxjs";
+import { RegisterService } from "../services/register.service";
 
 export interface ModuleStateModel {
     userFilter: string,
@@ -42,6 +43,7 @@ export class ModuleState {
     @BlockUI() blockUI!: NgBlockUI;
 
     constructor(
+        private registerService: RegisterService,
         private store: Store,
         private modulesService: ModulesService) {}
         
@@ -243,9 +245,20 @@ export class ModuleState {
         ctx.patchState({ countriesFilter, statusFilter, usersModules: results, userFilter: userFilter, rolesFilter: rolesFilter});
     }
 
+    @Action(RegisterUserAction)
+    registerUserAction(ctx: StateContext<ModuleStateModel>) {
+        this.blockUI.start();
+        const user = this.store.selectSnapshot(CoreState.getUser);
+        return this.registerService.registerUser(user).pipe(
+            switchMap(() => ctx.dispatch([new LogoutAction()])),
+            finalize(() => this.blockUI.stop() ))
+    }
+
     @Action(InitModulesAction)
     initModulesAction(ctx: StateContext<ModuleStateModel>) {
 
+        const user = this.store.selectSnapshot(CoreState.getUser);
+        const isNewUser = this.store.selectSnapshot(CoreState.isNewUser);
         const countries = this.store.selectSnapshot(CoreState.getCountries);
 
         this.blockUI.start();
@@ -257,38 +270,35 @@ export class ModuleState {
         return this.modulesService.getModules().pipe(
             tap(modules => ctx.patchState({modules}) ),
             switchMap(modules => {
-                return this.modulesService.getModulesUser().pipe(
-                    tap(users => {
-                        users.forEach((u: any) => {
-                            result = {id: u.id, username: u.username, roles: u.roles, avatar: u.avatar, status: u.status == true ? true: false, country: u.country ? u.country : '', refresh: new Date().getTime()};
-        
-                            for(let i = 0; i < modules.terrains.length; i++) 
-                                result['terrains_'+i] = u.modules.find((m:any) => m == modules.terrains[i].name) ? true : false;
+                if (!isNewUser) return zip(this.modulesService.getModulesUser(), of(modules));
+                else return zip(of([user]), of(modules));
+            }),
+            tap(([users, modules]) => {
+                console.log(users)
+                users.forEach((u: any) => {
+                    result = {id: u.id, username: u.username, roles: u.roles, avatar: u.avatar, status: u.status == true ? true: false, country: u.country ? u.country : '', refresh: new Date().getTime()};
+
+                    for(let i = 0; i < modules.terrains.length; i++) 
+                        result['terrains_'+i] = u.modules.find((m:any) => m == modules.terrains[i].name) ? true : false;
+    
+                    for(let i = 0; i < modules.jets.length; i++) 
+                        result['jets_'+i] = u.modules.find((m:any) => m == modules.jets[i].name) ? true : false;
             
-                            for(let i = 0; i < modules.jets.length; i++) 
-                                result['jets_'+i] = u.modules.find((m:any) => m == modules.jets[i].name) ? true : false;
-                    
-                            for(let i = 0; i < modules.warbirds.length; i++) 
-                                result['warbirds_'+i] = u.modules.find((m:any) => m == modules.warbirds[i].name) ? true : false;
-                    
-                            for(let i = 0; i < modules.helis.length; i++) 
-                                result['helis_'+i] = u.modules.find((m:any) => m == modules.helis[i].name) ? true : false;;
-                    
-                            for(let i = 0; i < modules.others.length; i++) 
-                                result['others_'+i] = u.modules.find((m:any) => m == modules.others[i].name) ? true : false;
-        
-                            results.push(result);
-                        });
-        
-                        ctx.patchState({ countriesFilter: countries.map(c => c.name), usersModules: results.filter(u => u.status), userModulesAll:results });
-                    }),
-                    catchError(err => {
-                        this.blockUI.stop();
-                        return throwError(err)
-                    }),
-                    finalize(() =>  this.blockUI.stop() )
-                )
-            })
+                    for(let i = 0; i < modules.warbirds.length; i++) 
+                        result['warbirds_'+i] = u.modules.find((m:any) => m == modules.warbirds[i].name) ? true : false;
+            
+                    for(let i = 0; i < modules.helis.length; i++) 
+                        result['helis_'+i] = u.modules.find((m:any) => m == modules.helis[i].name) ? true : false;;
+            
+                    for(let i = 0; i < modules.others.length; i++) 
+                        result['others_'+i] = u.modules.find((m:any) => m == modules.others[i].name) ? true : false;
+
+                    results.push(result);
+                });
+
+                ctx.patchState({ countriesFilter: countries.map(c => c.name), usersModules: results.filter(u => u.status), userModulesAll:results });
+            }),
+            finalize(() => this.blockUI.stop() )
         )
 
     }

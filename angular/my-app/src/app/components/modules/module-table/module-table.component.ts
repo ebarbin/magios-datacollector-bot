@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { SortUsersModuleAction, ToggleModuleValueAction, ToggleUserStatusValueAction, UpdateCountryUserValueAction } from 'src/app/actions/module.action';
+import { RegisterUserAction, SortUsersModuleAction, ToggleModuleValueAction, ToggleUserStatusValueAction, UpdateCountryUserValueAction } from 'src/app/actions/module.action';
 import { CoreState } from 'src/app/states/core.state';
-import { faFilter } from '@fortawesome/free-solid-svg-icons';
+import { faFilter, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { MatDialog } from '@angular/material/dialog';
 import { FilterDialogComponent } from '../filter-dialog/filter-dialog.component';
@@ -17,6 +17,7 @@ import { Sort } from '@angular/material/sort';
 })
 export class ModuleTableComponent implements OnInit {
 
+  faCheck = faCheck;
   faEyeSlash = faEyeSlash;
   faFilter = faFilter;
   
@@ -24,8 +25,10 @@ export class ModuleTableComponent implements OnInit {
 
   @Input() modules: any;
   @Input() users: any;
-  @Input() allUsernames :string[] | undefined
+  @Input() allUsernames :string[] | undefined;
+  @Input() isNewUser: boolean | false = false;
   
+
   constructor(private store: Store, private dialog: MatDialog) { }
 
   ngOnInit(): void {}
@@ -52,5 +55,9 @@ export class ModuleTableComponent implements OnInit {
 
   onSortData(sort: Sort) {
     this.store.dispatch(new SortUsersModuleAction({sort}));
+  }
+  
+  onRegister() {
+    this.store.dispatch(new RegisterUserAction());
   }
 }

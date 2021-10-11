@@ -41,3 +41,7 @@ export class ApplyFilterModulesAction {
 export class ClearFiltersModulesAction {
     static readonly type = '[Module] Clear filters modules';
 }
+
+export class RegisterUserAction {
+    static readonly type = '[Module] Register user';
+}
