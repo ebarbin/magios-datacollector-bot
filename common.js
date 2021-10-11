@@ -1,7 +1,7 @@
 const moment = require('moment-timezone');
 
 const AVATAR_BASE_PATH = 'https://cdn.discordapp.com/avatars/';
-const ENABLE_DISCORD_EVENTS = false;
+const ENABLE_DISCORD_EVENTS = true;
 
 const getToDay = () => {
     return moment.tz('America/Argentina/Buenos_Aires');

@@ -93,6 +93,14 @@ app.put('/api/modules/user/country/:userId', checkUserAuth, async (req, res) => 
     res.json({user: user});
 });
 
+app.put('/api/users/:userId', checkUserAuth, async (req, res) => {
+    //const userId = req.params.userId;
+    //const user = await datasource.getUser(userId);
+    const user = req.body;
+    await datasource.updateUser(user);
+    res.json({user: user});
+});
+
 app.put('/api/modules/user/:userId', checkUserAuth, async (req, res) => {
 
     const userId = req.params.userId;
