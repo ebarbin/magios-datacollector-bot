@@ -28,7 +28,7 @@
       <td class="normal" (dblclick)="onEditField(user, 'joinDate')">
         <ng-container *ngIf="fieldEditable && fieldSelected == 'joinDate' && user.id == userIdSelected">
           <mat-form-field>
-            <input matInput readonly [matDatepicker]="picker" [(ngModel)]="input" [ngModelOptions]="{standalone: true}" [value]="user.voiceChannelTotalTime" (dateChange)="onApplyChange($event)">
+            <input matInput readonly [matDatepicker]="picker" [(ngModel)]="input" [ngModelOptions]="{standalone: true}" [value]="user.voiceChannelTotalTime" (dateChange)="onApplyChange($event, user)">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
@@ -43,7 +43,7 @@
       <td class="normal" (dblclick)="onEditField(user, 'lastTextChannelDate')">
         <ng-container *ngIf="fieldEditable && fieldSelected == 'lastTextChannelDate' && user.id == userIdSelected">
           <mat-form-field>
-            <input matInput readonly [matDatepicker]="picker" [(ngModel)]="input" [ngModelOptions]="{standalone: true}" [value]="user.lastTextChannelDate" (dateChange)="onApplyChange($event)">
+            <input matInput readonly [matDatepicker]="picker" [(ngModel)]="input" [ngModelOptions]="{standalone: true}" [value]="user.lastTextChannelDate" (dateChange)="onApplyChange($event, user)">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
@@ -60,7 +60,7 @@
       <td class="normal" (dblclick)="onEditField(user, 'lastServerAccess')">
         <ng-container *ngIf="fieldEditable && fieldSelected == 'lastServerAccess' && user.id == userIdSelected">
           <mat-form-field>
-            <input matInput readonly [matDatepicker]="picker" [(ngModel)]="input" [ngModelOptions]="{standalone: true}" [value]="user.lastServerAccess" (dateChange)="onApplyChange($event)">
+            <input matInput readonly [matDatepicker]="picker" [(ngModel)]="input" [ngModelOptions]="{standalone: true}" [value]="user.lastServerAccess" (dateChange)="onApplyChange($event, user)">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
@@ -76,7 +76,7 @@
       <td class="normal" (dblclick)="onEditField(user, 'lastVoiceChannelAccessDate')">
         <ng-container *ngIf="fieldEditable && fieldSelected == 'lastVoiceChannelAccessDate' && user.id == userIdSelected">
           <mat-form-field>
-            <input matInput readonly [matDatepicker]="picker" [(ngModel)]="input" [ngModelOptions]="{standalone: true}" [value]="user.lastVoiceChannelAccessDate" (dateChange)="onApplyChange($event)">
+            <input matInput readonly [matDatepicker]="picker" [(ngModel)]="input" [ngModelOptions]="{standalone: true}" [value]="user.lastVoiceChannelAccessDate" (dateChange)="onApplyChange($event, user)">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
@@ -91,7 +91,7 @@
       <td class="normal" (dblclick)="onEditField(user, 'voiceChannelTotalTime')">
         <ng-container *ngIf="fieldEditable && fieldSelected == 'voiceChannelTotalTime' && user.id == userIdSelected">
             <mat-form-field>
-              <input type="number" [ngModelOptions]="{standalone: true}" [(ngModel)]="input" matInput value="{{user.voiceChannelTotalTime}}" (keydown.enter)="onApplyChange($event)">
+              <input type="number" [ngModelOptions]="{standalone: true}" [(ngModel)]="input" matInput value="{{user.voiceChannelTotalTime}}" (keydown.enter)="onApplyChange($event, user)">
             </mat-form-field>
         </ng-container>
         <ng-container *ngIf="!fieldEditable">

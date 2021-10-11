@@ -47,35 +47,6 @@ checkUserAuth = (req, res, next) => {
     }
 }
 
-app.post('/api/user-join-server', (req, res) => {
-    const username = req.body.username.trim().toLowerCase();
-    const serverId = req.body.serverId.trim();
-    const ip = req.body.ip.trim();
-
-    datasource.findUserByUsername(username).then(async user => {
-        if (!user) {
-            await discordModule.sendMessageToReportChannel('Unknown user "' + username + '" with ip ' + ip + ' has logged at Server ' + serverId + '.');
-            console.log(TAG + ' - Unknown user: "' + username + '" with ip: ' + ip + ' has logged in Server ' + serverId + '.');
-        } else {
-            user.lastServerAccess = common.getToDay().format('DD/MM/YYYY HH:mm:ss');
-            user.lastServerId = serverId;
-            user.lastServerAccessIp = ip;
-            await  discordModule.sendMessageToReportChannel('The user "' + username + '" with ip ' + ip + ' has logged in Server ' + serverId + '.');
-            console.log(TAG + ' - The user: "' + username + '" with ip: ' + ip + ' has logged in Server ' + serverId + '.');
-            await datasource.updateUser(user);
-        }
-    });
-
-    res.status(200).send();
-});
-
-app.get('/api/server-alive/:serverId', async  (req, res) => {
-    
-    console.log(TAG + ' - Server ' + req.params.serverId + ' requesting last alive date.');
-    const serverStatus = await datasource.getServerStatusById(req.params.serverId);
-    res.json({response: serverStatus});
-});
-
 app.get('/api/modules', checkUserAuth, async (req, res) => {
     const terrains = [];
     for (let i = 0; i < common.terrains.length; i++) terrains.push({id: i, name: common.terrains[i], visible: true});
@@ -151,15 +122,6 @@ app.get('/api/users', checkUserAuth, async (req, res) =>{
     res.json({users: all});
 });
 
-app.post('/api/server-alive/:serverId', async (req, res) => {
-    
-    const updated = req.body.updated.trim();
-    await datasource.updateServer({id: req.params.serverId, status: true, updated: updated, notified: false});
-    console.log(TAG + ' - Server ' + req.params.serverId + ' status was updated as ONLINE.');
-    
-    res.status(200).send();
-});
-
 app.post('/oauth/login', async (req, res) => {
 
     const creds = btoa(process.env.DISCORD_CLIENT_ID + ':' + process.env.DISCORD_AUTH_SECRET);
@@ -218,4 +180,38 @@ app.get('/welcome', async (req, res) => {
 
 app.get('/userStats', async (req, res) => {
     res.sendFile(__dirname + '/angular/my-app/dist/my-app/index.html');
+});
+
+app.post('/api/server-alive/:serverId', async (req, res) => {
+    const updated = req.body.updated.trim();
+    await datasource.updateServer({id: req.params.serverId, status: true, updated: updated, notified: false});
+    console.log(TAG + ' - Server ' + req.params.serverId + ' status was updated as ONLINE.');
+    res.status(200).send();
+});
+
+app.post('/api/user-join-server', async (req, res) => {
+    const username = req.body.username.trim().toLowerCase();
+    const serverId = req.body.serverId.trim();
+    const ip = req.body.ip.trim();
+
+    const user = await datasource.findUserByUsername(username);
+    if (!user) {
+        await discordModule.sendMessageToReportChannel('Unknown user "' + username + '" with ip ' + ip + ' has logged at Server ' + serverId + '.');
+        console.log(TAG + ' - Unknown user: "' + username + '" with ip: ' + ip + ' has logged in Server ' + serverId + '.');
+    } else {
+        user.lastServerAccess = common.getToDay().format('DD/MM/YYYY HH:mm:ss');
+        user.lastServerId = serverId;
+        user.lastServerAccessIp = ip;
+        await  discordModule.sendMessageToReportChannel('The user "' + username + '" with ip ' + ip + ' has logged in Server ' + serverId + '.');
+        console.log(TAG + ' - The user: "' + username + '" with ip: ' + ip + ' has logged in Server ' + serverId + '.');
+        await datasource.updateUser(user);
+    }
+
+    res.status(200).send();
+});
+
+app.get('/api/server-alive/:serverId', async  (req, res) => {
+    console.log(TAG + ' - Server ' + req.params.serverId + ' requesting last alive date.');
+    const serverStatus = await datasource.getServerStatusById(req.params.serverId);
+    res.json({response: serverStatus});
 });
