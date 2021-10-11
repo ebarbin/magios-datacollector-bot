@@ -706,6 +706,16 @@ sendServerStatus = (server) => {
     })
 }
 
+registerUser = (user) => {
+    return new Promise(async (resolve, reject) => {
+        const allMembers = await GUILD.members.fetch();
+        const member = allMembers.find(m => m.user.id == user.id);
+        const newJoinerRol = GUILD.roles.cache.find(r => r.name == 'NewJoiner');
+        member.addRole(newJoinerRol);
+        resolve();
+    })
+}
+
 cleanOldEvents = () => {
     return new Promise((resolve, reject) => {
         let quantity = 0;
@@ -747,3 +757,4 @@ exports.cleanServerStatus = cleanServerStatus;
 exports.checkNewUserAndCreate = checkNewUserAndCreate;
 exports.checkLeftUsersAndRemove = checkLeftUsersAndRemove;
 exports.notifyOwner = notifyOwner;
+exports.registerUser = registerUser;

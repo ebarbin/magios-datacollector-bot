@@ -100,7 +100,8 @@ app.put('/api/users/:userId', checkUserAuth, async (req, res) => {
 });
 
 app.put('/api/register/:userId', checkUserAuth, async (req, res) => {
-    //change role to NewJoiner
+    const user = await datasource.getUser(userId); 
+    await discordModule.registerUser(user);
     res.json();
 });
 
