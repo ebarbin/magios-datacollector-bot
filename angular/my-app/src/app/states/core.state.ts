@@ -26,7 +26,6 @@ export class CoreState {
     @BlockUI() blockUI!: NgBlockUI;
 
     constructor(
-        private http: HttpClient,
         private ngZone: NgZone,
         private loginService: LoginService,
         private toastrService: ToastrService,
@@ -121,7 +120,7 @@ export class CoreState {
 
     @Selector([CoreState.getUser])
     static isAdmin(user: any) {
-      return includes(user.roles, 'Admins');
+      return user && includes(user.roles, 'Admins');
     }
 
     @Selector()

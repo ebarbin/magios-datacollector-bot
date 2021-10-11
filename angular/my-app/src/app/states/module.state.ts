@@ -274,7 +274,6 @@ export class ModuleState {
                 else return zip(of([user]), of(modules));
             }),
             tap(([users, modules]) => {
-                console.log(users)
                 users.forEach((u: any) => {
                     result = {id: u.id, username: u.username, roles: u.roles, avatar: u.avatar, status: u.status == true ? true: false, country: u.country ? u.country : '', refresh: new Date().getTime()};
 
