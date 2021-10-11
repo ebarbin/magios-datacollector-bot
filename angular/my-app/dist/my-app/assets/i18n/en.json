@@ -40,6 +40,7 @@
     "Last voice channel name": "Last voice channel name",
     "Last voice channel access date":"Last voice channel access date",
     "Join voice channel count":"Join voice channel count",
-    "Voice channel total time":"Join voice channel count"
+    "Voice channel total time":"Join voice channel count",
+    "Unauthorized":"Unauthorized"
 
 }

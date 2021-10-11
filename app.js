@@ -151,7 +151,7 @@ app.get('/api/users', checkUserAuth, async (req, res) =>{
     res.json({users: all});
 });
 
-app.post('/api/server-alive/:serverId', checkUserAuth, async (req, res) => {
+app.post('/api/server-alive/:serverId', async (req, res) => {
     
     const updated = req.body.updated.trim();
     await datasource.updateServer({id: req.params.serverId, status: true, updated: updated, notified: false});
@@ -179,25 +179,22 @@ app.post('/oauth/login', async (req, res) => {
     const access_token = json.access_token;
     
     const response2 = await fetch(process.env.DISCORD_OAUTH_USERS_ME,
-        { method: 'GET',
-        headers: { Authorization: `Bearer ${access_token}`, 'Content-Type': 'application/x-www-form-urlencoded' }
+        { method: 'GET', headers: { Authorization: `Bearer ${access_token}`, 'Content-Type': 'application/x-www-form-urlencoded' }
     });
 
     const discordUser =  await response2.json();
-    
     if (!discordUser.username) {
-        res.json({allow: false});
+        return res.status(401).send();
     } else {
         let username = discordUser.username.toLowerCase();
 
         const user = await datasource.findUserByUsername(username);
         if (user && user.roles.find(r => r == 'Admins' || r == 'Magios' || r == 'NewJoiner')) {
-            await discordModule.sendMessageToReportChannel('The user "' + user.username + ' has logged in Magios Web Site.');
             sessions.push(user.id);
-            res.json({allow:true, user: user});
+            return res.json({user: user});
         } else {
             await discordModule.sendMessageToReportChannel('The not authorized user "' + username + '" was trying to login Magios Web Site.');
-            res.json({allow: false});
+            return res.status(401).send();
         }
     }
 });
