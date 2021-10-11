@@ -23,3 +23,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .mat-dialog-container {
     border: solid 2px grey;
 }
+
+.mat-dialog-container h2 {
+    border-bottom: 2px solid grey;
+}
