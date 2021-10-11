@@ -26,7 +26,7 @@ export class ModuleTableComponent implements OnInit {
   @Input() users: any;
   @Input() allUsernames :string[] | undefined
   
-  constructor(private store: Store, public dialog: MatDialog) { }
+  constructor(private store: Store, private dialog: MatDialog) { }
 
   ngOnInit(): void {}
 

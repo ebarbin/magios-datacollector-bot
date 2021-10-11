@@ -14,7 +14,6 @@
     "Accept":"Accept",
     "Cancel":"Cancel",
     "Attention":"Attention",
-    "You are going out":"You are going out",
     "Empty":"Empty",
     "All":"All",
     "Actives":"Active",
@@ -41,6 +40,7 @@
     "Last voice channel access date":"Last voice channel access date",
     "Join voice channel count":"Join voice channel count",
     "Voice channel total time":"Join voice channel count",
-    "Unauthorized":"Unauthorized"
+    "Unauthorized":"Unauthorized",
+    "Change value":"Change value"
 
 }

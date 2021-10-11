@@ -8,19 +8,14 @@ import { environment } from "src/environments/environment";
 import { HttpClient } from "@angular/common/http";
 import { includes } from 'lodash';
 import { LoginService } from "../services/login.service";
-import { tap } from "rxjs/operators";
+import { finalize, tap } from "rxjs/operators";
 import { EMPTY } from "rxjs";
 
-export interface CoreStateModel {
-  user: any,
-}
+export interface CoreStateModel { user: any }
   
-const initialState: CoreStateModel = {
-  user: null
-};
+const initialState: CoreStateModel = { user: null };
 
 const CORE_STATE_TOKEN = new StateToken<CoreStateModel>('core');
-
 @State<CoreStateModel>({
     name: CORE_STATE_TOKEN,
     defaults: initialState
@@ -40,6 +35,8 @@ export class CoreState {
     @Action(InitAppAction)
     initAppAction(ctx: StateContext<CoreStateModel>) {
       
+      this.blockUI.start();
+
       if (window.location.href.indexOf('/oauth/redirect') >=0) {
         const code = window.location.href.split('=')[1];
 
@@ -48,10 +45,12 @@ export class CoreState {
               localStorage.setItem('user', JSON.stringify(response.user));
               ctx.patchState({ user: response.user })
               return EMPTY;
-          })
+          }),
+          finalize(() => this.blockUI.stop() )
         )
 
       } else {
+        this.blockUI.stop();
         const user = localStorage.getItem('user');
         if (!user) {
           window.location.href = 'https://discordapp.com/api/oauth2/authorize?client_id='+environment.client_id+'&scope=identify&response_type=code&redirect_uri='+encodeURIComponent(environment.oauth_redirect);
@@ -64,14 +63,15 @@ export class CoreState {
 
     @Action(LogoutAction)
     logoutAction(ctx: StateContext<CoreStateModel>) {
+      this.blockUI.start();
       return this.loginService.logout().pipe(
         tap(() => {
           localStorage.removeItem('user');
-          ctx.dispatch(new ShowMessageAction({msg: 'You are going out', title: 'Attention', type: MessageType.WARNING}));
           setTimeout(() => {
             window.location.href = 'https://discordapp.com/api/oauth2/authorize?client_id='+environment.client_id+'&scope=identify&response_type=code&redirect_uri='+encodeURIComponent(environment.oauth_redirect);
           }, 1000);
-        })
+        }),
+        finalize(() => this.blockUI.stop() )
       )
     }
 

@@ -1,7 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Sort } from '@angular/material/sort';
 import { Store } from '@ngxs/store';
-import { ApplyChangeUserStatsAction, SortUserStatsAction } from 'src/app/actions/user-stats.action';
+import { SortUserStatsAction } from 'src/app/actions/user-stats.action';
+import { ValueChangeDialogComponent } from '../value-change-dialog/value-change-dialog.component';
 
 @Component({
   selector: 'app-user-stats-table',
@@ -10,33 +12,17 @@ import { ApplyChangeUserStatsAction, SortUserStatsAction } from 'src/app/actions
 })
 export class UserStatsTableComponent implements OnInit {
 
-  fieldEditable = false;
-  userIdSelected = '';
-  fieldSelected = '';
-  input:any;
-
   @Input() users: any;
   
-  constructor(private store: Store) {}
+  constructor(private store: Store, private dialog: MatDialog) {}
 
   ngOnInit(): void {}
 
-  onApplyChange(event: any, user: any) {
-    console.log(this.input);
-    user[this.fieldSelected] = this.input;
-    
-    this.fieldEditable = false;
-    this.fieldSelected = '';
-    this.userIdSelected = '';
-    
-    this.store.dispatch(new ApplyChangeUserStatsAction({user}));
-  }
-
-  onEditField(user:any, field: string) {
-    this.userIdSelected = user.id;
-    this.fieldSelected = field;
-    this.fieldEditable = !this.fieldEditable;
-    this.input = user[field];
+  onEditField(user:any, field: string, label: string) {
+    let fieldType = 'text';
+    if (field == 'joinDate' || field == 'lastTextChannelDate' || field == 'lastVoiceChannelAccessDate' || field == 'lastServerAccess') fieldType = 'date';
+    else if (field == 'msgChannelCount' || field == 'lastServerId' || field == 'joinVoiceChannelCount' || field == 'voiceChannelTotalTime') fieldType = 'number'
+    this.dialog.open(ValueChangeDialogComponent, {data: {user: {...user}, field: field, value: user[field], fieldType: fieldType, label: label} });
   }
 
   onSortData(sort: Sort) {

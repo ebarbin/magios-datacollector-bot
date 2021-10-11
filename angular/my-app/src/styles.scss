@@ -19,3 +19,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .mat-sort-header-container {
     display:inline-flex !important;
 }
+
+.mat-dialog-container {
+    border: solid 2px grey;
+}

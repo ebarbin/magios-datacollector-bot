@@ -28,6 +28,7 @@ import { ShowHideDialogComponent } from './components/modules/show-hide-dialog/s
 import { UserStatsComponent } from './components/user-stats/user-stats.component';
 import { UserStatsTableComponent } from './components/user-stats/components/user-stats-table/user-stats-table.component';
 import { MomentModule } from 'ngx-moment';
+import { ValueChangeDialogComponent } from './components/user-stats/components/value-change-dialog/value-change-dialog.component';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -60,7 +61,8 @@ export const ngxsLoggerConfig = {
     FilterDialogComponent,
     ShowHideDialogComponent,
     UserStatsComponent,
-    UserStatsTableComponent
+    UserStatsTableComponent,
+    ValueChangeDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -90,7 +92,8 @@ export const ngxsLoggerConfig = {
   ],
   providers: [
     FilterDialogComponent, 
-    ShowHideDialogComponent
+    ShowHideDialogComponent,
+    ValueChangeDialogComponent
   ],
   bootstrap: [AppComponent]
 })

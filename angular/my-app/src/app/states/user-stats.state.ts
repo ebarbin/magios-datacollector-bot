@@ -2,20 +2,16 @@ import { Injectable } from "@angular/core";
 import { Action, Selector, State, StateContext, StateToken, Store } from "@ngxs/store";
 import { BlockUI, NgBlockUI } from "ng-block-ui";
 import { finalize, tap, map } from "rxjs/operators";
-import { GetAllUsersAction, SortUserStatsAction } from "../actions/user-stats.action";
+import { ApplyChangeUserStatsAction, GetAllUsersAction, SortUserStatsAction } from "../actions/user-stats.action";
 import { UserStatsService } from "../services/user-stats.service";
 import * as moment from 'moment';
+import { patch, updateItem } from "@ngxs/store/operators";
 
-export interface UserStatsStateModel {
-    users: any,
-  }
+export interface UserStatsStateModel { users: any }
     
-  const initialState: UserStatsStateModel = {
-    users: null
-  };
+const initialState: UserStatsStateModel = { users: null };
   
-  const CORE_STATE_TOKEN = new StateToken<UserStatsStateModel>('userStats');
-  
+const CORE_STATE_TOKEN = new StateToken<UserStatsStateModel>('userStats');
   @State<UserStatsStateModel>({
       name: CORE_STATE_TOKEN,
       defaults: initialState
@@ -80,6 +76,21 @@ export interface UserStatsStateModel {
       else if (a == null) return -1 * (isAsc ? 1 : -1);
       else if (b == null) return 1 * (isAsc ? 1 : -1);
       else return (a.isBefore(b) ? -1 : 1) * (isAsc ? 1 : -1);
+    }
+
+    @Action(ApplyChangeUserStatsAction)
+    applyChangeUserStatsAction(ctx: StateContext<UserStatsStateModel>, action: ApplyChangeUserStatsAction) {
+
+      const { user } = action.payload;
+      this.blockUI.start();
+      return this.userStatsService.updateUser(user).pipe(
+        tap(() => {
+          ctx.setState(
+            patch({ users: updateItem<any>(item => item.id === user.id, user) })
+          );
+        }),
+        finalize(() => this.blockUI.stop() )
+      )
     }
 
     @Action(GetAllUsersAction)
