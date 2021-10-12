@@ -168,7 +168,7 @@ app.post('/oauth/login', async (req, res) => {
         let username = discordUser.username.toLowerCase();
 
         const user = await datasource.findUserByUsername(username);
-        if (user && user.roles.find(r => r == 'Admins' || r == 'Magios' || r == 'NewJoiner')) {
+        if (user/* && user.roles.find(r => r == 'Admins' || r == 'Magios' || r == 'NewJoiner')*/) {
             sessions.push(user.id);
             return res.json({user: user});
         } else {
