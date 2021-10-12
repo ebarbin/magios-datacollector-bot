@@ -78,19 +78,27 @@ app.get('/api/modules/user', checkUserAuth, async (req, res) => {
 app.put('/api/modules/user/status/:userId', checkUserAuth, async (req, res) => {
     const userId = req.params.userId;
     const user = await datasource.getUser(userId);
-    if (!user.status) user.status = true;
-    else user.status = false;
-    await datasource.updateUser(user);
-    res.json({user: user});
+    if (user) {
+        if (!user.status) user.status = true;
+        else user.status = false;
+        await datasource.updateUser(user);
+        return res.status(200).send();
+    } else {
+        return res.status(401).send();
+    }
 });
 
 app.put('/api/modules/user/country/:userId', checkUserAuth, async (req, res) => {
     const userId = req.params.userId;
     const country = req.body.country;
     const user = await datasource.getUser(userId);
-    user.country = country;
-    await datasource.updateUser(user);
-    res.json({user: user});
+    if (user) {
+        user.country = country;
+        await datasource.updateUser(user);
+        return res.status(200).send();
+    } else {
+        return res.status(401).send();
+    }
 });
 
 app.put('/api/users/:userId', checkUserAuth, async (req, res) => {
@@ -127,13 +135,19 @@ app.put('/api/modules/user/:userId', checkUserAuth, async (req, res) => {
     else if (moduleKey == 'others') module = common.others[index];
 
     const user = await datasource.getUser(userId);
+    if (user) {
 
-    if (flag) user.modules.push(module);
-    else user.modules = user.modules.filter(m => m !== module);
+        if (flag) user.modules.push(module);
+        else user.modules = user.modules.filter(m => m !== module);
+        
+        await datasource.updateUser(user);
     
-    await datasource.updateUser(user);
+        res.json({user: user});
 
-    res.json({user: user});
+    } else {
+        return res.status(401).send();
+    }
+
 });
 
 app.get('/api/users', checkUserAuth, async (req, res) =>{
