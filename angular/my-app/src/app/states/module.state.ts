@@ -75,7 +75,7 @@ export class ModuleState {
     }
 
     private allowOperation(myUser: any, user: any) {
-        return myUser.roles.find((r:string)=> r == 'Admins') || myUser.id == user;
+        return myUser.roles.find((r:string)=> r == 'Admins') || myUser.id == user.id;
     }
     
     @Action(SortUsersModuleAction)
