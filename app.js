@@ -102,7 +102,7 @@ app.put('/api/users/:userId', checkUserAuth, async (req, res) => {
 app.put('/api/register/:userId', checkUserAuth, async (req, res) => {
     const userId = req.params.userId;
     const user = await datasource.getUser(userId);
-    if (user.country && user.modules > 0) {
+    if (user.country && user.modules.length > 0) {
         await discordModule.registerUser(user);
         res.json();
     } else {
