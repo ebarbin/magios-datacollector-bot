@@ -72,14 +72,14 @@
         </tbody>
     </table>
 
-    <a matBadgePosition="before" matBadgeColor="warn" class="float-btn filter-btn" (click)="onFilter()" *ngIf="!isNewUser">
+    <button mat-button matBadgePosition="before" matBadgeColor="warn" class="float-btn filter-btn" (click)="onFilter()" *ngIf="!isNewUser">
         <fa-icon [icon]="faFilter" class="float-btn-icon"></fa-icon>
-    </a>
+    </button>
     
-    <a matBadgePosition="before" matBadgeColor="warn" class="float-btn show-hide-btn" (click)="onShowHide()" *ngIf="!isNewUser">
+    <button mat-button matBadgePosition="before" matBadgeColor="warn" class="float-btn show-hide-btn" (click)="onShowHide()" *ngIf="!isNewUser">
         <fa-icon [icon]="faEyeSlash" class="float-btn-icon"></fa-icon>
-    </a>
+    </button>
 
-    <a matBadgePosition="before" matBadgeColor="warn" class="float-btn show-hide-btn" (click)="onRegister()" *ngIf="isNewUser">
+    <button mat-button matBadgePosition="before" matBadgeColor="warn" class="float-btn show-hide-btn" (click)="onRegister()" *ngIf="isNewUser">
         <fa-icon [icon]="faCheck" class="float-btn-icon"></fa-icon>
-    </a>
+    </button>

@@ -41,6 +41,6 @@
     "Join voice channel count":"Join voice channel count",
     "Voice channel total time":"Join voice channel count",
     "Unauthorized":"Unauthorized",
-    "Change value":"Change value"
-
+    "Change value":"Change value",
+    "User must have at least one setting":"User must have at least one setting"
 }

@@ -247,7 +247,7 @@ export class ModuleState {
 
     @Action(RegisterUserAction)
     registerUserAction(ctx: StateContext<ModuleStateModel>) {
-        this.blockUI.start();
+        this.blockUI.start();        
         const user = this.store.selectSnapshot(CoreState.getUser);
         return this.registerService.registerUser(user).pipe(
             switchMap(() => ctx.dispatch([new LogoutAction()])),

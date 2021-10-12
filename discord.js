@@ -711,7 +711,7 @@ registerUser = (user) => {
         const allMembers = await GUILD.members.fetch();
         const member = allMembers.find(m => m.user.id == user.id);
         const newJoinerRol = GUILD.roles.cache.find(r => r.name == 'NewJoiner');
-        member.addRole(newJoinerRol);
+        await member.roles.add(newJoinerRol);
         resolve();
     })
 }

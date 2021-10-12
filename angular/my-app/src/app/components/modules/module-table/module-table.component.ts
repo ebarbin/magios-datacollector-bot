@@ -27,7 +27,6 @@ export class ModuleTableComponent implements OnInit {
   @Input() users: any;
   @Input() allUsernames :string[] | undefined;
   @Input() isNewUser: boolean | false = false;
-  
 
   constructor(private store: Store, private dialog: MatDialog) { }
 
