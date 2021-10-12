@@ -213,7 +213,7 @@ app.post('/api/user-join-server', async (req, res) => {
 
     const user = await datasource.findUserByUsername(username);
     if (!user) {
-        await discordModule.sendMessageToReportChannel('Unknown user "' + username + '" with ip ' + ip + ' has logged at Server ' + serverId + '.');
+        await discordModule.sendMessageToReportChannel('Unknown user "' + username + '" with ip ' + ip + ' has logged in Server ' + serverId + '.');
         console.log(TAG + ' - Unknown user: "' + username + '" with ip: ' + ip + ' has logged in Server ' + serverId + '.');
     } else {
         user.lastServerAccess = common.getToDay().format('DD/MM/YYYY HH:mm:ss');
