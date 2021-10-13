@@ -123,12 +123,12 @@ export class CoreState {
 
     @Selector([CoreState.getUser])
     static isNewUser(user: any) {
-      return user && user.roles == null || user.roles.length == 0 || includes(user.roles, 'Limbo');
+      return user != null && (user.roles == null || user.roles.length == 0 || includes(user.roles, 'Limbo'));
     }
 
     @Selector([CoreState.getUser])
     static isAdmin(user: any) {
-      return user && includes(user.roles, 'Admins');
+      return user != null && includes(user.roles, 'Admins');
     }
 
     @Selector()
