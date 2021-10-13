@@ -667,6 +667,16 @@ checkNewUserAndCreate = () => {
     })
 }
 
+notifyNewUserOnGeneral = (user) => {
+    return new Promise((resolve, reject) => {
+        const newJoinerRol = GUILD.roles.cache.find(r => r.name == 'NewJoiner')
+        const magiosRol = GUILD.roles.cache.find(r => r.name == 'Magios')
+        const members = await GUILD.members.fetch();
+        const newMember = members.find(m => m.user.id == user.id);
+        GENERAL_CHANNEL.send('Attention ' +` ${newJoinerRol} ${magiosRol}` + 'let\'s welcome ' + `${newMember}`).then(() => resolve());
+    })
+}
+
 sendMessageToGeneralChannel = (msg) => {
     return new Promise((resolve, reject) => {
         GENERAL_CHANNEL.send(msg).then(() => resolve());
@@ -755,6 +765,7 @@ cleanOldEvents = () => {
     });
 }
 
+exports.notifyNewUserOnGeneral = notifyNewUserOnGeneral;
 exports.sendMessageToReportChannel = sendMessageToReportChannel;
 exports.sendMessageToGeneralChannel = sendMessageToGeneralChannel;
 exports.cleanOldEvents = cleanOldEvents;

@@ -115,7 +115,7 @@ app.put('/api/register/:userId', checkUserAuth, async (req, res) => {
         await discordModule.registerUser(user);
         user.roles = ['NewJoiner'];
         await datasource.updateUser(user);
-        await discordModule.sendMessageToGeneralChannel('Attention @NewJoiner @Magios!! let\'s welcome @' + user.username);
+        await discordModule.notifyNewUserOnGeneral(user);
         return res.status(200).send();
     } else {
         return res.status(400).send({ errorDesc: 'User must have at least one setting' });
