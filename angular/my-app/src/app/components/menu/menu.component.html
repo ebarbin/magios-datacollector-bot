@@ -3,5 +3,11 @@
     <a mat-list-item (click)="navigate('modules')">{{ 'Modules' | translate }}</a>
     <a mat-list-item *ngIf="isAdmin$ | async" (click)="navigate('user-stats')">{{ 'User stats' | translate }}</a>
     <mat-divider></mat-divider>
+    <mat-divider></mat-divider>
+    <mat-divider></mat-divider>
+    <mat-divider></mat-divider>
+    <mat-divider></mat-divider>
+    <mat-divider></mat-divider>
+    <a mat-list-item (click)="onDiscord()">{{ 'Discord' | translate }}&nbsp;<img width="20" src="/assets/images/discord.png"> </a>
     <a mat-list-item (click)="onLogout()">{{ 'Logout' | translate }}&nbsp;<fa-icon [icon]="faSignOutAlt"></fa-icon> </a>
 </mat-nav-list>
