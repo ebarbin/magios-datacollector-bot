@@ -42,5 +42,8 @@
     "Voice channel total time":"Minutos en canal voz",
     "Unauthorized":"No estás autorizado.",
     "Change value":"Modificar",
-    "User must have at least one setting":"Debes ingresar el pais y al menos un modulo para poder ingresar."
+    "User must have at least one setting":"Debes ingresar el pais y al menos un modulo para poder ingresar.",
+    "Close":"Cerrar",
+    "Next":"Siguiente",
+    "Back":"Atrás"
 }

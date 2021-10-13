@@ -5,8 +5,7 @@ import { BlockUI, NgBlockUI } from "ng-block-ui";
 import { ToastrService } from "ngx-toastr";
 import { InitAppAction, LogoutAction, MessageType, ShowMessageAction } from "../actions/core.action";
 import { environment } from "src/environments/environment";
-import { HttpClient } from "@angular/common/http";
-import { includes } from 'lodash';
+import { includes, sortBy } from 'lodash';
 import { LoginService } from "../services/login.service";
 import { finalize, tap } from "rxjs/operators";
 import { EMPTY } from "rxjs";
@@ -115,7 +114,7 @@ export class CoreState {
 
     @Selector([CoreState.getUser])
     static isNewUser(user: any) {
-      return user != null && user.roles == null || user.roles.length == 0 || includes(user.roles, 'Limbo');
+      return true;//user && user.roles == null || user.roles.length == 0 || includes(user.roles, 'Limbo');
     }
 
     @Selector([CoreState.getUser])
@@ -129,8 +128,10 @@ export class CoreState {
         { name:'', code:'', css:'' },
         { name:'Argentina', code:'ar', css:'flag-icon-ar' },
         { name:'Bolivia', code:'bo', css:'flag-icon-bo' },
+        { name:'Canada', code:'ca', css:'flag-icon-ca' },
         { name:'Chile', code:'cl', css:'flag-icon-cl' },
         { name:'Colombia', code:'co', css:'flag-icon-co' },
+        { name:'Costa Rica', code:'cr', css:'flag-icon-cr' },
         { name:'Cuba', code:'cu', css:'flag-icon-cu' },
         { name:'Ecuador', code:'ec', css:'flag-icon-ec' },
         { name:'España', code:'es', css:'flag-icon-es' },
@@ -139,6 +140,11 @@ export class CoreState {
         { name:'Mexico', code:'mx', css:'flag-icon-mx' },
         { name:'Uruguay', code:'uy', css:'flag-icon-uy' }
       ]
+    }
+
+    @Selector([CoreState.getCountries])
+    static getSortedCountries(countries: any[]) {
+      return sortBy(countries, ['name']);
     }
 
 }

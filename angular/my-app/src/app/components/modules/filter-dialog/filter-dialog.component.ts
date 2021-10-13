@@ -2,14 +2,12 @@ import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Select, Store } from '@ngxs/store';
-import { Observable, of, Subscription, zip } from 'rxjs';
-import { map, startWith, switchMap } from 'rxjs/operators';
+import { Observable, Subscription } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 import { ApplyFilterModulesAction, ClearFiltersModulesAction } from 'src/app/actions/module.action';
 import { CoreState } from 'src/app/states/core.state';
 import { ModuleState } from 'src/app/states/module.state';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatAutocomplete } from '@angular/material/autocomplete';
-import { MatOption } from '@angular/material/core';
 
 @Component({
   selector: 'app-filter-dialog',
@@ -21,7 +19,7 @@ export class FilterDialogComponent implements OnInit, OnDestroy {
   myControl = new FormControl();
   filteredOptions$: Observable<string[]> | undefined;
 
-  @Select(CoreState.getCountries) getCountries$: Observable<any> | undefined;
+  @Select(CoreState.getSortedCountries) getCountries$: Observable<any> | undefined;
   @Select(ModuleState.getSelectedFilters) getSelectedFilters$: Observable<any> | undefined;
   subs: Subscription | undefined;
 
