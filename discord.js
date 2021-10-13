@@ -668,7 +668,7 @@ checkNewUserAndCreate = () => {
 }
 
 notifyNewUserOnGeneral = (user) => {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         const newJoinerRol = GUILD.roles.cache.find(r => r.name == 'NewJoiner')
         const magiosRol = GUILD.roles.cache.find(r => r.name == 'Magios')
         const members = await GUILD.members.fetch();
