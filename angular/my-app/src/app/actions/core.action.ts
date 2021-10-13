@@ -14,3 +14,11 @@ export class ShowMessageAction {
 export class LogoutAction {
     static readonly type = '[Core] Logout';
 }
+
+export class RedirectToDiscordLoginAction {
+    static readonly type = '[Core] Redirect to discord login';
+}
+
+export class RedirectToDiscordGeneralChannelAction {
+    static readonly type = '[Core] Redirect to Los Magios discord general channel';
+}

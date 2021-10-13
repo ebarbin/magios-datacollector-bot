@@ -23,23 +23,27 @@ export class GlobalHttpInterceptor implements HttpInterceptor {
     }
 
     return next.handle(req).pipe(
-      catchError((errorResponse) => {
+      catchError((response) => {
           this.blockUI.stop();
-        if (errorResponse instanceof HttpErrorResponse) {
-            if (errorResponse.error instanceof ErrorEvent) {
-                this.store.dispatch( new ShowMessageAction({ msg: 'Error Event', type: MessageType.ERROR}) );
+          if (response.error && response.error.errorDesc) {
+            this.store.dispatch( new ShowMessageAction({ msg: response.error.errorDesc, type: MessageType.ERROR}) );
+          } else {
+            if (response instanceof HttpErrorResponse) {
+              if (response.error instanceof ErrorEvent) {
+                  this.store.dispatch( new ShowMessageAction({ msg: 'Error Event', type: MessageType.ERROR}) );
+              } else {
+                  this.store.dispatch( new ShowMessageAction({ msg: response.statusText, type: MessageType.ERROR}) );
+                  if (response.status == 401) {
+                    setTimeout(() => {
+                      window.location.href = 'https://discordapp.com/api/oauth2/authorize?client_id='+environment.client_id+'&scope=identify&response_type=code&redirect_uri='+encodeURIComponent(environment.oauth_redirect);
+                    }, 1000);
+                  }
+              } 
             } else {
-                this.store.dispatch( new ShowMessageAction({ msg: errorResponse.statusText, type: MessageType.ERROR}) );
-                if (errorResponse.status == 401) {
-                  setTimeout(() => {
-                    window.location.href = 'https://discordapp.com/api/oauth2/authorize?client_id='+environment.client_id+'&scope=identify&response_type=code&redirect_uri='+encodeURIComponent(environment.oauth_redirect);
-                  }, 1000);
-                }
-            } 
-        } else {
-            this.store.dispatch( new ShowMessageAction({ msg: 'Some thing else happened', type: MessageType.ERROR}) );
-        }
-        return throwError(errorResponse);
+                this.store.dispatch( new ShowMessageAction({ msg: 'Some thing else happened', type: MessageType.ERROR}) );
+            }
+          }
+        return throwError(response);
       }) 
     )
   }

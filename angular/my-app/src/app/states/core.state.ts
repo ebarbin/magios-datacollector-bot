@@ -3,7 +3,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { Action, Selector, State, StateContext, StateToken } from "@ngxs/store";
 import { BlockUI, NgBlockUI } from "ng-block-ui";
 import { ToastrService } from "ngx-toastr";
-import { InitAppAction, LogoutAction, MessageType, ShowMessageAction } from "../actions/core.action";
+import { InitAppAction, LogoutAction, MessageType, RedirectToDiscordGeneralChannelAction, RedirectToDiscordLoginAction, ShowMessageAction } from "../actions/core.action";
 import { environment } from "src/environments/environment";
 import { includes, sortBy } from 'lodash';
 import { LoginService } from "../services/login.service";
@@ -63,14 +63,23 @@ export class CoreState {
     logoutAction(ctx: StateContext<CoreStateModel>) {
       this.blockUI.start();
       return this.loginService.logout().pipe(
-        tap(() => {
-          localStorage.removeItem('user');
-          setTimeout(() => {
-            window.location.href = 'https://discordapp.com/api/oauth2/authorize?client_id='+environment.client_id+'&scope=identify&response_type=code&redirect_uri='+encodeURIComponent(environment.oauth_redirect);
-          }, 1000);
-        }),
+        tap(() => localStorage.removeItem('user') ),
         finalize(() => this.blockUI.stop() )
       )
+    }
+
+    @Action(RedirectToDiscordLoginAction)
+    redirectToDiscordLoginAction(ctx: StateContext<CoreStateModel>) {
+      setTimeout(() => {
+        window.location.href = 'https://discordapp.com/api/oauth2/authorize?client_id='+environment.client_id+'&scope=identify&response_type=code&redirect_uri='+encodeURIComponent(environment.oauth_redirect);
+      }, 1000);
+    }
+
+    @Action(RedirectToDiscordGeneralChannelAction)
+    redirectToDiscordGeneralChannelAction(ctx: StateContext<CoreStateModel>) {
+      setTimeout(() => {
+        window.location.href = 'https://discord.com/channels/628750110821449739/841520992182730792';
+      }, 1000);
     }
 
     @Action(ShowMessageAction)
@@ -114,7 +123,7 @@ export class CoreState {
 
     @Selector([CoreState.getUser])
     static isNewUser(user: any) {
-      return true;//user && user.roles == null || user.roles.length == 0 || includes(user.roles, 'Limbo');
+      return user && user.roles == null || user.roles.length == 0 || includes(user.roles, 'Limbo');
     }
 
     @Selector([CoreState.getUser])

@@ -22,7 +22,7 @@ export class WelcomeComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.isNewUserSubs = this.isNewUser$?.subscribe(value => {
       if (value) {
-        this.dialog.open(NewUserDialogComponent, {disableClose: true, hasBackdrop: true});
+        this.dialog.open(NewUserDialogComponent, { width: '40%', disableClose: true, hasBackdrop: true} );
       }
     });
   }

@@ -110,13 +110,15 @@ app.put('/api/users/:userId', checkUserAuth, async (req, res) => {
 app.put('/api/register/:userId', checkUserAuth, async (req, res) => {
     const userId = req.params.userId;
     const user = await datasource.getUser(userId);
+    
     if (user && user.country && user.modules.length > 0) {
         await discordModule.registerUser(user);
         user.roles = ['NewJoiner'];
         await datasource.updateUser(user);
+        await discordModule.sendMessageToGeneralChannel('Attention @NewJoiner @Magios!! let\'s welcome @' + user.username);
         return res.status(200).send();
     } else {
-        return res.status(400).send(new Error('User must have at least one setting'));
+        return res.status(400).send({ errorDesc: 'User must have at least one setting' });
     }
 });
 

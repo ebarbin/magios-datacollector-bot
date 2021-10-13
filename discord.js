@@ -20,24 +20,23 @@ const client = new DiscordClient({
 
 const TEMPLATE = fs.readFileSync("template.html", "utf8");
 
-const REPORT_CHANNEL_NAME = 'report';
-const SERVER_STATUS_CHANNEL_NAME = 'server-status';
-const EVENTOS_CALENDARIO_CHANNEL_NAME = 'eventos-calendario';
-
-const ADMIN_GENERAL_CHANNEL_NAME = 'admin-general';
 const GUILD_ID = '628750110821449739';
 
 let SERVER_STATUS_CHANNEL;
 let EVENTOS_CALENDARIO_CHANNEL;
 let REPORT_CHANNEL;
+let GENERAL_CHANNEL;
 let GUILD;
 
 client.login(process.env.DISCORD_BOT_TOKEN);
 
     client.once('ready', async () => {
-        REPORT_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === REPORT_CHANNEL_NAME);
-        EVENTOS_CALENDARIO_CHANNEL = client.channels.cache.find(channel => channel.name === EVENTOS_CALENDARIO_CHANNEL_NAME);
-        SERVER_STATUS_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'Server Data' && channel.name === SERVER_STATUS_CHANNEL_NAME);
+        REPORT_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === 'report');
+        GENERAL_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'Text Channels' && channel.name === 'general');
+        EVENTOS_CALENDARIO_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'Text Channels' && channel.name === 'eventos-calendario');
+        SERVER_STATUS_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'Server Data' && channel.name === 'server-status');
+        
+
         GUILD = client.guilds.cache.find((g) => g.id === GUILD_ID );
 
         console.log(TAG + ' - Discord bot is connected.')
@@ -473,7 +472,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
                 await datasource.updateUser(dataBaseUser);
             }
 
-        } else if (message.channel.parent.name == 'ADMIN' && message.channel.name != ADMIN_GENERAL_CHANNEL_NAME) {
+        } else if (message.channel.parent.name == 'ADMIN' && message.channel.name != 'admin-general') {
 
             if (message.content == '!delete') {
 
@@ -668,6 +667,12 @@ checkNewUserAndCreate = () => {
     })
 }
 
+sendMessageToGeneralChannel = (msg) => {
+    return new Promise((resolve, reject) => {
+        GENERAL_CHANNEL.send(msg).then(() => resolve());
+    })
+}
+
 sendMessageToReportChannel = (msg) => {
     return new Promise((resolve, reject) => {
         REPORT_CHANNEL.send(msg).then(() => resolve());
@@ -751,6 +756,7 @@ cleanOldEvents = () => {
 }
 
 exports.sendMessageToReportChannel = sendMessageToReportChannel;
+exports.sendMessageToGeneralChannel = sendMessageToGeneralChannel;
 exports.cleanOldEvents = cleanOldEvents;
 exports.sendServerStatus = sendServerStatus;
 exports.cleanServerStatus = cleanServerStatus;

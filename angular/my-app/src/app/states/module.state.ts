@@ -1,14 +1,14 @@
 import { Injectable } from "@angular/core";
 import { Action, Selector, State, StateContext, StateToken, Store } from "@ngxs/store";
 import { BlockUI, NgBlockUI } from "ng-block-ui";
-import { finalize, switchMap, tap } from "rxjs/operators";
-import { LogoutAction, MessageType, ShowMessageAction } from "../actions/core.action";
+import { catchError, finalize, switchMap, tap } from "rxjs/operators";
+import { LogoutAction, MessageType, RedirectToDiscordGeneralChannelAction, ShowMessageAction } from "../actions/core.action";
 import { ModulesService } from "../services/modules.service";
 import { CoreState } from "./core.state";
 import { ApplyFilterModulesAction, ClearFiltersModulesAction, InitModulesAction, RefreshElementModulesAction, RegisterUserAction, ShowHideModulesAction, SortUsersModuleAction, ToggleModuleValueAction, ToggleUserStatusValueAction, UpdateCountryUserValueAction } from "../actions/module.action";
 import { includes } from 'lodash';
 import { patch, updateItem } from '@ngxs/store/operators';
-import { of, zip } from "rxjs";
+import { EMPTY, of, zip } from "rxjs";
 import { RegisterService } from "../services/register.service";
 
 export interface ModuleStateModel {
@@ -250,7 +250,11 @@ export class ModuleState {
         this.blockUI.start();        
         const user = this.store.selectSnapshot(CoreState.getUser);
         return this.registerService.registerUser(user).pipe(
-            switchMap(() => ctx.dispatch([new LogoutAction()])),
+            tap(() => ctx.dispatch(new ShowMessageAction({ msg: 'You are a NewJoiner now. Enjoy Los Magios!', type: MessageType.INFO}))),
+            switchMap(() => ctx.dispatch([
+                new LogoutAction(),
+                new RedirectToDiscordGeneralChannelAction()
+            ])),
             finalize(() => this.blockUI.stop() ))
     }
 
