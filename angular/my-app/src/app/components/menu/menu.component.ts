@@ -15,6 +15,8 @@ import { Observable } from 'rxjs';
 export class MenuComponent implements OnInit {
 
   @Select(CoreState.isAdmin) isAdmin$: Observable<boolean> | undefined;
+  @Select(CoreState.isNonNewUser) isNonNewUser$: Observable<boolean> | undefined;
+  
 
   faSignOutAlt = faSignOutAlt;
   

@@ -126,6 +126,11 @@ export class CoreState {
       return user != null && (user.roles == null || user.roles.length == 0 || includes(user.roles, 'Limbo'));
     }
 
+    @Selector([CoreState.isNewUser])
+    static isNonNewUser(isNewUser: boolean) {
+      return !isNewUser;
+    }
+
     @Selector([CoreState.getUser])
     static isAdmin(user: any) {
       return user != null && includes(user.roles, 'Admins');
