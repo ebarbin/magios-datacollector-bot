@@ -219,7 +219,14 @@ export class ModuleState {
     clearFiltersModulesAction(ctx: StateContext<ModuleStateModel>) {
         const countries = this.store.selectSnapshot(CoreState.getCountries);
         const { userModulesAll } = ctx.getState();
-        ctx.patchState({ countriesFilter: countries.map(c => c.name), statusFilter: ['ACTIVE'], rolesFilter: ['Magios', 'Admins', 'NewJoiner'], usersModules: userModulesAll.filter(u => u.status)});
+        
+        ctx.patchState({ 
+            countriesFilter: countries.map(c => c.name), 
+            statusFilter: ['ACTIVE'], 
+            rolesFilter: ['Magios', 'Admins', 'NewJoiner'], 
+            usersModules: userModulesAll.filter(u => u.status),
+            userFilter: ''
+        });
     }
 
     @Action(ApplyFilterModulesAction)
