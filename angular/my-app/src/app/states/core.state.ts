@@ -152,6 +152,7 @@ export class CoreState {
         { name:'Estados Unidos', code:'us', css:'flag-icon-us' },
         { name:'Guatemala', code:'gt', css:'flag-icon-gt' },
         { name:'Mexico', code:'mx', css:'flag-icon-mx' },
+        { name:'Puerto Rico', code:'pr', css:'flag-icon-pr' },
         { name:'Uruguay', code:'uy', css:'flag-icon-uy' }
       ]
     }
