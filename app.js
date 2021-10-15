@@ -224,21 +224,55 @@ app.post('/api/server-alive/:serverId', async (req, res) => {
     res.status(200).send();
 });
 
-app.post('/api/user-join-server', async (req, res) => {
-    const username = req.body.username.trim().toLowerCase();
-    const serverId = req.body.serverId.trim();
-    const ip = req.body.ip.trim();
+app.post('/api/user/event/:serverId', async (req, res) => {
 
+    const username = req.body.username.trim().toLowerCase();
+    const eventType = req.body.event.trim().toLowerCase();
+    const serverId = parseInt(req.params.serverId);
+    
     const user = await datasource.findUserByUsername(username);
+
     if (!user) {
-        await discordModule.sendMessageToReportChannel('Unknown user "' + username + '" with ip ' + ip + ' has logged in Server ' + serverId + '.');
-        console.log(TAG + ' - Unknown user: "' + username + '" with ip: ' + ip + ' has logged in Server ' + serverId + '.');
+
+        await discordModule.sendMessageToReportChannel('Unknown user "' + username + '" has making stuff in Server ' + serverId + '.');
+        console.log(TAG + ' - Unknown user "' + username + '" has making stuff in Server ' + serverId + '.');
+
     } else {
-        user.lastServerAccess = common.getToDay().format('DD/MM/YYYY HH:mm:ss');
-        user.lastServerId = serverId;
-        user.lastServerAccessIp = ip;
-        await  discordModule.sendMessageToReportChannel('The user "' + username + '" with ip ' + ip + ' has logged in Server ' + serverId + '.');
-        console.log(TAG + ' - The user: "' + username + '" with ip: ' + ip + ' has logged in Server ' + serverId + '.');
+
+        await discordModule.sendMessageToReportChannel('The user "' + username + '" logged the event: "' + eventType + '".');
+        console.log(TAG + 'The user "' + username + '" logged the event: "' + eventType + '".');
+
+        if (!user.stats) {
+            user.stats = [
+                { takeoff:0, land: 0, kill: 0, crash: 0, hit: 0, shot: 0, dead: 0 },
+                { takeoff:0, land: 0, kill: 0, crash: 0, hit: 0, shot: 0, dead: 0 },
+                { takeoff:0, land: 0, kill: 0, crash: 0, hit: 0, shot: 0, dead: 0 }
+            ];
+        }
+
+        const userStat = user.stats[serverId - 1];
+
+        if (eventType == 'connect') {
+
+            user.lastServerAccess = common.getToDay().format('DD/MM/YYYY HH:mm:ss');
+            user.lastServerId = serverId;
+        
+        } else  if (eventType == 'takeoff') {    
+            userStat.takeoff++;
+        } else if (eventType == 'land') {
+            userStat.land++;
+        } else if (eventType == 'kill') {
+            userStat.kill++;
+        } else if (eventType == 'crash') {
+            userStat.crash++;
+        } else if (eventType == 'hit') {
+            userStat.hit++;
+        } else if (eventType == 'shot') {
+            userStat.shot++;
+        } else if (eventType == 'dead') {
+            userStat.dead++;
+        }
+            
         await datasource.updateUser(user);
     }
 
