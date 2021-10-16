@@ -1,0 +1,13 @@
+<ngx-charts-bar-vertical
+    [results]="data"
+    [gradient]="false"
+    [xAxis]="true"
+    [yAxis]="true"
+    [legend]="true"
+    legendTitle="{{'Countries' | translate}}"
+    [showXAxisLabel]="true"
+    [showYAxisLabel]="true"
+    xAxisLabel="{{'Country' | translate}}"
+    yAxisLabel="{{'Quantity' | translate}}"
+    (select)="onSelect($event)">
+</ngx-charts-bar-vertical>

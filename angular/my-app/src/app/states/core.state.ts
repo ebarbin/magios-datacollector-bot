@@ -163,7 +163,11 @@ export class CoreState {
 
     @Selector([CoreState.getCountries])
     static getSortedCountries(countries: any[]) {
-      return sortBy(countries, ['name']);
+      return sortBy(countries.filter(c => c.code != ''), ['name']);
     }
 
+    @Selector([CoreState.getCountries])
+    static getRawSortedCountries(countries: any[]) {
+      return sortBy(countries, ['name']);
+    }
 }

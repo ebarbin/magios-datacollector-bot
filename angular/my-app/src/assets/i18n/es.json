@@ -4,7 +4,7 @@
     "You are not allow":"No tienes permitido realizar esta operación",
     "Successful operation":"Operación realizada con éxito",
     "Module changes":"Cambio de modulo",
-    "Country":"Pais",
+    "Country":"País",
     "User country":"País del usuario",
     "User status":"Estado",
     "User status update":"Estado de usuario",
@@ -42,9 +42,10 @@
     "Voice channel total time":"Minutos en canal voz",
     "Unauthorized":"No estás autorizado.",
     "Change value":"Modificar",
-    "User must have at least one setting":"Debes ingresar el país y al menos un módulo para poder ingresar.",
+    "User must complete at least the country":"Debes completar al menos el país para poder ingresar.",
     "Close":"Cerrar",
     "Next":"Siguiente",
     "Back":"Atrás",
-    "You are a NewJoiner now. Enjoy Los Magios!":"Ya eres un NewJoiner. Bienvenido!"
+    "You are a NewJoiner now. Enjoy Los Magios!":"Ya eres un NewJoiner. Bienvenido!",
+    "Quantity":"Cantidad"
 }

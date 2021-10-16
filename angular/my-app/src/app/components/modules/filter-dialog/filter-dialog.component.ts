@@ -19,7 +19,7 @@ export class FilterDialogComponent implements OnInit, OnDestroy {
   myControl = new FormControl();
   filteredOptions$: Observable<string[]> | undefined;
 
-  @Select(CoreState.getSortedCountries) getCountries$: Observable<any> | undefined;
+  @Select(CoreState.getRawSortedCountries) getCountries$: Observable<any> | undefined;
   @Select(ModuleState.getSelectedFilters) getSelectedFilters$: Observable<any> | undefined;
   subs: Subscription | undefined;
 

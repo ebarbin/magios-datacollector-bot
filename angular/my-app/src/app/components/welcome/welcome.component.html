@@ -2,7 +2,7 @@
     <img class="welcome-img" src="/assets/images/welcome.png">
     <div class="flag-list" >
         <ng-container *ngFor="let country of getCountries$ | async">
-            <span *ngIf="country != ''" class="flag-icon {{country.css}} flag-icon-squared"></span>&nbsp;
+            <span class="flag-icon {{country.css}} flag-icon-squared"></span>&nbsp;
         </ng-container>
     </div>
 </div>

@@ -2,6 +2,7 @@
     <a mat-list-item (click)="navigate('welcome')">{{ 'Welcome' | translate }}</a>
     <a mat-list-item (click)="navigate('modules')">{{ 'Modules' | translate }}</a>
     <a mat-list-item *ngIf="isAdmin$ | async" (click)="navigate('user-stats')">{{ 'User stats' | translate }}</a>
+    <a mat-list-item *ngIf="isAdmin$ | async" (click)="navigate('dashboard')">{{ 'Dashboard' | translate }}</a>
     <mat-divider></mat-divider>
     <mat-divider></mat-divider>
     <mat-divider></mat-divider>

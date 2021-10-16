@@ -1,0 +1,25 @@
+<div class="container">
+    <mat-tab-group>
+        <mat-tab label="{{ 'General' | translate }}">
+
+            <mat-accordion>
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      {{'Country chart' | translate}}
+                    </mat-panel-title>
+                    <mat-panel-description>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+                  <app-country-chart *ngIf="getUsers$ | async as users" [users]="users"></app-country-chart>
+                </mat-expansion-panel>
+              </mat-accordion>
+            
+        </mat-tab>
+        <mat-tab label="Server 1">
+
+             </mat-tab>
+        <mat-tab label="Server 2"> Content 2 </mat-tab>
+        <mat-tab label="Server 3"> Content 3 </mat-tab>
+    </mat-tab-group>
+</div>

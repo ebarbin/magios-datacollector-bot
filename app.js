@@ -118,14 +118,14 @@ app.put('/api/register/:userId', checkUserAuth, async (req, res) => {
     const userId = req.params.userId;
     const user = await datasource.getUser(userId);
     
-    if (user && user.country && user.modules.length > 0) {
+    if (user && user.country) {
         await discordModule.registerUser(user);
         user.roles = ['NewJoiner'];
         await datasource.updateUser(user);
         await discordModule.notifyNewUserOnGeneral(user);
         return res.status(200).send();
     } else {
-        return res.status(400).send({ errorDesc: 'User must have at least one setting' });
+        return res.status(400).send({ errorDesc: 'User must complete at least the country' });
     }
 });
 

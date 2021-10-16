@@ -42,9 +42,10 @@
     "Voice channel total time":"Join voice channel count",
     "Unauthorized":"Unauthorized",
     "Change value":"Change value",
-    "User must have at least one setting":"User must have at least one setting",
+    "User must complete at least the country":"User must complete at least the country",
     "Close":"Close",
     "Next":"Next",
     "Back":"Back",
-    "You are a NewJoiner now. Enjoy Los Magios!":"You are a NewJoiner now. Enjoy Los Magios!"
+    "You are a NewJoiner now. Enjoy Los Magios!":"You are a NewJoiner now. Enjoy Los Magios!",
+    "Quantity":"Quantity"
 }

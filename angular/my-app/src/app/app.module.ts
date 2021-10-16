@@ -30,6 +30,8 @@ import { UserStatsTableComponent } from './components/user-stats/components/user
 import { MomentModule } from 'ngx-moment';
 import { ValueChangeDialogComponent } from './components/user-stats/components/value-change-dialog/value-change-dialog.component';
 import { NewUserDialogComponent } from './components/welcome/components/new-user-dialog/new-user-dialog.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { CountryChartComponent } from './components/dashboard/country-chart/country-chart.component';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -64,7 +66,9 @@ export const ngxsLoggerConfig = {
     UserStatsComponent,
     UserStatsTableComponent,
     ValueChangeDialogComponent,
-    NewUserDialogComponent
+    NewUserDialogComponent,
+    DashboardComponent,
+    CountryChartComponent
   ],
   imports: [
     BrowserModule,
