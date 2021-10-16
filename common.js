@@ -46,3 +46,4 @@ exports.jets = jets;
 exports.warbirds = warbirds;
 exports.helis = helis;
 exports.others = others;
+exports.JWT_SECRET = 'magios-rulz-2021';

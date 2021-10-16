@@ -2,6 +2,7 @@ require('dotenv').config();
 require('./cron');
 
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const _ = require('lodash');
@@ -19,8 +20,7 @@ const TAG = '[magios-datacollector-bot]';
 const PORT = process.env.PORT || 3000;
 const app = express();
 
-let sessions = [];
-
+app.set('jwt-secret', common.JWT_SECRET);
 app.use(cors());
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -40,10 +40,17 @@ app.listen(PORT, () => {
 });
 
 checkUserAuth = (req, res, next) => {
-    if (!req.headers.userid) return res.status(401).send();
-    else {
-        if (sessions.find(s => s == req.headers.userid)) next();
-        else return res.status(401).send();
+    const token = req.headers['access-token'];
+    if (token) {
+        jwt.verify(token, app.get('jwt-secret'), (err, decoded) => {      
+            if (err) return res.status(401).send();
+            else {
+              req.decoded = decoded;    
+              next();
+            }
+          });
+    } else {
+        return res.status(401).send();
     }
 }
 
@@ -186,9 +193,9 @@ app.post('/oauth/login', async (req, res) => {
         let username = discordUser.username.toLowerCase();
 
         const user = await datasource.findUserByUsername(username);
-        if (user/* && user.roles.find(r => r == 'Admins' || r == 'Magios' || r == 'NewJoiner')*/) {
-            sessions.push(user.id);
-            return res.json({user: user});
+        if (user) {
+            const token = jwt.sign({ check:  true }, app.get('jwt-secret'), { expiresIn: 1440 });
+            return res.json({user: user, token: token});
         } else {
             await discordModule.sendMessageToReportChannel('The not authorized user "' + username + '" was trying to login Magios Web Site.');
             return res.status(401).send();
@@ -197,7 +204,6 @@ app.post('/oauth/login', async (req, res) => {
 });
 
 app.post('/oauth/logout', (req, res) => {
-    sessions = sessions.filter(s => s != req.headers.userid);
     res.json();
 });
 
