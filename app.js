@@ -242,14 +242,6 @@ app.post('/api/user/event/:serverId', async (req, res) => {
         await discordModule.sendMessageToReportChannel('The user "' + username + '" logged the event: "' + eventType + '".');
         console.log(TAG + 'The user "' + username + '" logged the event: "' + eventType + '".');
 
-        if (!user.stats) {
-            user.stats = [
-                { takeoff:0, land: 0, kill: 0, crash: 0, hit: 0, shot: 0, dead: 0 },
-                { takeoff:0, land: 0, kill: 0, crash: 0, hit: 0, shot: 0, dead: 0 },
-                { takeoff:0, land: 0, kill: 0, crash: 0, hit: 0, shot: 0, dead: 0 }
-            ];
-        }
-
         const userStat = user.stats[serverId - 1];
 
         if (eventType == 'connect') {

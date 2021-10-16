@@ -22,7 +22,13 @@ const createEmptyUser = (member) => {
         lastTextChannelDate: null,
         status: true,
         country: '',
-        modules: []
+        modules: [],
+        statsHistory:[],
+        stats: [
+            { takeoff:0, land: 0, kill: 0, crash: 0, hit: 0, shot: 0, dead: 0 },
+            { takeoff:0, land: 0, kill: 0, crash: 0, hit: 0, shot: 0, dead: 0 },
+            { takeoff:0, land: 0, kill: 0, crash: 0, hit: 0, shot: 0, dead: 0 }
+        ]
     }
 }
 
