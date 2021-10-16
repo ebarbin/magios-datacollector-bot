@@ -6,20 +6,20 @@
                 <th mat-sort-header="roles" scope="col">{{'Role' | translate}}</th>
                 <th scope="col">{{'User country' | translate}}</th>
                 <th scope="col">{{'User status' | translate}}</th>
-                <ng-container *ngFor="let terrain of modules.terrains">
-                    <th *ngIf="terrain.visible" class="terrains" scope="col">{{terrain.name}}</th>
+                <ng-container *ngFor="let terrain of modules.terrains; let i = index">
+                    <th mat-sort-header="terrains_{{i}}" *ngIf="terrain.visible" class="terrains" scope="col">{{terrain.name}}</th>
                 </ng-container>
-                <ng-container *ngFor="let jet of modules.jets">
-                    <th *ngIf="jet.visible" class="jets" scope="col">{{jet.name}}</th>
+                <ng-container *ngFor="let jet of modules.jets; let i = index">
+                    <th mat-sort-header="jets_{{i}}" *ngIf="jet.visible" class="jets" scope="col">{{jet.name}}</th>
                 </ng-container>
-                <ng-container *ngFor="let warbird of modules.warbirds">
-                    <th *ngIf="warbird.visible" class="warbirds" scope="col">{{warbird.name}}</th>
+                <ng-container *ngFor="let warbird of modules.warbirds; let i = index">
+                    <th mat-sort-header="warbirds_{{i}}" *ngIf="warbird.visible" class="warbirds" scope="col">{{warbird.name}}</th>
                 </ng-container>
-                <ng-container *ngFor="let heli of modules.helis">
-                    <th *ngIf="heli.visible" class="helis" scope="col">{{heli.name}}</th>
+                <ng-container *ngFor="let heli of modules.helis; let i = index">
+                    <th mat-sort-header="helis_{{i}}" *ngIf="heli.visible" class="helis" scope="col">{{heli.name}}</th>
                 </ng-container>
-                <ng-container *ngFor="let other of modules.others">
-                    <th *ngIf="other.visible" class="others" scope="col">{{other.name}}</th>
+                <ng-container *ngFor="let other of modules.others; let i = index">
+                    <th mat-sort-header="others_{{i}}" *ngIf="other.visible" class="others" scope="col">{{other.name}}</th>
                 </ng-container>
                 <th mat-sort-header="username-bis" scope="col">{{'Usename' | translate}}</th>
                 <th scope="col"></th>

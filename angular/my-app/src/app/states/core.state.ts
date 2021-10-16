@@ -39,7 +39,8 @@ export class CoreState {
         const code = window.location.href.split('=')[1];
 
         return this.loginService.login(code).pipe(
-          tap((response:any) => {          
+          tap((response:any) => {
+              localStorage.setItem('token', response.token);
               localStorage.setItem('user', JSON.stringify(response.user));
               ctx.patchState({ user: response.user })
               return EMPTY;
@@ -63,7 +64,10 @@ export class CoreState {
     logoutAction(ctx: StateContext<CoreStateModel>) {
       this.blockUI.start();
       return this.loginService.logout().pipe(
-        tap(() => localStorage.removeItem('user') ),
+        tap(() => {
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+        }),
         finalize(() => this.blockUI.stop() )
       )
     }

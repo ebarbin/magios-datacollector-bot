@@ -17,10 +17,8 @@ export class GlobalHttpInterceptor implements HttpInterceptor {
  
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
  
-    const user = localStorage.getItem('user');
-    if (user) {
-      req = this.addAuthenticationData(req, JSON.parse(user))
-    }
+    const token = localStorage.getItem('token');
+    if (token) req = this.addAuthenticationData(req, token);
 
     return next.handle(req).pipe(
       catchError((response) => {
@@ -48,7 +46,7 @@ export class GlobalHttpInterceptor implements HttpInterceptor {
     )
   }
 
-  private addAuthenticationData(request: HttpRequest<any>, user: any) {
-    return request.clone({ setHeaders: { userId: user.id } });
+  private addAuthenticationData(request: HttpRequest<any>, token: string ) {
+    return request.clone({ setHeaders: { 'access-token': token } });
   }
 }

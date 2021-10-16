@@ -90,10 +90,9 @@ export class ModuleState {
             sortedData = data.sort((a:any, b:any) => {
                 const isAsc = sort.direction === 'asc';
                 switch (sort.active) {
-                  case 'username': return this.compare(a.username, b.username, isAsc);
                   case 'username-bis': return this.compare(a.username, b.username, isAsc);
-                  case 'roles': return this.compareRoles(a.roles, b.roles, isAsc);
-                  default: return 0;
+                  case 'roles': return this.compareRoles(a[sort.active], b[sort.active], isAsc);
+                  default: return this.compare(a[sort.active], b[sort.active], isAsc);
                 }
               });
         }
