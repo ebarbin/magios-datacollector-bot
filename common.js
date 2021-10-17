@@ -15,9 +15,9 @@ const createEmptyUser = (member) => {
         lastVoiceChannelAccessDate: null, lastVoiceChannelName: null, lastTextChannelName: null, lastTextChannelDate: null,
         status: true, country: '', modules: [], statsHistory:[],
         stats: [
-            { takeoff:0, land: 0, kill: 0, crash: 0, hit: 0, shot: 0, dead: 0 },
-            { takeoff:0, land: 0, kill: 0, crash: 0, hit: 0, shot: 0, dead: 0 },
-            { takeoff:0, land: 0, kill: 0, crash: 0, hit: 0, shot: 0, dead: 0 }
+            { lastEvent: null, lastDate: null, takeoff:0, land: 0, kill: 0, crash: 0, hit: 0, shot: 0, dead: 0 },
+            { lastEvent: null, lastDate: null, takeoff:0, land: 0, kill: 0, crash: 0, hit: 0, shot: 0, dead: 0 },
+            { lastEvent: null, lastDate: null, takeoff:0, land: 0, kill: 0, crash: 0, hit: 0, shot: 0, dead: 0 }
         ]
     }
 }

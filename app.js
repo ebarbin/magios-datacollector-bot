@@ -235,7 +235,8 @@ app.post('/api/user/event/:serverId', async (req, res) => {
     const username = req.body.username.trim().toLowerCase();
     const eventType = req.body.event.trim().toLowerCase();
     const serverId = parseInt(req.params.serverId);
-    
+    const date = req.body.date ? req.body.date.trim().toLowerCase() : null;
+
     const user = await datasource.findUserByUsername(username);
 
     if (!user) {
@@ -249,21 +250,27 @@ app.post('/api/user/event/:serverId', async (req, res) => {
         console.log(TAG + 'The user "' + username + '" logged the event: "' + eventType + '" at Server ' + serverId + '.');
 
         const userStat = user.stats[serverId - 1];
-
-        if (eventType == 'connect') {
-
-            user.lastServerAccess = common.getToDay().format('DD/MM/YYYY HH:mm:ss');
-            user.lastServerId = serverId;
         
-        } else  if (eventType == 'takeoff') { userStat.takeoff++;
-        } else if (eventType == 'land') { userStat.land++;
-        } else if (eventType == 'kill') { userStat.kill++;
-        } else if (eventType == 'crash') { userStat.crash++;
-        } else if (eventType == 'hit') { userStat.hit++;
-        } else if (eventType == 'shot') { userStat.shot++;
-        } else if (eventType == 'dead') { userStat.dead++; }
+        if (!userStat.lastDate && !userStat.lastEvent || (userStat.lastDate != date && userStat.lastEvent != eventType)) {
+        
+            userStat.lastDate = date;
+            userStat.lastEvent = eventType;
             
-        await datasource.updateUser(user);
+            if (eventType == 'connect') {
+
+                user.lastServerAccess = common.getToDay().format('DD/MM/YYYY HH:mm:ss');
+                user.lastServerId = serverId;
+            
+            } else  if (eventType == 'takeoff') { userStat.takeoff++;
+            } else if (eventType == 'land') { userStat.land++;
+            } else if (eventType == 'kill') { userStat.kill++;
+            } else if (eventType == 'crash') { userStat.crash++;
+            } else if (eventType == 'hit') { userStat.hit++;
+            } else if (eventType == 'shot') { userStat.shot++;
+            } else if (eventType == 'dead') { userStat.dead++; }
+                
+            await datasource.updateUser(user);
+        }
     }
 
     res.status(200).send();
