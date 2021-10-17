@@ -240,13 +240,13 @@ app.post('/api/user/event/:serverId', async (req, res) => {
 
     if (!user) {
 
-        await discordModule.sendMessageToReportChannel('Unknown user "' + username + '" has making stuff in Server ' + serverId + '.');
-        console.log(TAG + ' - Unknown user "' + username + '" has making stuff in Server ' + serverId + '.');
+        await discordModule.sendMessageToReportChannel('Unknown user "' + username + '" has making stuff at Server ' + serverId + '.');
+        console.log(TAG + ' - Unknown user "' + username + '" has making stuff at Server ' + serverId + '.');
 
     } else {
 
-        await discordModule.sendMessageToReportChannel('The user "' + username + '" logged the event: "' + eventType + '".');
-        console.log(TAG + 'The user "' + username + '" logged the event: "' + eventType + '".');
+        await discordModule.sendMessageToReportChannel('The user "' + username + '" logged the event: "' + eventType + '" at Server ' + serverId + '.');
+        console.log(TAG + 'The user "' + username + '" logged the event: "' + eventType + '" at Server ' + serverId + '.');
 
         const userStat = user.stats[serverId - 1];
 
@@ -255,21 +255,13 @@ app.post('/api/user/event/:serverId', async (req, res) => {
             user.lastServerAccess = common.getToDay().format('DD/MM/YYYY HH:mm:ss');
             user.lastServerId = serverId;
         
-        } else  if (eventType == 'takeoff') {    
-            userStat.takeoff++;
-        } else if (eventType == 'land') {
-            userStat.land++;
-        } else if (eventType == 'kill') {
-            userStat.kill++;
-        } else if (eventType == 'crash') {
-            userStat.crash++;
-        } else if (eventType == 'hit') {
-            userStat.hit++;
-        } else if (eventType == 'shot') {
-            userStat.shot++;
-        } else if (eventType == 'dead') {
-            userStat.dead++;
-        }
+        } else  if (eventType == 'takeoff') { userStat.takeoff++;
+        } else if (eventType == 'land') { userStat.land++;
+        } else if (eventType == 'kill') { userStat.kill++;
+        } else if (eventType == 'crash') { userStat.crash++;
+        } else if (eventType == 'hit') { userStat.hit++;
+        } else if (eventType == 'shot') { userStat.shot++;
+        } else if (eventType == 'dead') { userStat.dead++; }
             
         await datasource.updateUser(user);
     }
