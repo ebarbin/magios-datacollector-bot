@@ -31,7 +31,9 @@ import { MomentModule } from 'ngx-moment';
 import { ValueChangeDialogComponent } from './components/user-stats/components/value-change-dialog/value-change-dialog.component';
 import { NewUserDialogComponent } from './components/welcome/components/new-user-dialog/new-user-dialog.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { CountryChartComponent } from './components/dashboard/country-chart/country-chart.component';
+import { CountryChartComponent } from './components/dashboard/components/country-chart/country-chart.component';
+import { FilterUserStatsDialogComponent } from './components/user-stats/components/filter-user-stats-dialog/filter-user-stats-dialog.component';
+import { DashboardState } from './states/dashboard.state';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -68,7 +70,8 @@ export const ngxsLoggerConfig = {
     ValueChangeDialogComponent,
     NewUserDialogComponent,
     DashboardComponent,
-    CountryChartComponent
+    CountryChartComponent,
+    FilterUserStatsDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -89,7 +92,7 @@ export const ngxsLoggerConfig = {
       },
       defaultLanguage: 'es'
     }),
-    NgxsModule.forRoot([CoreState, ModuleState, UserStatsState], ngxsConfig),
+    NgxsModule.forRoot([CoreState, ModuleState, UserStatsState, DashboardState], ngxsConfig),
     NgxsRouterPluginModule.forRoot(),
     NgxsResetPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot(ngxsLoggerConfig),
@@ -98,6 +101,7 @@ export const ngxsLoggerConfig = {
   ],
   providers: [
     FilterDialogComponent, 
+    FilterUserStatsDialogComponent,
     ShowHideDialogComponent,
     ValueChangeDialogComponent,
     NewUserDialogComponent

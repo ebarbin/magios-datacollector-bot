@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { GetAllUsersAction } from 'src/app/actions/user-stats.action';
-import { UserStatsState } from 'src/app/states/user-stats.state';
+import { InitDashboardAction } from 'src/app/actions/dashboard-actions';
+import { CoreState } from 'src/app/states/core.state';
+import { DashboardState } from 'src/app/states/dashboard.state';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,10 +12,10 @@ import { UserStatsState } from 'src/app/states/user-stats.state';
 })
 export class DashboardComponent implements OnInit {
 
-  @Select(UserStatsState.getUsers) getUsers$: Observable<any> | undefined;
+  @Select(DashboardState.getUsers) getUsers$: Observable<any> | undefined;
   
   constructor(private store: Store) {}
   ngOnInit() {
-    this.store.dispatch([new GetAllUsersAction()]);
+    this.store.dispatch([new InitDashboardAction()]);
   }
 }

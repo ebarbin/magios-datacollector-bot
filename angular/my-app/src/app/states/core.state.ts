@@ -43,20 +43,24 @@ export class CoreState {
               localStorage.setItem('token', response.token);
               localStorage.setItem('user', JSON.stringify(response.user));
               ctx.patchState({ user: response.user })
-              return EMPTY;
           }),
           finalize(() => this.blockUI.stop() )
         )
 
       } else {
         this.blockUI.stop();
-        const user = localStorage.getItem('user');
-        if (!user) {
+
+        const user:any = localStorage.getItem('user');
+        const token = localStorage.getItem('token');
+
+        if (!user && !token) {
+
           window.location.href = 'https://discordapp.com/api/oauth2/authorize?client_id='+environment.client_id+'&scope=identify&response_type=code&redirect_uri='+encodeURIComponent(environment.oauth_redirect);
+          return EMPTY;
+
         } else {
-          ctx.patchState({ user: JSON.parse(user) })
+          return ctx.patchState({ user: JSON.parse(user)  })
         }
-        return EMPTY;
       }
     }
 

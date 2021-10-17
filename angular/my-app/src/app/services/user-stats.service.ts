@@ -8,10 +8,6 @@ export class UserStatsService {
 
     constructor(private http: HttpClient) {}
 
-    getAllUsers(): Observable<any> {
-        return this.http.get<any[]>(environment.api + '/api/users');   
-    }
-
     updateUser(user: any): Observable<any> {
         const reqUser = {...user};
         reqUser.joinDate = reqUser.joinDate ? reqUser.joinDate.format('DD/MM/YYYY HH:mm:ss') : null;

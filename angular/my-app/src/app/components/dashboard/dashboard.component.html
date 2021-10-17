@@ -2,16 +2,14 @@
     <mat-tab-group>
         <mat-tab label="{{ 'General' | translate }}">
 
-            <mat-accordion>
+            <mat-accordion *ngIf="getUsers$ | async as users">
                 <mat-expansion-panel>
                   <mat-expansion-panel-header>
-                    <mat-panel-title>
-                      {{'Country chart' | translate}}
-                    </mat-panel-title>
+                    <mat-panel-title> {{'Country chart' | translate}} </mat-panel-title>
                     <mat-panel-description>
                     </mat-panel-description>
                   </mat-expansion-panel-header>
-                  <app-country-chart *ngIf="getUsers$ | async as users" [users]="users"></app-country-chart>
+                  <app-country-chart [users]="users"></app-country-chart>
                 </mat-expansion-panel>
               </mat-accordion>
             

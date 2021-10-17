@@ -1,15 +1,27 @@
 import { Injectable } from "@angular/core";
 import { Action, Selector, State, StateContext, StateToken, Store } from "@ngxs/store";
 import { BlockUI, NgBlockUI } from "ng-block-ui";
-import { finalize, tap, map } from "rxjs/operators";
-import { ApplyChangeUserStatsAction, GetAllUsersAction, SortUserStatsAction } from "../actions/user-stats.action";
+import { finalize, tap } from "rxjs/operators";
+import { ApplyChangeUserStatsAction, ApplyFilterUserStatsAction, ClearFiltersUserStatsAction, InitUserStatsAction, SortUserStatsAction } from "../actions/user-stats.action";
 import { UserStatsService } from "../services/user-stats.service";
 import * as moment from 'moment';
 import { patch, updateItem } from "@ngxs/store/operators";
+import { includes } from 'lodash';
+import { CoreState } from "./core.state";
+import { UserService } from "../services/user.service";
 
-export interface UserStatsStateModel { users: any }
+export interface UserStatsStateModel {
+  userFilter: string,
+  rolesFilter: string[],
+  allUsers: any,
+  users: any }
     
-const initialState: UserStatsStateModel = { users: null };
+const initialState: UserStatsStateModel = { 
+  userFilter: '',
+  rolesFilter: ['Magios', 'Admins', 'NewJoiner', 'Limbo', ''],
+  allUsers: [],
+  users: [] 
+};
   
 const CORE_STATE_TOKEN = new StateToken<UserStatsStateModel>('userStats');
   @State<UserStatsStateModel>({
@@ -21,7 +33,7 @@ const CORE_STATE_TOKEN = new StateToken<UserStatsStateModel>('userStats');
 
     @BlockUI() blockUI!: NgBlockUI;
 
-    constructor(private store: Store, private userStatsService: UserStatsService) {}
+    constructor(private store: Store, private userStatsService: UserStatsService, private userService: UserService) {}
         
     @Action(SortUserStatsAction)
     sortUserStatsAction(ctx: StateContext<UserStatsStateModel>, action: SortUserStatsAction) {
@@ -93,31 +105,64 @@ const CORE_STATE_TOKEN = new StateToken<UserStatsStateModel>('userStats');
       )
     }
 
-    @Action(GetAllUsersAction)
-    getAllUsersAction(ctx: StateContext<UserStatsStateModel>, action: GetAllUsersAction) {
+    @Action(InitUserStatsAction)
+    initUserStatsAction(ctx: StateContext<UserStatsStateModel>) {
+      return this.userService.getAllUsers().pipe(
+        tap(users => {
+          return ctx.patchState({ users: users, allUsers: users  })
+        })
+      )
+    }
 
-        this.blockUI.start();
+    @Action(ClearFiltersUserStatsAction)
+    clearFiltersModulesAction(ctx: StateContext<UserStatsStateModel>) {
+        const { allUsers } = ctx.getState();
+        
+        ctx.patchState({ 
+            rolesFilter: ['Magios', 'Admins', 'NewJoiner', 'Limbo', ''], 
+            users: allUsers,
+            userFilter: ''
+        });
+    }
 
-        return this.userStatsService.getAllUsers().pipe(
-            map(response => {
-              return response.users.map((u:any) => {
-                u.joinDate = u.joinDate ? moment(u.joinDate, 'DD/MM/YYYY HH:mm:ss') : null
-                u.lastTextChannelDate = u.lastTextChannelDate ? moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss') : null;
-                u.lastVoiceChannelAccessDate = u.lastVoiceChannelAccessDate ? moment(u.lastVoiceChannelAccessDate, 'DD/MM/YYYY HH:mm:ss') : null;
-                u.lastServerAccess = u.lastServerAccess ? moment(u.lastServerAccess, 'DD/MM/YYYY HH:mm:ss') : null;
-                return u;
-              })
-            }),
-            tap(users => {
-                ctx.patchState({users: users});
-            }),
-            finalize(() => this.blockUI.stop() )
-        )
+    @Action(ApplyFilterUserStatsAction)
+    applyFilterModulesAction(ctx: StateContext<UserStatsStateModel>, action: ApplyFilterUserStatsAction) {
+        const { allUsers } = ctx.getState();
+        const { userFilter, rolesFilter } =  action.payload;
+
+        const results: any[] = [];
+        let userFlag, roleFlag;
+        
+        allUsers.forEach((u:any) => {
+            if (rolesFilter.length > 2) roleFlag = true;
+            else if (u.roles.length > 1) roleFlag = includes(rolesFilter, 'Admins');
+            else roleFlag = includes(rolesFilter, u.roles[0]);
+
+            if (includes(rolesFilter, '') &&  u.roles.length == 0) roleFlag = true;
+            
+            userFlag = userFilter == '' || userFilter.toLowerCase() == u.username.toLowerCase()
+            
+            if (roleFlag && userFlag) results.push(u);
+        });
+
+        ctx.patchState({ users: results, userFilter: userFilter, rolesFilter: rolesFilter});
     }
 
     @Selector()
     static getUsers(state: UserStatsStateModel) {
       return state.users;
     }
-    
+
+    @Selector([UserStatsState.getUsers])
+    static getAllUsernames(users:any) {
+      return users.map((u:any) => u.username);
+    }
+
+    @Selector()
+    static getSelectedFilters(state: UserStatsStateModel) {
+      return { 
+          userFilter: state.userFilter,
+          rolesFilter: state.rolesFilter
+        };
+    }
   }

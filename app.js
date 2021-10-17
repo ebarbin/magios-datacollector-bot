@@ -223,6 +223,10 @@ app.get('/user-stats', async (req, res) => {
     res.sendFile(__dirname + '/angular/my-app/dist/my-app/index.html');
 });
 
+app.get('/dashboard', async (req, res) => {
+    res.sendFile(__dirname + '/angular/my-app/dist/my-app/index.html');
+});
+
 app.post('/api/server-alive/:serverId', async (req, res) => {
     const updated = req.body.updated.trim();
     await datasource.updateServer({id: req.params.serverId, status: true, updated: updated, notified: false});

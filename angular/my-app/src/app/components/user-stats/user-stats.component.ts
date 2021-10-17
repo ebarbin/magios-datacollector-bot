@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { GetAllUsersAction } from 'src/app/actions/user-stats.action';
+import { InitUserStatsAction } from 'src/app/actions/user-stats.action';
+import { CoreState } from 'src/app/states/core.state';
 import { UserStatsState } from 'src/app/states/user-stats.state';
 
 @Component({
@@ -12,10 +13,11 @@ import { UserStatsState } from 'src/app/states/user-stats.state';
 export class UserStatsComponent implements OnInit {
 
   @Select(UserStatsState.getUsers) getUsers$: Observable<any> | undefined;
+  @Select(UserStatsState.getAllUsernames) getAllUsernames$: Observable<any> | undefined;
 
   constructor(private store: Store) { }
 
   ngOnInit(): void {
-    this.store.dispatch(new GetAllUsersAction());
+    this.store.dispatch(new InitUserStatsAction());
   }
 }

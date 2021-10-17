@@ -1,0 +1,50 @@
+<h2 mat-dialog-title>{{'Filters' | translate}}</h2>
+<mat-dialog-content class="mat-typography">
+    <h3>{{'Select filters' | translate}}</h3>
+    <div class="row">
+        
+        <form class="example-form">
+            <mat-form-field class="filter-element">
+                <mat-label>{{'Users' | translate}}</mat-label>
+              <input type="text"
+                     placeholder="{{'Select one' | translate}}" matInput
+                     [formControl]="myControl"
+                     [matAutocomplete]="auto">
+              <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onUsersFilterChange($event)">
+                <mat-option *ngFor="let user of filteredOptions$ | async" [value]="user">
+                  {{user}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+        </form>
+
+        <mat-form-field class="filter-element">
+            <mat-label>{{'Role' | translate}}</mat-label>
+            <mat-select [value]="rolesFilter" [ngModel]="rolesFilter" multiple (ngModelChange)="onRolesFilterChange($event)">
+                <mat-option value="">
+                    {{'Empty' | translate}}
+                </mat-option>
+                <mat-option value="Admins">
+                    {{'Admins' | translate}}
+                </mat-option>
+                <mat-option value="Magios">
+                    {{'Magios' | translate}}
+                </mat-option>
+                <mat-option value="NewJoiner">
+                    {{'NewJoiner' | translate}}
+                </mat-option>
+                <mat-option value="Limbo">
+                    {{'Limbo' | translate}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+    </div>
+
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button color="warn" mat-dialog-close>{{'Cancel' | translate }}</button>
+    <button mat-button (click)="onClear()">{{'Clear' | translate }}</button>
+    <button mat-button color="primary" cdkFocusInitial (click)="onAccept()">{{'Accept' | translate}}</button>
+</mat-dialog-actions>
