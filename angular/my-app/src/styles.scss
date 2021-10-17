@@ -27,3 +27,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .mat-dialog-container h2 {
     border-bottom: 2px solid grey;
 }
+.mat-expansion-panel-body {
+    padding: 0 0 0 0 !important
+}
