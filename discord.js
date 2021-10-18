@@ -70,6 +70,8 @@ if (common.ENABLE_DISCORD_EVENTS) {
                 newUser.joinDate = common.getToDay().format('DD/MM/YYYY HH:mm:ss');
                 await datasource.saveUser(newUser);
                 await sendMessageToReportChannel('The user "' + newUser.username + '" was created.');
+
+                await member.user.send('Hello! go to this web site to complete the join process: ' + process.env.APP_URL);
             }
         }
     });
