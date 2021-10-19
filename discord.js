@@ -687,7 +687,7 @@ notifyNewUserOnWelcome = (user) => {
         const members = await GUILD.members.fetch();
         const newMember = members.find(m => m.user.id == user.id);
         await WELCOME_CHANNEL.send('Atención ' + `${adminsRol} ${newJoinerRol} ${magiosRol}` + ' se ha unido al grupo ' + `${newMember}` + '.');
-        await WELCOME_CHANNEL.send('Es de ' + user.country + ' y tiene estos módulos: ' + user.modules.join(', '));
+        await WELCOME_CHANNEL.send('Es de ' + user.country + ' y tiene estos módulos: ' + user.modules.join(', ') + '.');
         resolve();
     })
 }
