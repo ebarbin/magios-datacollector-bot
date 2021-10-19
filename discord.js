@@ -688,6 +688,7 @@ notifyNewUserOnWelcome = (user) => {
         const newMember = members.find(m => m.user.id == user.id);
         await WELCOME_CHANNEL.send('Atención ' + `${adminsRol} ${newJoinerRol} ${magiosRol}` + ' se ha unido al grupo ' + `${newMember}` + '.');
         await WELCOME_CHANNEL.send('Es de ' + user.country + ' y tiene estos módulos: ' + user.modules.join(', '));
+        resolve();
     })
 }
 
@@ -739,8 +740,8 @@ registerUser = (user) => {
     return new Promise(async (resolve, reject) => {
         const allMembers = await GUILD.members.fetch();
         const member = allMembers.find(m => m.user.id == user.id);
-        const newJoinerRol = GUILD.roles.cache.find(r => r.name == 'NewJoiner');
-        await member.roles.add(newJoinerRol);
+        const limboRol = GUILD.roles.cache.find(r => r.name == 'Limbo');
+        await member.roles.add(limboRol);
         resolve();
     })
 }
