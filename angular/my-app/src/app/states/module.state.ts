@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Action, Selector, State, StateContext, StateToken, Store } from "@ngxs/store";
 import { BlockUI, NgBlockUI } from "ng-block-ui";
 import { finalize, switchMap, tap } from "rxjs/operators";
-import { LogoutAction, MessageType, RedirectToDiscordGeneralChannelAction, ShowMessageAction } from "../actions/core.action";
+import { LogoutAction, MessageType, RedirectToDiscordGeneralChannelAction, RedirectToDiscordWelcomeChannelAction, ShowMessageAction } from "../actions/core.action";
 import { ModulesService } from "../services/modules.service";
 import { CoreState } from "./core.state";
 import { ApplyFilterModulesAction, ClearFiltersModulesAction, InitModulesAction, RefreshElementModulesAction, RegisterUserAction, ShowHideModulesAction, SortUsersModuleAction, ToggleModuleValueAction, ToggleUserStatusValueAction, UpdateCountryUserValueAction } from "../actions/module.action";
@@ -256,10 +256,10 @@ export class ModuleState {
         this.blockUI.start();        
         const user = this.store.selectSnapshot(CoreState.getUser);
         return this.registerService.registerUser(user).pipe(
-            tap(() => ctx.dispatch(new ShowMessageAction({ msg: 'You are a NewJoiner now. Enjoy Los Magios!', type: MessageType.INFO}))),
+            tap(() => ctx.dispatch(new ShowMessageAction({ msg: 'There is less to be part of the group. An administrator will speak to you through the #welcome channel', type: MessageType.INFO}))),
             switchMap(() => ctx.dispatch([
                 new LogoutAction(),
-                new RedirectToDiscordGeneralChannelAction()
+                new RedirectToDiscordWelcomeChannelAction()
             ])),
             finalize(() => this.blockUI.stop() ))
     }

@@ -120,9 +120,9 @@ app.put('/api/register/:userId', checkUserAuth, async (req, res) => {
     
     if (user && user.country) {
         await discordModule.registerUser(user);
-        user.roles = ['NewJoiner'];
+        user.roles = ['Limbo'];
         await datasource.updateUser(user);
-        await discordModule.notifyNewUserOnGeneral(user);
+        await discordModule.notifyNewUserOnWelcome(user);
         return res.status(200).send();
     } else {
         return res.status(400).send({ errorDesc: 'User must complete at least the country' });

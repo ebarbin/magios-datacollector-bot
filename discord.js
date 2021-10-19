@@ -26,6 +26,7 @@ let SERVER_STATUS_CHANNEL;
 let EVENTOS_CALENDARIO_CHANNEL;
 let REPORT_CHANNEL;
 let GENERAL_CHANNEL;
+let WELCOME_CHANNEL;
 let GUILD;
 
 client.login(process.env.DISCORD_BOT_TOKEN);
@@ -33,10 +34,10 @@ client.login(process.env.DISCORD_BOT_TOKEN);
     client.once('ready', async () => {
 
         REPORT_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === 'report');
+        WELCOME_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'Text Channels' && channel.name === 'welcome');
         GENERAL_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'Text Channels' && channel.name === 'general');
         EVENTOS_CALENDARIO_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'Text Channels' && channel.name === 'eventos-calendario');
         SERVER_STATUS_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'Server Data' && channel.name === 'server-status');
-        
 
         GUILD = client.guilds.cache.find((g) => g.id === GUILD_ID );
 
@@ -678,13 +679,15 @@ checkNewUserAndCreate = () => {
     })
 }
 
-notifyNewUserOnGeneral = (user) => {
+notifyNewUserOnWelcome = (user) => {
     return new Promise(async (resolve, reject) => {
-        const newJoinerRol = GUILD.roles.cache.find(r => r.name == 'NewJoiner')
-        const magiosRol = GUILD.roles.cache.find(r => r.name == 'Magios')
+        const adminsRol = GUILD.roles.cache.find(r => r.name == 'Admins');
+        const newJoinerRol = GUILD.roles.cache.find(r => r.name == 'NewJoiner');
+        const magiosRol = GUILD.roles.cache.find(r => r.name == 'Magios');
         const members = await GUILD.members.fetch();
         const newMember = members.find(m => m.user.id == user.id);
-        GENERAL_CHANNEL.send('Attention ' +` ${newJoinerRol} ${magiosRol}` + ' let\'s welcome ' + `${newMember}`).then(() => resolve());
+        await WELCOME_CHANNEL.send('Atención ' + ` ${adminsRol} ${newJoinerRol} ${magiosRol}` + ' se ha unido al grupo ' + `${newMember}` + '.');
+        await WELCOME_CHANNEL.send('Es de ' + user.country + ' y tiene estos módulos: ' + users.modules.join(', '));
     })
 }
 
@@ -776,7 +779,7 @@ cleanOldEvents = () => {
     });
 }
 
-exports.notifyNewUserOnGeneral = notifyNewUserOnGeneral;
+exports.notifyNewUserOnWelcome = notifyNewUserOnWelcome;
 exports.sendMessageToReportChannel = sendMessageToReportChannel;
 exports.sendMessageToGeneralChannel = sendMessageToGeneralChannel;
 exports.cleanOldEvents = cleanOldEvents;
