@@ -54,6 +54,26 @@ checkUserAuth = (req, res, next) => {
     }
 }
 
+app.get('/api/servers', checkUserAuth, async (req, res) => {
+    const servers = await datasource.getServerStatus();
+    res.json({ servers: servers });
+});
+
+app.put('/api/servers/:serverId', checkUserAuth, async (req, res) => {
+    const serverId = req.params.serverId;
+    const updatedServer = req.body;
+    const server = await datasource.getServerStatusById(serverId);
+    if (!server) {
+        return res.status(400).send({ errorDesc: 'Server not found' });
+    } else {
+        await datasource.updateServerInfo(updatedServer);
+        await discordModule.cleanServerStatus();
+        const servers = await datasource.getServerStatus();
+        servers.forEach(async sv => await discordModule.sendServerStatus(sv) )
+        return res.status(200).send();
+    }
+});
+
 app.get('/api/modules', checkUserAuth, async (req, res) => {
     const terrains = [];
     for (let i = 0; i < common.terrains.length; i++) terrains.push({id: i, name: common.terrains[i], visible: true});
@@ -224,6 +244,10 @@ app.get('/user-stats', async (req, res) => {
 });
 
 app.get('/dashboard', async (req, res) => {
+    res.sendFile(__dirname + '/angular/my-app/dist/my-app/index.html');
+});
+
+app.get('/server-data', async (req, res) => {
     res.sendFile(__dirname + '/angular/my-app/dist/my-app/index.html');
 });
 

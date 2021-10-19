@@ -730,6 +730,15 @@ sendServerStatus = (server) => {
         } else {
             embed.setTitle('Servidor ' + server.id +': OFFLINE').setColor('#c90000');
         }
+
+        embed.addFields(
+            { name: 'Nombre: ', value: server.name , inline: false },
+            { name: 'Dirección IP: ', value: server.ip , inline: true },
+            { name: 'Contraseña: ', value: server.password , inline: true },
+            { name: 'Descripción: ', value: server.description , inline: false },
+            { name: 'Otros: ', value: server.others , inline: false }
+        );
+
         await SERVER_STATUS_CHANNEL.send(embed);
         console.log(TAG + ' - Server ' + server.id + ' status was reported to discord as ' + (server.status ? 'ONLINE.' : 'OFFLINE.'));
         resolve();

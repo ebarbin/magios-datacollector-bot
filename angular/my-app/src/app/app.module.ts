@@ -34,6 +34,9 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { CountryChartComponent } from './components/dashboard/components/country-chart/country-chart.component';
 import { FilterUserStatsDialogComponent } from './components/user-stats/components/filter-user-stats-dialog/filter-user-stats-dialog.component';
 import { DashboardState } from './states/dashboard.state';
+import { ServerDataComponent } from './components/server-data/server-data.component';
+import { ServerDataState } from './states/server-data.state';
+import { ServerFormComponent } from './components/server-data/components/server-form/server-form.component';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -71,7 +74,9 @@ export const ngxsLoggerConfig = {
     NewUserDialogComponent,
     DashboardComponent,
     CountryChartComponent,
-    FilterUserStatsDialogComponent
+    FilterUserStatsDialogComponent,
+    ServerDataComponent,
+    ServerFormComponent
   ],
   imports: [
     BrowserModule,
@@ -92,7 +97,7 @@ export const ngxsLoggerConfig = {
       },
       defaultLanguage: 'es'
     }),
-    NgxsModule.forRoot([CoreState, ModuleState, UserStatsState, DashboardState], ngxsConfig),
+    NgxsModule.forRoot([CoreState, ModuleState, UserStatsState, DashboardState, ServerDataState], ngxsConfig),
     NgxsRouterPluginModule.forRoot(),
     NgxsResetPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot(ngxsLoggerConfig),

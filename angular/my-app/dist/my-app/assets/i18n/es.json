@@ -48,5 +48,13 @@
     "Back":"Atrás",
     "There is less to be part of the group. An administrator will speak to you through the #welcome channel":"Ya falta menos para formar parte del grupo. Un adminstrador te hablara por el canal #welcome.",
     "Quantity":"Cantidad",
-    "Users by country chart":"Usuarios por país"
+    "Users by country chart":"Usuarios por país",
+    "Servers":"Servidores",
+    "Ip address":"Dirección ip",
+    "Password":"Contraseña",
+    "Description":"Descripción",
+    "Others":"Otros",
+    "Save":"Guardar",
+    "Name":"Nombre",
+    "Server info update":"Información del servidor actualizada"
 }

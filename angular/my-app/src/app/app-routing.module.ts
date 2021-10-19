@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ModulesComponent } from './components/modules/modules.component';
+import { ServerDataComponent } from './components/server-data/server-data.component';
 import { UserStatsComponent } from './components/user-stats/user-stats.component';
 import { WelcomeComponent } from './components/welcome/welcome.component';
 import { AuthGuard } from './guards/auth.guard';
@@ -22,6 +23,10 @@ const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent, canActivate: [AuthGuard]
+  },
+  {
+    path: 'server-data',
+    component: ServerDataComponent, canActivate: [AuthGuard]
   },
   {
     path: 'oauth/redirect',

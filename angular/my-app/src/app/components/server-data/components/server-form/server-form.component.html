@@ -1,0 +1,36 @@
+<form noValidate [formGroup]="form" class="server-form">
+
+    <mat-card>
+        <mat-card-title>{{'Server'| translate }} {{server.id}}</mat-card-title>
+
+        <mat-form-field class="field-full-width">
+            <mat-label>{{'Name' | translate}}</mat-label>
+            <input matInput placeholder="{{'Name' | translate}}" formControlName="name">
+        </mat-form-field>
+
+        <mat-form-field class="field-full-width">
+            <mat-label>{{'Ip address' | translate}}</mat-label>
+            <input matInput placeholder="{{'Ip address' | translate}}" formControlName="ip">
+        </mat-form-field>
+    
+        <mat-form-field class="field-full-width">
+            <mat-label>{{'Password' | translate}}</mat-label>
+            <input matInput placeholder="{{'Password' | translate}}" formControlName="password">
+        </mat-form-field>
+    
+        <mat-form-field class="field-full-width">
+            <mat-label>{{'Description' | translate}}</mat-label>
+            <input matInput placeholder="{{'Description' | translate}}" formControlName="description">
+        </mat-form-field>
+    
+        <mat-form-field class="field-full-width">
+            <mat-label>{{'Others' | translate}}</mat-label>
+            <input matInput placeholder="{{'Others' | translate}}" formControlName="others">
+        </mat-form-field>
+
+        <mat-card-actions align="end">
+            <button mat-raised-button color="primary" [disabled]="!form.valid" (click)="onSave()">{{'Save' | translate }}</button>
+        </mat-card-actions>
+    </mat-card>
+    <br>
+</form>

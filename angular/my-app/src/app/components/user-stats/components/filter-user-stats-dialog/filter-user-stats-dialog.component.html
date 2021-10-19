@@ -6,15 +6,15 @@
         <form class="example-form">
             <mat-form-field class="filter-element">
                 <mat-label>{{'Users' | translate}}</mat-label>
-              <input type="text"
-                     placeholder="{{'Select one' | translate}}" matInput
-                     [formControl]="myControl"
-                     [matAutocomplete]="auto">
-              <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onUsersFilterChange($event)">
+                <input type="text"
+                        placeholder="{{'Select one' | translate}}" matInput
+                        [formControl]="myControl"
+                        [matAutocomplete]="auto">
+                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onUsersFilterChange($event)">
                 <mat-option *ngFor="let user of filteredOptions$ | async" [value]="user">
-                  {{user}}
+                    {{user}}
                 </mat-option>
-              </mat-autocomplete>
+                </mat-autocomplete>
             </mat-form-field>
         </form>
 
@@ -38,13 +38,10 @@
                 </mat-option>
             </mat-select>
         </mat-form-field>
-
     </div>
-
-
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-    <button mat-button color="warn" mat-dialog-close>{{'Cancel' | translate }}</button>
-    <button mat-button (click)="onClear()">{{'Clear' | translate }}</button>
-    <button mat-button color="primary" cdkFocusInitial (click)="onAccept()">{{'Accept' | translate}}</button>
+    <button mat-raised-button color="warn" mat-dialog-close>{{'Cancel' | translate }}</button>
+    <button mat-raised-button (click)="onClear()">{{'Clear' | translate }}</button>
+    <button mat-raised-button color="primary" cdkFocusInitial (click)="onAccept()">{{'Accept' | translate}}</button>
 </mat-dialog-actions>

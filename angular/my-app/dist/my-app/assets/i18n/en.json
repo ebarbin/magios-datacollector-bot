@@ -48,5 +48,13 @@
     "Back":"Back",
     "There is less to be part of the group. An administrator will speak to you through the #welcome channel":"There is less to be part of the group. An administrator will speak to you through the #welcome channel.",
     "Quantity":"Quantity",
-    "Users by country chart":"Users by country chart"
+    "Users by country chart":"Users by country chart",
+    "Servers":"Servers",
+    "Ip address":"Ip address",
+    "Password":"Password",
+    "Description":"Description",
+    "Others":"Others",
+    "Save":"Save",
+    "Name":"Name",
+    "Server info update":"Server info update"
 }

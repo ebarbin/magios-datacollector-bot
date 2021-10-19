@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { InitDashboardAction } from 'src/app/actions/dashboard-actions';
-import { CoreState } from 'src/app/states/core.state';
+import { InitDashboardAction } from 'src/app/actions/dashboard.actions';
 import { DashboardState } from 'src/app/states/dashboard.state';
 
 @Component({
