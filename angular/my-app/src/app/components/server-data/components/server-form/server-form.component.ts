@@ -25,7 +25,9 @@ export class ServerFormComponent implements OnInit {
       map: ['',Validators.required],
       password: ['',Validators.required], 
       description: [''],
-      others: ['']
+      others: [''],
+      srs: [false],
+      atis: [false],
     });
 
     this.form.patchValue(this.server);

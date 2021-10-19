@@ -725,19 +725,19 @@ notifyOwner = (server) => {
 sendServerStatus = (server) => {
     return new Promise(async (resolve, reject) => {
         const embed = new MessageEmbed().setTimestamp();
-        if (server.status) {
-            embed.setTitle('Servidor ' + server.id +': ONLINE').setColor('#00830b');
-        } else {
-            embed.setTitle('Servidor ' + server.id +': OFFLINE').setColor('#c90000');
-        }
+
+        if (server.status) embed.setTitle('Servidor ' + server.id +': ONLINE').setColor('#00830b');
+        else embed.setTitle('Servidor ' + server.id +': OFFLINE').setColor('#c90000');
 
         embed.addFields(
-            { name: 'Nombre: ', value: server.name , inline: false },
-            { name: 'Dirección IP: ', value: server.ip , inline: true },
-            { name: 'Contraseña: ', value: server.password , inline: true },
-            { name: 'Mapa: ', value: server.map , inline: true },
-            { name: 'Descripción: ', value: server.description , inline: false },
-            { name: 'Otros: ', value: server.others , inline: false }
+            { name: 'Nombre', value: (server.name != null && server.name != '') ? server.name : '-', inline: false },
+            { name: 'Dirección IP', value: (server.ip != null && server.ip != '') ? server.ip : '-', inline: true },
+            { name: 'Contraseña', value: (server.password != null && server.password != '') ? server.password: '-', inline: true },
+            { name: 'Mapa', value: (server.map != null && server.map != '') ? server.map : '-', inline: true },
+            { name: 'ATIS', value: (server.atis != null && server.atis) ? 'Si' : 'No' , inline: true },
+            { name: 'SRS', value: (server.srs != null && server.srs) ? "Si" : 'No' , inline: true },
+            { name: 'Descripción', value: (server.description != null && server.description != '') ? server.description: '-', inline: false },
+            { name: 'Otros', value: (server.others != null && server.others != '') ? server.others: '-', inline: false }
         );
 
         await SERVER_STATUS_CHANNEL.send(embed);

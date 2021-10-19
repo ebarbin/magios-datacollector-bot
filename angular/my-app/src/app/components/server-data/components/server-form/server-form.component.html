@@ -40,6 +40,14 @@
             <input matInput placeholder="{{'Others' | translate}}" formControlName="others">
         </mat-form-field>
 
+        <mat-slide-toggle class="toggle-field" formControlName="srs" color="primary">
+            {{'SRS' | translate}}
+        </mat-slide-toggle>
+
+        <mat-slide-toggle class="toggle-field" formControlName="atis" color="primary">
+            {{'ATIS' | translate}}
+        </mat-slide-toggle>
+
         <mat-card-actions align="end">
             <button mat-raised-button color="primary" [disabled]="!form.valid" (click)="onSave()">{{'Save' | translate }}</button>
         </mat-card-actions>
