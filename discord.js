@@ -72,7 +72,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
                 await datasource.saveUser(newUser);
                 await sendMessageToReportChannel('The user "' + newUser.username + '" was created.');
 
-                await member.user.send('Hola! `${member}` Bienvenido a Los Magios. Te pido que ingreses a este link para completar el proceso de ingreso al grupo: ' + process.env.APP_URL);
+                await member.user.send('Hola! ' + `${member}` + ' Bienvenido a Los Magios. Te pido que ingreses a este link para completar el proceso de ingreso al grupo: ' + process.env.APP_URL);
                 await member.user.send('Si tenes alguna duda podes escribir en el canal #welcome.');
             }
         }
@@ -686,7 +686,7 @@ notifyNewUserOnWelcome = (user) => {
         const magiosRol = GUILD.roles.cache.find(r => r.name == 'Magios');
         const members = await GUILD.members.fetch();
         const newMember = members.find(m => m.user.id == user.id);
-        await WELCOME_CHANNEL.send('Atención ' + ` ${adminsRol} ${newJoinerRol} ${magiosRol}` + ' se ha unido al grupo ' + `${newMember}` + '.');
+        await WELCOME_CHANNEL.send('Atención ' + `${adminsRol} ${newJoinerRol} ${magiosRol}` + ' se ha unido al grupo ' + `${newMember}` + '.');
         await WELCOME_CHANNEL.send('Es de ' + user.country + ' y tiene estos módulos: ' + users.modules.join(', '));
     })
 }
