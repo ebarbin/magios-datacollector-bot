@@ -10,8 +10,9 @@ import { ServerDataState } from 'src/app/states/server-data.state';
   styleUrls: ['./server-data.component.scss']
 })
 export class ServerDataComponent implements OnInit {
-
+  
   @Select(ServerDataState.getServers) getServers$: Observable<any> | undefined;
+  @Select(ServerDataState.getTerrains) getTerrains$: Observable<any> | undefined;
 
   constructor(private store: Store) { }
 

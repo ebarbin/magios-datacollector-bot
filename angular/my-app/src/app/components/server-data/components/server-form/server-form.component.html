@@ -17,6 +17,18 @@
             <mat-label>{{'Password' | translate}}</mat-label>
             <input matInput placeholder="{{'Password' | translate}}" formControlName="password">
         </mat-form-field>
+
+        <mat-form-field class="field-full-width">
+            <mat-label>{{'Map' | translate}}</mat-label>
+            <mat-select formControlName="map">
+                <mat-option value="">{{'Select one' | translate}}...</mat-option>
+                <mat-option value="Caucasus">{{'Caucasus' | translate}}</mat-option>
+                <mat-option value="Mariana Islands">{{'Mariana Islands' | translate}}</mat-option>
+              <mat-option *ngFor="let terrain of terrains" [value]="terrain.name">
+                {{terrain.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
     
         <mat-form-field class="field-full-width">
             <mat-label>{{'Description' | translate}}</mat-label>

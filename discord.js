@@ -735,6 +735,7 @@ sendServerStatus = (server) => {
             { name: 'Nombre: ', value: server.name , inline: false },
             { name: 'Dirección IP: ', value: server.ip , inline: true },
             { name: 'Contraseña: ', value: server.password , inline: true },
+            { name: 'Mapa: ', value: server.map , inline: true },
             { name: 'Descripción: ', value: server.description , inline: false },
             { name: 'Otros: ', value: server.others , inline: false }
         );

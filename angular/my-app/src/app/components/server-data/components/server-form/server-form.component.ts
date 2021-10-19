@@ -11,16 +11,18 @@ import { UpdateServerDataAction } from 'src/app/actions/server-data.actions';
 export class ServerFormComponent implements OnInit {
 
   @Input() server: any;
+  @Input() terrains: any;
 
   form: any;
 
   constructor(private store: Store, private fb: FormBuilder) { }
 
-  ngOnInit(): void {
+  ngOnInit(): void {    
     this.form = this.fb.group({
       id: [''],
       name: ['',Validators.required],
       ip: ['',Validators.required],
+      map: ['',Validators.required],
       password: ['',Validators.required], 
       description: [''],
       others: ['']

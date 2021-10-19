@@ -2,17 +2,20 @@ import { Injectable } from "@angular/core";
 import { Action, Selector, State, StateContext, StateToken } from "@ngxs/store";
 import { patch, updateItem } from "@ngxs/store/operators";
 import { BlockUI, NgBlockUI } from "ng-block-ui";
-import { finalize, tap } from "rxjs/operators";
+import { finalize, switchMap, tap } from "rxjs/operators";
 import { MessageType, ShowMessageAction } from "../actions/core.action";
 import { InitServerDataAction, UpdateServerDataAction } from "../actions/server-data.actions";
+import { ModulesService } from "../services/modules.service";
 import { ServerDataService } from "../services/server-data.services";
 
 export interface ServerDataStateModel {
-    servers: any 
+    servers: any,
+    terrains: any
 }
       
 const initialState: ServerDataStateModel = { 
-    servers: []
+    servers: [],
+    terrains: []
 };
 
 const CORE_STATE_TOKEN = new StateToken<ServerDataStateModel>('serverdata');
@@ -25,14 +28,20 @@ const CORE_STATE_TOKEN = new StateToken<ServerDataStateModel>('serverdata');
 
     @BlockUI() blockUI!: NgBlockUI;
 
-    constructor(private serverDataService: ServerDataService) {}
+    constructor(private serverDataService: ServerDataService, private modulesService: ModulesService) {}
 
     @Action(InitServerDataAction)
     initServerDataAction(ctx: StateContext<ServerDataStateModel>) {
         this.blockUI.start();
+        
         return this.serverDataService.getServers().pipe(
             tap(servers => {
                 ctx.patchState({ servers })
+            }),
+            switchMap(() => {
+                return this.modulesService.getModules().pipe(
+                    tap((modules:any) => ctx.patchState({ terrains: modules.terrains }))
+                )
             }),
             finalize(() => this.blockUI.stop() )
         )
@@ -57,5 +66,10 @@ const CORE_STATE_TOKEN = new StateToken<ServerDataStateModel>('serverdata');
     @Selector()
     static getServers(state: ServerDataStateModel) {
       return state.servers;
+    }
+
+    @Selector()
+    static getTerrains(state: ServerDataStateModel) {
+      return state.terrains;
     }
   }

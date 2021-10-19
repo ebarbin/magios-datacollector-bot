@@ -93,7 +93,7 @@ const getServerStatus = async () => {
 }
 
 const updateServerInfo = async (server) => {
-    const query = { text: 'UPDATE server_status SET name = $2, ip = $3, password = $4, description = $5, others = $6 WHERE id = $1', values: [server.id, server.name, server.ip, server.password, server.description, server.others ] };
+    const query = { text: 'UPDATE server_status SET name = $2, ip = $3, password = $4, description = $5, others = $6, map = $7 WHERE id = $1', values: [server.id, server.name, server.ip, server.password, server.description, server.others, server.map ] };
     const res = await postgresClient.query(query);
 }
 
