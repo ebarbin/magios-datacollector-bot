@@ -65,5 +65,11 @@ if (common.ENABLE_DISCORD_EVENTS) {
             ];
             await datasource.updateUser(u);
         })
+
+        console.log(TAG + ' - Notifying limbo/none rol users - Running a task every month.');
+        const limbosOrNoneRoleUsers = await datasource.getLimboOrNoneRoleUsers();
+        limbosOrNoneRoleUsers.forEach(async u => {
+            await discordModule.notifyLimboOrNonRoleUser(u);
+        })
     });
 }

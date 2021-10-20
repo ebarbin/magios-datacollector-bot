@@ -1,6 +1,6 @@
 require('dotenv').config();
 const PostgresClient = require('pg').Client;
-const common = require('./common');
+const _ = require('lodash');
 
 const TAG = '[magios-datacollector-bot]';
 
@@ -63,6 +63,10 @@ const saveUser = async (user) => {
       } catch (err) {
       }
 }
+const getLimboOrNoneRoleUsers = async () => {
+    const users = await getAllUsers();
+    return users.filter(u => u.roles == null || _.includes(u.roles, 'Limbo'));
+}
 
 const getAllUsers = async () => {
     try {
@@ -76,6 +80,7 @@ const getAllUsers = async () => {
         }
         return result;
       } catch (err) {
+        return [];
       }
 }
 
@@ -131,6 +136,7 @@ exports.saveUser = saveUser;
 exports.findUserByUsername = findUserByUsername;
 exports.getUser = getUser;
 exports.getAllUsers = getAllUsers;
+exports.getLimboOrNoneRoleUsers = getLimboOrNoneRoleUsers;
 exports.createDataBase = createDataBase;
 exports.updateServerInfo = updateServerInfo;
 exports.updateServer = updateServer;

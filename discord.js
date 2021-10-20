@@ -692,6 +692,20 @@ notifyNewUserOnWelcome = (user) => {
     })
 }
 
+notifyLimboOrNonRoleUser = (user) => {
+    return new Promise(async (resolve, reject) => {
+
+        const members = await GUILD.members.fetch();
+        const member = members.find(m => m.user.id == user.id);
+
+        await member.user.send('Hola! ' + `${member}` + ' ¿como estás? Notamos que te has quedado en el canal de bienvenida. ¿Sigues interesado en formar parte de Los Magios?');
+        await member.user.send('Para continuar el proceso de ingreso debes ingresar en el siguiente link y completar con tus datos. ' + process.env.APP_URL);
+        await member.user.send('Si tenes alguna duda puedes escribir en el canal ' + `${WELCOME_CHANNEL}` + '.');
+
+        resolve();
+    })
+}
+
 sendMessageToGeneralChannel = (msg) => {
     return new Promise((resolve, reject) => {
         GENERAL_CHANNEL.send(msg).then(() => resolve());
@@ -800,3 +814,4 @@ exports.checkNewUserAndCreate = checkNewUserAndCreate;
 exports.checkLeftUsersAndRemove = checkLeftUsersAndRemove;
 exports.notifyOwner = notifyOwner;
 exports.registerUser = registerUser;
+exports.notifyLimboOrNonRoleUser = notifyLimboOrNonRoleUser;
