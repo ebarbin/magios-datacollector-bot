@@ -1,27 +1,20 @@
-
-     <mat-accordion >
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title> {{'Users by country chart' | translate}} </mat-panel-title>
-            <mat-panel-description>
-            </mat-panel-description>
-          </mat-expansion-panel-header>
-          
-          <ngx-charts-bar-horizontal
-            [results]="data"
-            [gradient]="false"
-            [xAxis]="true"
-            [yAxis]="true"
-            [legend]="false"
-            legendTitle="{{'Countries' | translate}}"
-            [showXAxisLabel]="false"
-            [showYAxisLabel]="false"
-            xAxisLabel="{{'Quantity' | translate}}"
-            yAxisLabel="{{'Country' | translate}}"
-            (select)="onSelect($event)">
-        </ngx-charts-bar-horizontal>
-
-        </mat-expansion-panel>
-      </mat-accordion>
-    
+ <mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title> {{'Users by country chart' | translate}} </mat-panel-title>
+    <mat-panel-description>
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+  <ngx-charts-bar-horizontal
+    [results]="data"
+    [gradient]="false"
+    [xAxis]="true"
+    [yAxis]="true"
+    [legend]="false"
+    legendTitle="{{'Countries' | translate}}"
+    [showXAxisLabel]="false"
+    [showYAxisLabel]="false"
+    xAxisLabel="{{'Quantity' | translate}}"
+    yAxisLabel="{{'Country' | translate}}">
+</ngx-charts-bar-horizontal>
+</mat-expansion-panel>
 

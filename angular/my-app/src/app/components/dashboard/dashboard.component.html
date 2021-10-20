@@ -1,14 +1,22 @@
 <div class="container">
     <mat-tab-group>
         <mat-tab label="{{ 'General' | translate }}">
-
-          <app-country-chart *ngIf="getUsers$ | async as users" [users]="users"></app-country-chart>
-            
+          <br>
+          <mat-accordion>
+            <app-country-chart *ngIf="getUsers$ | async as users" [users]="users"></app-country-chart>
+          </mat-accordion>
         </mat-tab>
-        <mat-tab label="Server 1">
-
-             </mat-tab>
-        <mat-tab label="Server 2"> Content 2 </mat-tab>
-        <mat-tab label="Server 3"> Content 3 </mat-tab>
+        <mat-tab *ngFor="let server of getServers$ | async" label="Server {{server.id}}">
+          <mat-accordion>
+            <br>
+            <app-killer-chart *ngIf="getUsers$ | async as users" [users]="users" [serverId]="server.id"></app-killer-chart>
+            <br>
+            <app-accuracy-chart *ngIf="getUsers$ | async as users" [users]="users" [serverId]="server.id"></app-accuracy-chart>
+            <br>
+            <app-dead-chart *ngIf="getUsers$ | async as users" [users]="users" [serverId]="server.id"></app-dead-chart>
+            <br>
+            <app-crash-chart *ngIf="getUsers$ | async as users" [users]="users" [serverId]="server.id"></app-crash-chart>
+          </mat-accordion>
+        </mat-tab>
     </mat-tab-group>
 </div>

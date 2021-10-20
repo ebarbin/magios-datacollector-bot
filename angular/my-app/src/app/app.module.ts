@@ -37,6 +37,10 @@ import { DashboardState } from './states/dashboard.state';
 import { ServerDataComponent } from './components/server-data/server-data.component';
 import { ServerDataState } from './states/server-data.state';
 import { ServerFormComponent } from './components/server-data/components/server-form/server-form.component';
+import { KillerChartComponent } from './components/dashboard/components/killer-chart/killer-chart.component';
+import { AccuracyChartComponent } from './components/dashboard/components/accuracy-chart/accuracy-chart.component';
+import { DeadChartComponent } from './components/dashboard/components/dead-chart/dead-chart.component';
+import { CrashChartComponent } from './components/dashboard/components/crash-chart/crash-chart.component';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -76,7 +80,11 @@ export const ngxsLoggerConfig = {
     CountryChartComponent,
     FilterUserStatsDialogComponent,
     ServerDataComponent,
-    ServerFormComponent
+    ServerFormComponent,
+    KillerChartComponent,
+    AccuracyChartComponent,
+    DeadChartComponent,
+    CrashChartComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,15 @@
+<mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title> {{'Dead chart' | translate}} </mat-panel-title>
+      <mat-panel-description>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <ngx-charts-pie-chart *ngIf="data.length > 0"
+        [results]="data"
+        [gradient]="false"
+        [legend]="false"
+        [labels]="true"
+        [doughnut]="false">
+    </ngx-charts-pie-chart>
+    <h2 *ngIf="data.length == 0">{{'No data' | translate}}</h2>
+</mat-expansion-panel>
