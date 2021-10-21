@@ -41,6 +41,7 @@ import { KillerChartComponent } from './components/dashboard/components/killer-c
 import { AccuracyChartComponent } from './components/dashboard/components/accuracy-chart/accuracy-chart.component';
 import { DeadChartComponent } from './components/dashboard/components/dead-chart/dead-chart.component';
 import { CrashChartComponent } from './components/dashboard/components/crash-chart/crash-chart.component';
+import { Error401Component } from './components/error401/error401.component';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -84,7 +85,8 @@ export const ngxsLoggerConfig = {
     KillerChartComponent,
     AccuracyChartComponent,
     DeadChartComponent,
-    CrashChartComponent
+    CrashChartComponent,
+    Error401Component
   ],
   imports: [
     BrowserModule,

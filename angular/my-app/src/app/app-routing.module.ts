@@ -5,6 +5,7 @@ import { ModulesComponent } from './components/modules/modules.component';
 import { ServerDataComponent } from './components/server-data/server-data.component';
 import { UserStatsComponent } from './components/user-stats/user-stats.component';
 import { WelcomeComponent } from './components/welcome/welcome.component';
+import { Error401Component } from './components/error401/error401.component';
 import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
@@ -27,6 +28,10 @@ const routes: Routes = [
   {
     path: 'server-data',
     component: ServerDataComponent, canActivate: [AuthGuard]
+  },
+  {
+    path: 'error401',
+    component: Error401Component
   },
   {
     path: 'oauth/redirect',
