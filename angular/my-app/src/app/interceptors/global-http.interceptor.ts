@@ -33,6 +33,8 @@ export class GlobalHttpInterceptor implements HttpInterceptor {
               } else {
                   this.store.dispatch( new ShowMessageAction({ msg: response.statusText, type: MessageType.ERROR}) );
                   if (response.status == 401) {
+                    localStorage.removeItem('user');
+                    localStorage.removeItem('token');
                     this.store.dispatch(new Navigate(['error401']));
                     setTimeout(() => {
                       window.location.href = 'https://discordapp.com/api/oauth2/authorize?client_id='+environment.client_id+'&scope=identify&response_type=code&redirect_uri='+encodeURIComponent(environment.oauth_redirect);

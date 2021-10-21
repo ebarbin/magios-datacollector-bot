@@ -25,6 +25,8 @@ export class ServerFormComponent implements OnInit {
       map: ['',Validators.required],
       password: ['',Validators.required], 
       description: [''],
+      hours: [''],
+      tacview: [''],
       others: [''],
       srs: [false],
       atis: [false],
