@@ -90,7 +90,8 @@ if (common.ENABLE_DISCORD_EVENTS) {
             join = false;
         }
 
-        if (entryData.channel.parent.name == 'ADMIN') return;
+        //const presence = await entryData.member.user.presence;
+       // if (entryData.channel.parent.name == 'ADMIN') return;
         
         let dataBaseUser = await datasource.getUser(entryData.member.user.id);
         const roles = getUserRoles(entryData.member);
