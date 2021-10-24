@@ -1,36 +1,50 @@
 <h2 mat-dialog-title>Portal de nuevos ingresos</h2>
 <mat-dialog-content class="mat-typography">
-
     <ng-container *ngIf="currentPage == 1">
         <h3>Bienvenido/a <span *ngIf="getUser$ | async as user">{{user.username}}</span>!!</h3>
-        <p>Los magios es un escuadrón virtual con integrantes de todo LATAM que lleva casi un año desde su creación.</p>
-        <p>Somos un grupo relajado con ganas de divertirnos pero al mismo tiempo con ganas de aprender.</p>
+        <p>Los Magios es un escuadrón virtual formado a principios del 2021 con integrantes de todo LATAM.</p>
+        <p>Somos un grupo apasionado por la simulación que busca pasarla bien en un ambiente de camaraderia y respeto.</p>
         <p>Contamos con tres servidores que funcionan 24x7 cada uno de ellos con misiones sandbox en distintos mapas.</p>
-        <p>Los sábados tenemos misiones y los miércoles realizamos charlas y/o entrenamientos.</p>
+        <p>Las actividades que realizamos son:</p>
+        <ul>
+            <li>Los días miércoles: Charlas/Entrenamientos.</li>
+            <li>Los días sábados: Misiones "oficiales".</li>
+        </ul>
     </ng-container>
     <ng-container *ngIf="currentPage == 2">
         <h3>¿Qué esperar de Los Magios?</h3>
         <ul>
-            <li>La idea es que TODOS, sin importar nivel, gustos y capacidad pueda volar.</li>
+            <li>La idea es que <b>TODOS</b>, sin importar nivel, gustos y capacidad pueda volar.</li>
             <li>No hay requerimientos de habilidad pero si de llevar un órden mínimo para que todos los que colaboren y participen puedan disfrutar.</li>
-            <li>Se busca volar en grupo, como comunidad. Si la intención del usuario es volar muy esporádicamente en el servidor, entonces probablemente no sea el grupo para vos.</li>
-            <li>No se requiere exclusividad de ningún tipo; los miembros pueden ser parte de otros grupos libremente. Tampoco hay exámenes de habilidad aunque se fomente que todos aprendan. Si la intención no es aprender, probablemente no sea el grupo ideal para vos.</li>
+            <li>No se requiere exclusividad de ningún tipo; los miembros pueden ser parte de otros grupos libremente.</li>
+            <li>No tenemos exámenes de habilidad.</li>
+            <li>No somos una academia. Pero si nos ayudamos entre todos para seguir aprendiendo.</li>
             <li>No se acepta Trolling, abusos, insultos, bullying, etc.</li>
+            <li><b>No usamos (ni tenemos en los servidores mods) no oficiales de DCS.</b></li>
         </ul> 
     </ng-container>
     <ng-container *ngIf="currentPage == 3">
+        <h3>¿Qué pedimos?</h3>
+        <ul>
+            <li>Uso de los canales de voz al ingresar a alguno de los servidores.</li>
+            <li>Uso de SRS para misiones y eventos.</li>
+            <li><b>El callsign de dcs debe ser el mismo al apodo/username de discord.</b></li>
+            <li>El uso adecuado de srs y canales de voz.</li>
+        </ul> 
+    </ng-container>
+    <ng-container *ngIf="currentPage == 4">
         <h3>¿Como completar el ingreso a Los Magios?</h3>
         <p>Una vez que cierres este popup debes ingresar al menu haciendo click en <fa-icon [icon]="faBars" ></fa-icon> sobre el margen superior izquierdo.</p>
         <p>Luego deberás ingresar en la opción de menu 'Módulos'. Se desplegará una grilla con un registro que corresponde con tu nombre de usuario.</p>
         <p>Deberas completar tu país y los módulos que tienes.<i> Esta información la utilizamos para el armado de misiones.</i></p>
         <p>Activa/desactiva los módulos haciendo en la casilla que corresponda. Deja <img width="20" src="/assets/images/green.png"> para indicar que tienes el módulo y <img width="20" src="/assets/images/red.png"> para indicar lo contrario.</p>
         <p>Una vez finalizada la carga, has click en <fa-icon [icon]="faCheck" ></fa-icon> (sobre el margen inferior derecho) para finalizar.</p>
-        <p>Este proceso te dara acceso total al servidor de discord de <b>Los Magios</b>. No te olvides de saludar en el canal #general :).</p>
+        <p>Este proceso notificará a un administrador para que te de acceso al resto de los canales de discord de <b>Los Magios</b>.</p>
     </ng-container>
 
 </mat-dialog-content>
 <mat-dialog-actions align="end">
     <button mat-button color="warn" (click)="onBack()" [disabled]="currentPage == 1">{{'Back' | translate }}</button>
-    <button mat-button color="primary" cdkFocusInitial (click)="onNext()" *ngIf="currentPage < 3">{{'Next' | translate}}</button>
-    <button mat-button color="primary" cdkFocusInitial (click)="onClose()" *ngIf="currentPage == 3">{{'Close' | translate}}</button>
+    <button mat-button color="primary" cdkFocusInitial (click)="onNext()" *ngIf="currentPage < 4">{{'Next' | translate}}</button>
+    <button mat-button color="primary" cdkFocusInitial (click)="onClose()" *ngIf="currentPage == 4">{{'Close' | translate}}</button>
 </mat-dialog-actions>

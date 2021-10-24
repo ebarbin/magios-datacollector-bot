@@ -12,7 +12,6 @@
           
           <th mat-sort-header="lastServerId"scope="col">{{'Last server id' | translate}}</th>
           <th mat-sort-header="lastServerAccess"scope="col">{{'Last server access' | translate}}</th>
-          <th mat-sort-header="lastServerAccessIp"scope="col">{{'Last server access ip' | translate}}</th>
 
           <th mat-sort-header="lastVoiceChannelName" scope="col">{{'Last voice channel name' | translate}}</th>
           <th mat-sort-header="lastVoiceChannelAccessDate" scope="col">{{'Last voice channel access date' | translate}}</th>
@@ -37,7 +36,6 @@
           </span>
       </td>
       <td class="normal" (dblclick)="onEditField(user, 'msgChannelCount', 'Msg channel count')">{{user.msgChannelCount}}</td>
-      <td class="normal" (dblclick)="onEditField(user, 'lastServerId', 'Last server id')">{{user.lastServerId}}</td>
       <td class="normal" (dblclick)="onEditField(user, 'lastServerAccess', 'Last server access')">
           <span *ngIf="user.lastServerAccess">
             {{user.lastServerAccess | amLocal | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}

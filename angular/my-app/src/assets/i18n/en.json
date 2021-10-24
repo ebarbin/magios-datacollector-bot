@@ -59,5 +59,9 @@
     "Server info update":"Server info update",
     "Map":"Map",
     "No data":"No data",
-    "Hours":"Hours"
+    "Hours":"Hours",
+    "Accuracy chart":"Accuracy chart",
+    "Crash chart":"Crash chart",
+    "Dead chart":"Dead chart",
+    "Killer chart":"Killer chart"
 }

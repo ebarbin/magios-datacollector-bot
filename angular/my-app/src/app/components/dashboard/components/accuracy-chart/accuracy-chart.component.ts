@@ -16,7 +16,8 @@ export class AccuracyChartComponent implements OnInit {
 
   ngOnInit(): void {
     this.data = this.users.filter((u:any) => u.stats[this.serverId - 1].shot > 0 ).map((u:any) => {
-      return {value: (u.stats[this.serverId - 1].hit / u.stats[this.serverId - 1].shot) * 100 , name: u.username} 
+      let value = (u.stats[this.serverId - 1].hit / u.stats[this.serverId - 1].shot) * 100;
+      return {value: value > 100 ? 100 : value , name: u.username} 
     });
   }
 }

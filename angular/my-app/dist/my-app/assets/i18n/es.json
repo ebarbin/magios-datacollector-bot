@@ -59,5 +59,9 @@
     "Server info update":"Información del servidor actualizada",
     "Map":"Mapa",
     "No data":"Sin datos",
-    "Hours":"Horarios"
+    "Hours":"Horarios",
+    "Accuracy chart":"Gráfico % de aciertos (hits/shots)",
+    "Crash chart":"Gráfico Cantidad de bajas propias (crash)",
+    "Dead chart":"Gráfico Cantidad de muertes propias",
+    "Killer chart":"Gráfico Cantidad de objetivos destruidos"
 }
