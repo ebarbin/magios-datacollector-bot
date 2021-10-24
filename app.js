@@ -288,67 +288,73 @@ app.post('/api/user/event/:serverId', async (req, res) => {
             userStat.lastDate = date;
             userStat.lastEvent = eventType;
             
+            const event = { type: eventType, date: date };
+            userStat.events.push(event);
+
             if (eventType == 'connect') {
 
                 user.lastServerAccess = common.getToDay().format('DD/MM/YYYY HH:mm:ss');
                 user.lastServerId = serverId;
-
                 await discordModule.sendMessageToReportChannel('The user "' + username + '" logged the event: "' + eventType + '" at Server ' + serverId + '. (' + date + ')');
                 console.log(TAG + 'The user "' + username + '" logged the event: "' + eventType + '" at Server ' + serverId + '. (' + date + ')');
             
             } else  if (eventType == 'takeoff') { 
 
                 userStat.takeoff++;
-
                 await discordModule.sendMessageToReportChannel('The user "' + username + '" logged the event: "' + eventType + '" at Server ' + serverId + '. (' + date + ')');
                 console.log(TAG + 'The user "' + username + '" logged the event: "' + eventType + '" at Server ' + serverId + '. (' + date + ')');
 
             } else if (eventType == 'land') { 
 
                 userStat.land++;
-
                 await discordModule.sendMessageToReportChannel('The user "' + username + '" logged the event: "' + eventType + '" at Server ' + serverId + '. (' + date + ')');
                 console.log(TAG + 'The user "' + username + '" logged the event: "' + eventType + '" at Server ' + serverId + '. (' + date + ')');
                 
             } else if (eventType == 'kill') { 
 
+                event.weapon = weapon;
+                event.target = target;
                 userStat.kill++;
-
                 await discordModule.sendMessageToReportChannel('The user "' + username + '" logged the event: "' + eventType + '", weapon:"' + weapon + '", target: "'+ target +'" at Server ' + serverId + '. (' + date + ')');
                 console.log(TAG + 'The user "' + username + '" logged the event: "' + eventType + '", weapon:"' + weapon + '", target: "'+ target +'" at Server ' + serverId + '. (' + date + ')');
 
             } else if (eventType == 'crash') { 
 
                 userStat.crash++;
-
                 await discordModule.sendMessageToReportChannel('The user "' + username + '" logged the event: "' + eventType + '" at Server ' + serverId + '. (' + date + ')');
                 console.log(TAG + 'The user "' + username + '" logged the event: "' + eventType + '" at Server ' + serverId + '. (' + date + ')');
 
             } else if (eventType == 'hit') { 
 
+                event.weapon = weapon;
+                event.target = target;
                 userStat.hit++;
-
                 await discordModule.sendMessageToReportChannel('The user "' + username + '" logged the event: "' + eventType + '", weapon:"' + weapon + '", target: "'+ target +'" at Server ' + serverId + '. (' + date + ')');
                 console.log(TAG + 'The user "' + username + '" logged the event: "' + eventType + '", weapon:"' + weapon + '", target: "'+ target +'" at Server ' + serverId + '. (' + date + ')');
 
 
             } else if (eventType == 'shot') { 
 
+                event.weapon = weapon;
+                event.target = target;
                 userStat.shot++;
-
                 await discordModule.sendMessageToReportChannel('The user "' + username + '" logged the event: "' + eventType + '", weapon:"' + weapon + '" at Server ' + serverId + '. (' + date + ')');
                 console.log(TAG + 'The user "' + username + '" logged the event: "' + eventType + '", weapon:"' + weapon + '" at Server ' + serverId + '. (' + date + ')');
 
-
-            } else if (eventType == 'dead') { 
+            } else if (eventType == 'dead') {
 
                 userStat.dead++; 
+                await discordModule.sendMessageToReportChannel('The user "' + username + '" logged the event: "' + eventType + '" at Server ' + serverId + '. (' + date + ')');
+                console.log(TAG + 'The user "' + username + '" logged the event: "' + eventType + '" at Server ' + serverId + '. (' + date + ')');
 
+            } else if (eventType == 'relinquished') {
+
+                userStat.dead++; 
                 await discordModule.sendMessageToReportChannel('The user "' + username + '" logged the event: "' + eventType + '" at Server ' + serverId + '. (' + date + ')');
                 console.log(TAG + 'The user "' + username + '" logged the event: "' + eventType + '" at Server ' + serverId + '. (' + date + ')');
 
             }
-                
+    
             await datasource.updateUser(user);
         }
     }

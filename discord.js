@@ -666,14 +666,7 @@ checkNewUserAndCreate = () => {
                              
                         dbUser.username = member.displayName.toLowerCase();
                         dbUser.roles = roles;
-                        if (!dbUser.stats) {
-                            dbUser.statsHistory = [];
-                            dbUser.stats = [
-                                { lastEvent: null, lastDate: null, takeoff:0, land: 0, kill: 0, crash: 0, hit: 0, shot: 0, dead: 0 },
-                                { lastEvent: null, lastDate: null, takeoff:0, land: 0, kill: 0, crash: 0, hit: 0, shot: 0, dead: 0 },
-                                { lastEvent: null, lastDate: null, takeoff:0, land: 0, kill: 0, crash: 0, hit: 0, shot: 0, dead: 0 }
-                            ]
-                        }
+                        if (!dbUser.events) dbUser.events = [];
                         datasource.updateUser(dbUser);
                     }
                 }
