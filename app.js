@@ -288,7 +288,7 @@ app.post('/api/user/event/:serverId', async (req, res) => {
             userStat.lastDate = date;
             userStat.lastEvent = eventType;
             
-            const event = { type: eventType, date: date };
+            const event = { type: eventType, date: date, serverId: serverId };
             userStat.events.push(event);
 
             if (eventType == 'connect') {
