@@ -28,7 +28,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
         const servers = await datasource.getServerStatus();
 
         servers.forEach(async server => {
-            if (common.getToDay().diff(moment(server.updated, 'DD/MM/YYYY HH:mm:ss'), 'minutes') > 15) {
+            if (common.getToDay().diff(moment(server.updated, 'YYYY-MM-DD HH:mm:ss.SSS'), 'minutes') > 15) {
                 server.status = false;
 
                 if (!server.notified) {
