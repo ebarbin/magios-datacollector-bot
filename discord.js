@@ -750,7 +750,7 @@ sendServerStatus = (server) => {
         const lastOnline = moment(server.updated, 'YYYY-MM-DD HH:mm:ss.SSS').format('DD/MM/YYYY HH:mm:ss')
 
         if (server.status) embed.setTitle('Servidor ' + server.id +': ONLINE').setColor('#00830b');
-        else embed.setTitle('Servidor ' + server.id +': OFFLINE - desde: ' + lastOnline).setColor('#c90000');
+        else embed.setTitle('Servidor ' + server.id +': OFFLINE (' + lastOnline + ')').setColor('#c90000');
 
         if (server.name && server.name != '') {
             embed.addFields({ name: 'Nombre', value: server.name, inline: false })
