@@ -215,7 +215,7 @@ app.post('/oauth/login', async (req, res) => {
             const token = jwt.sign({ check:  true }, app.get('jwt-secret'), { expiresIn: 1440 });
             return res.json({user: user, token: token});
         } else {
-            await discordModule.sendMessageToReportChannel('The not authorized user "' + username + '" was trying to login Magios Web Site.');
+            await discordModule.sendMessageToReportChannel('The not authorized user "' + discordUser.username + '" was trying to login Magios Web Site.');
             return res.status(401).send();
         }
     }
