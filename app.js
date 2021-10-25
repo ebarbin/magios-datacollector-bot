@@ -210,9 +210,7 @@ app.post('/oauth/login', async (req, res) => {
     if (!discordUser.username) {
         return res.status(401).send();
     } else {
-        let username = discordUser.username.toLowerCase();
-
-        const user = await datasource.findUserByUsername(username);
+        const user = await datasource.getUser(discordUser.id)
         if (user) {
             const token = jwt.sign({ check:  true }, app.get('jwt-secret'), { expiresIn: 1440 });
             return res.json({user: user, token: token});
