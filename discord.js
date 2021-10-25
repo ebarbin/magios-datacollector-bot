@@ -737,7 +737,7 @@ notifyOwner = (server) => {
     return new Promise(async (resolve, reject) => {
         const allMembers = await GUILD.members.fetch();
         const ownerMember = allMembers.find(m => m.user.id == server.owner);
-        await ownerMember.user.send('Server ' + server.id + ' is OFFLINE. Please check pick it up. Thanks!');
+        await ownerMember.user.send(+ `${ownerMember}` + ': Server ' + server.id + ' is OFFLINE. Please check pick it up. Thanks!');
         await sendMessageToReportChannel('Server ' + server.id + ' is OFFLINE. The owner @' + ownerMember.displayName + ' was notified.');
         resolve();
     })
@@ -747,8 +747,10 @@ sendServerStatus = (server) => {
     return new Promise(async (resolve, reject) => {
         const embed = new MessageEmbed().setTimestamp();
 
+        const lastOnline = moment(server.updated, 'YYYY-MM-DD HH:mm:ss.SSS').format('DD/MM/YYYY HH:mm:ss')
+
         if (server.status) embed.setTitle('Servidor ' + server.id +': ONLINE').setColor('#00830b');
-        else embed.setTitle('Servidor ' + server.id +': OFFLINE').setColor('#c90000');
+        else embed.setTitle('Servidor ' + server.id +': OFFLINE - desde: ' + lastOnline).setColor('#c90000');
 
         if (server.name && server.name != '') {
             embed.addFields({ name: 'Nombre', value: server.name, inline: false })
