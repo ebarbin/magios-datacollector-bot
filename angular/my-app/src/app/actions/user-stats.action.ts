@@ -24,3 +24,9 @@ export class ApplyChangeUserStatsAction {
     constructor(public payload: { user: any}) {}
 }
 
+export class ShowUserServerEventTabsAction {
+    static readonly type = '[User stats] Show user server event tabs';
+    constructor(public payload: { user: any}) {}
+}
+
+

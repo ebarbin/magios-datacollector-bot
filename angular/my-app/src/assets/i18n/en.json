@@ -63,5 +63,16 @@
     "Accuracy chart":"Accuracy chart",
     "Crash chart":"Crash chart",
     "Dead chart":"Dead chart",
-    "Killer chart":"Killer chart"
+    "Killer chart":"Killer chart",
+    "Server events":"Server events",
+    "takeoff":"Takeoff",
+    "land":"Land",
+    "hit":"Hit",
+    "kill":"Kill",
+    "dead":"Dead",
+    "shot":"Shot",
+    "crash":"Crash",
+    "connect":"Connect",
+    "relinquished":"Relinquished",
+    "Target":"Target"
 }

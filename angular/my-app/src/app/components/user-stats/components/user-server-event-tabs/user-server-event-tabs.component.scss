@@ -1,0 +1,28 @@
+.user-header {
+    margin-top:10px;
+    margin-bottom:10px;
+}
+
+.float-btn {
+    position:fixed;
+	width:60px;
+	height:60px;
+    right:25px;
+    color:#FFF;
+	border-radius:50px;
+	text-align:center;
+	box-shadow: 2px 2px 3px #999;
+    cursor: pointer;
+}
+
+.filter-btn {
+    z-index: 1000 !important;
+    bottom:100px;
+	background-color:#910998;
+}
+
+.back-btn {
+    z-index: 1000 !important;
+    bottom:20px;
+	background-color:#100998;
+}

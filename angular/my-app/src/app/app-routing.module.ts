@@ -7,6 +7,7 @@ import { UserStatsComponent } from './components/user-stats/user-stats.component
 import { WelcomeComponent } from './components/welcome/welcome.component';
 import { Error401Component } from './components/error401/error401.component';
 import { AuthGuard } from './guards/auth.guard';
+import { UserServerEventTabsComponent } from './components/user-stats/components/user-server-event-tabs/user-server-event-tabs.component';
 
 const routes: Routes = [
   {
@@ -28,6 +29,10 @@ const routes: Routes = [
   {
     path: 'server-data',
     component: ServerDataComponent, canActivate: [AuthGuard]
+  },
+  {
+    path: 'user-server-event-tabs',
+    component: UserServerEventTabsComponent, canActivate: [AuthGuard]
   },
   {
     path: 'error401',

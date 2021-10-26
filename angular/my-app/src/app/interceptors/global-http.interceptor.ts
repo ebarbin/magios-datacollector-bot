@@ -25,13 +25,13 @@ export class GlobalHttpInterceptor implements HttpInterceptor {
       catchError((response) => {
           this.blockUI.stop();
           if (response.error && response.error.errorDesc) {
-            this.store.dispatch( new ShowMessageAction({ msg: response.error.errorDesc, type: MessageType.ERROR}) );
+            this.store.dispatch( new ShowMessageAction({ msg: response.error.errorDesc, title:'Error', type: MessageType.ERROR}) );
           } else {
             if (response instanceof HttpErrorResponse) {
               if (response.error instanceof ErrorEvent) {
-                  this.store.dispatch( new ShowMessageAction({ msg: 'Error Event', type: MessageType.ERROR}) );
+                  this.store.dispatch( new ShowMessageAction({ msg: 'Error Event', title:'Error', type: MessageType.ERROR}) );
               } else {
-                  this.store.dispatch( new ShowMessageAction({ msg: response.statusText, type: MessageType.ERROR}) );
+                  this.store.dispatch( new ShowMessageAction({ msg: response.statusText, title:'Error', type: MessageType.ERROR}) );
                   if (response.status == 401) {
                     localStorage.removeItem('user');
                     localStorage.removeItem('token');
@@ -42,7 +42,7 @@ export class GlobalHttpInterceptor implements HttpInterceptor {
                   }
               } 
             } else {
-                this.store.dispatch( new ShowMessageAction({ msg: 'Some thing else happened', type: MessageType.ERROR}) );
+                this.store.dispatch( new ShowMessageAction({ msg: 'Some thing else happened', title:'Error', type: MessageType.ERROR}) );
             }
           }
         return throwError(response);

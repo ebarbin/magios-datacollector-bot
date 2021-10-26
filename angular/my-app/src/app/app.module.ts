@@ -42,6 +42,11 @@ import { AccuracyChartComponent } from './components/dashboard/components/accura
 import { DeadChartComponent } from './components/dashboard/components/dead-chart/dead-chart.component';
 import { CrashChartComponent } from './components/dashboard/components/crash-chart/crash-chart.component';
 import { Error401Component } from './components/error401/error401.component';
+import { UserServerEventTabsComponent } from './components/user-stats/components/user-server-event-tabs/user-server-event-tabs.component';
+import { UserEventsServerComponent } from './components/user-stats/components/user-events-server/user-events-server.component';
+import { HeaderEventDatePipe } from './pipes/header-event-date.pipe';
+import { EventDatePipe } from './pipes/event-date.pipe';
+import { EventTypeComponent } from './components/user-stats/components/event-type/event-type.component';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -86,7 +91,12 @@ export const ngxsLoggerConfig = {
     AccuracyChartComponent,
     DeadChartComponent,
     CrashChartComponent,
-    Error401Component
+    Error401Component,
+    UserServerEventTabsComponent,
+    UserEventsServerComponent,
+    HeaderEventDatePipe,
+    EventDatePipe,
+    EventTypeComponent
   ],
   imports: [
     BrowserModule,

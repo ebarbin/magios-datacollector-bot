@@ -4,6 +4,7 @@
           <th scope="col">({{users?.length}})</th>
           <th mat-sort-header="username" scope="col">{{'Usename' | translate}}</th>
           <th mat-sort-header="roles" scope="col">{{'Role' | translate}}</th>
+          <th>{{'Server events' | translate}}</th>
           <th mat-sort-header="joinDate" scope="col">{{'Join date' | translate}}</th>
           
           <th mat-sort-header="lastTextChannelName"scope="col">{{'Last text channel name' | translate}}</th>
@@ -24,6 +25,9 @@
       <td class="normal"><img *ngIf="user.avatar" class="rounded-circle" width="30" src="https://cdn.discordapp.com/avatars/{{user.id}}/{{user.avatar}}"></td>
       <td class="normal"><b>{{user.username}}</b></td>
       <td class="normal"><app-role [user]="user"></app-role></td>
+      <td class="normal">
+        <button mat-raised-button color="primary" [disabled]="!user.events || user.events.length == 0" (click)="onServerEvents(user)">{{'Server events' | translate}}</button>
+      </td>
       <td class="normal" (dblclick)="onEditField(user, 'joinDate', 'Join date')">
           <span *ngIf="user.joinDate">
             {{user.joinDate | amLocal | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}

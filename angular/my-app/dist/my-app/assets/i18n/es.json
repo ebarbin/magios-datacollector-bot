@@ -63,5 +63,16 @@
     "Accuracy chart":"Gráfico % de aciertos (hits/shots)",
     "Crash chart":"Gráfico Cantidad de bajas propias (crash)",
     "Dead chart":"Gráfico Cantidad de muertes propias",
-    "Killer chart":"Gráfico Cantidad de objetivos destruidos"
+    "Killer chart":"Gráfico Cantidad de objetivos destruidos",
+    "Server events":"Eventos DCS",
+    "takeoff":"Despegue",
+    "land":"Aterrizaje",
+    "hit":"Impacto a enemigo",
+    "kill":"Destrucción de enemigo",
+    "dead":"Muerte propia",
+    "shot":"Disparo",
+    "crash":"Destrucción propia",
+    "connect":"Conexión",
+    "relinquished":"Desconexión",
+    "Target":"Objetivo"
 }

@@ -2,25 +2,28 @@ import { Injectable } from "@angular/core";
 import { Action, Selector, State, StateContext, StateToken, Store } from "@ngxs/store";
 import { BlockUI, NgBlockUI } from "ng-block-ui";
 import { finalize, tap } from "rxjs/operators";
-import { ApplyChangeUserStatsAction, ApplyFilterUserStatsAction, ClearFiltersUserStatsAction, InitUserStatsAction, SortUserStatsAction } from "../actions/user-stats.action";
+import { ApplyChangeUserStatsAction, ApplyFilterUserStatsAction, ClearFiltersUserStatsAction, InitUserStatsAction, ShowUserServerEventTabsAction, SortUserStatsAction } from "../actions/user-stats.action";
 import { UserStatsService } from "../services/user-stats.service";
 import * as moment from 'moment';
 import { patch, updateItem } from "@ngxs/store/operators";
 import { includes } from 'lodash';
-import { CoreState } from "./core.state";
 import { UserService } from "../services/user.service";
+import { Navigate } from "@ngxs/router-plugin";
 
 export interface UserStatsStateModel {
   userFilter: string,
   rolesFilter: string[],
   allUsers: any,
-  users: any }
+  users: any,
+  user: any
+}
     
 const initialState: UserStatsStateModel = { 
   userFilter: '',
   rolesFilter: ['Magios', 'Admins', 'NewJoiner', 'Limbo', ''],
   allUsers: [],
-  users: [] 
+  users: [],
+  user: null
 };
   
 const CORE_STATE_TOKEN = new StateToken<UserStatsStateModel>('userStats');
@@ -125,6 +128,16 @@ const CORE_STATE_TOKEN = new StateToken<UserStatsStateModel>('userStats');
         });
     }
 
+    @Action(ShowUserServerEventTabsAction)
+    showUserServerEventTabsAction(ctx: StateContext<UserStatsStateModel>, action: ShowUserServerEventTabsAction) {
+        
+        const { user } =  action.payload;
+        ctx.patchState({ user });
+
+        ctx.dispatch(new Navigate(['user-server-event-tabs']))
+       
+    }
+
     @Action(ApplyFilterUserStatsAction)
     applyFilterModulesAction(ctx: StateContext<UserStatsStateModel>, action: ApplyFilterUserStatsAction) {
         const { allUsers } = ctx.getState();
@@ -151,6 +164,11 @@ const CORE_STATE_TOKEN = new StateToken<UserStatsStateModel>('userStats');
     @Selector()
     static getUsers(state: UserStatsStateModel) {
       return state.users;
+    }
+
+    @Selector()
+    static getUser(state: UserStatsStateModel) {
+      return state.user;
     }
 
     @Selector([UserStatsState.getUsers])

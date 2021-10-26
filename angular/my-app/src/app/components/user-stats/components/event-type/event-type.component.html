@@ -1,0 +1,5 @@
+<span><b>{{event.date | eventDate}}</b></span>
+<fa-icon class="element" *ngIf="icon" [icon]="icon"></fa-icon>
+<span *ngIf="event.type" class="element">{{event.type | translate}}</span>
+<span *ngIf="event.target" class="element"><b>{{event.target}}</b></span>
+<span *ngIf="event.weapon" class="element"><b>{{event.weapon}}</b></span>

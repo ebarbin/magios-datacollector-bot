@@ -1,9 +1,8 @@
 import { Injectable } from "@angular/core";
 import { Action, Selector, State, StateContext, StateToken } from "@ngxs/store";
 import { BlockUI, NgBlockUI } from "ng-block-ui";
-import { finalize, map, tap } from "rxjs/operators";
+import { tap } from "rxjs/operators";
 import { InitDashboardAction } from "../actions/dashboard.actions";
-import * as moment from 'moment';
 import { UserService } from "../services/user.service";
 
 export interface DashboardStateModel {

@@ -1,0 +1,20 @@
+<div class="container" *ngIf="getUser$ | async as user">
+    <div class="user-header">
+      <img *ngIf="user?.avatar" class="rounded-circle" width="30" src="https://cdn.discordapp.com/avatars/{{user?.id}}/{{user?.avatar}}">&nbsp;<b>{{user?.username}}</b>
+    </div>
+    <mat-tab-group backgroundColor="primary">
+        <mat-tab *ngFor="let server of getServers$ | async" label="Server {{server.id}}">
+          <app-user-events-server [server]="server" [user]="user"></app-user-events-server>
+        </mat-tab>
+    </mat-tab-group>
+</div>
+
+<!--
+<button mat-button matBadgePosition="before" matBadgeColor="warn" class="float-btn filter-btn">
+  <fa-icon [icon]="faMinusSquare" class="float-btn-icon"></fa-icon>
+</button>
+-->
+
+<button mat-button matBadgePosition="before" matBadgeColor="warn" class="float-btn back-btn" (click)="onBack()">
+  <fa-icon [icon]="faChevronLeft" class="float-btn-icon"></fa-icon>
+</button>
