@@ -40,12 +40,12 @@
           </span>
       </td>
       <td class="normal" (dblclick)="onEditField(user, 'msgChannelCount', 'Msg channel count')">{{user.msgChannelCount}}</td>
+      <td class="normal" (dblclick)="onEditField(user, 'lastServerId', 'Last server id')">{{user.lastServerId}}</td>
       <td class="normal" (dblclick)="onEditField(user, 'lastServerAccess', 'Last server access')">
           <span *ngIf="user.lastServerAccess">
             {{user.lastServerAccess | amLocal | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}
           </span>
       </td>
-      <td class="normal" (dblclick)="onEditField(user, 'lastServerAccessIp', 'Last server access ip')">{{user.lastServerAccessIp}}</td>
       <td class="normal" (dblclick)="onEditField(user, 'lastVoiceChannelName', 'Last voice channel name')">{{user.lastVoiceChannelName}}</td>
       <td class="normal" (dblclick)="onEditField(user, 'lastVoiceChannelAccessDate', 'Last voice channel access date')">
           <span *ngIf="user.lastVoiceChannelAccessDate">
