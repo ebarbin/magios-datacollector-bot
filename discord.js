@@ -782,6 +782,10 @@ sendServerStatus = (server) => {
         if (server.atis != null) {
             embed.addFields({ name: 'ATIS', value: server.atis ? 'Si': 'No', inline: true })
         }
+        if (server.owner != null) {
+            const owner = await datasource.getUser(server.owner);
+            embed.addFields({ name: 'Dueño', value: owner.username, inline: true })
+        }
 
         await SERVER_STATUS_CHANNEL.send(embed);
         console.log(TAG + ' - Server ' + server.id + ' status was reported to discord as ' + (server.status ? 'ONLINE.' : 'OFFLINE.'));

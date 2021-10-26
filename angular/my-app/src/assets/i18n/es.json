@@ -74,5 +74,6 @@
     "crash":"Destrucción propia",
     "connect":"Conexión",
     "relinquished":"Desconexión",
-    "Target":"Objetivo"
+    "Target":"Objetivo",
+    "Owner":"Dueño"
 }

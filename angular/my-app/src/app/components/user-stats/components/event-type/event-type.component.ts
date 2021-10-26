@@ -23,7 +23,7 @@ export class EventTypeComponent implements OnInit {
     } else if (this.event.type == 'relinquished') {
       this.icon = faSignOutAlt;
     } else if (this.event.type == 'shot') {
-      this.icon = faBahai;
+      this.icon = faCrosshairs;
     } else if (this.event.type == 'kill') {
       this.icon = faSkullCrossbones;
     } else if (this.event.type == 'dead') {
@@ -31,7 +31,7 @@ export class EventTypeComponent implements OnInit {
     } else if (this.event.type == 'crash') {
       this.icon = faPlaneSlash;
     } else if (this.event.type == 'hit') {
-      this.icon = faCrosshairs;
+      this.icon = faBahai;
     }
     
   }

@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 import { UpdateServerDataAction } from 'src/app/actions/server-data.actions';
 
 @Component({
@@ -10,6 +12,10 @@ import { UpdateServerDataAction } from 'src/app/actions/server-data.actions';
 })
 export class ServerFormComponent implements OnInit {
 
+  myControl = new FormControl();
+  filteredOptions$: Observable<any[]> | undefined;
+
+  @Input() users: any;
   @Input() server: any;
   @Input() terrains: any;
 
@@ -30,12 +36,44 @@ export class ServerFormComponent implements OnInit {
       others: [''],
       srs: [false],
       atis: [false],
+      owner: ['', [Validators.required, this.customValidation]]
     });
 
-    this.form.patchValue(this.server);
+    const sv = {...this.server};
+    const user = this.users.find((u:any) => u.id == sv.owner);
+    sv.owner = user;
+    this.myControl.setValue(user ? user.username : "");
+    
+    this.form.patchValue(sv);
+
+    this.filteredOptions$ = this.form.controls.owner.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value))
+    );
+  }
+
+  customValidation(control: AbstractControl) {
+    if (typeof control.value === 'object') return null;
+    else return { invalidSelection: true }
+  }
+  displayFn(user: any){
+    if (user != null) return user.username;
+    else return "";
+  }
+  
+  private _filter(value: any): any[] {
+    let filterValue = "";
+    if (typeof value === 'object'){
+      filterValue = value.username.toLowerCase();
+    } else {
+      filterValue = value.toLowerCase();
+    }
+    return this.users.filter((u: any) => u.username.toLowerCase().includes(filterValue));
   }
 
   onSave() {
+    const req = this.form.value;
+    req.owner = req.owner.id;
     this.store.dispatch(new UpdateServerDataAction({ values: this.form.value }))
   }
 

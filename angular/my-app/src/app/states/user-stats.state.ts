@@ -9,6 +9,8 @@ import { patch, updateItem } from "@ngxs/store/operators";
 import { includes } from 'lodash';
 import { UserService } from "../services/user.service";
 import { Navigate } from "@ngxs/router-plugin";
+import { CoreState } from "./core.state";
+import { MessageType, ShowMessageAction } from "../actions/core.action";
 
 export interface UserStatsStateModel {
   userFilter: string,
@@ -96,16 +98,22 @@ const CORE_STATE_TOKEN = new StateToken<UserStatsStateModel>('userStats');
     @Action(ApplyChangeUserStatsAction)
     applyChangeUserStatsAction(ctx: StateContext<UserStatsStateModel>, action: ApplyChangeUserStatsAction) {
 
+      const myUser = this.store.selectSnapshot(CoreState.getUser);
       const { user } = action.payload;
-      this.blockUI.start();
-      return this.userStatsService.updateUser(user).pipe(
-        tap(() => {
-          ctx.setState(
-            patch({ users: updateItem<any>(item => item.id === user.id, user) })
-          );
-        }),
-        finalize(() => this.blockUI.stop() )
-      )
+
+      if (this.allowOperation(myUser)) {
+        this.blockUI.start();
+        return this.userStatsService.updateUser(user).pipe(
+          tap(() => {
+            ctx.setState(
+              patch({ users: updateItem<any>(item => item.id === user.id, user) })
+            );
+          }),
+          finalize(() => this.blockUI.stop() )
+        )
+      } else {
+        return this.store.dispatch([ new ShowMessageAction({msg: 'You are not allow', title: 'Permission', type: MessageType.ERROR}) ]);
+      }
     }
 
     @Action(InitUserStatsAction)
@@ -159,6 +167,10 @@ const CORE_STATE_TOKEN = new StateToken<UserStatsStateModel>('userStats');
         });
 
         ctx.patchState({ users: results, userFilter: userFilter, rolesFilter: rolesFilter});
+    }
+
+    private allowOperation(myUser: any) {
+      return myUser.roles.find((r:string)=> r == 'Admins');
     }
 
     @Selector()

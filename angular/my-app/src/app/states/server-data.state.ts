@@ -2,20 +2,24 @@ import { Injectable } from "@angular/core";
 import { Action, Selector, State, StateContext, StateToken } from "@ngxs/store";
 import { patch, updateItem } from "@ngxs/store/operators";
 import { BlockUI, NgBlockUI } from "ng-block-ui";
+import { zip } from "rxjs";
 import { finalize, switchMap, tap } from "rxjs/operators";
 import { MessageType, ShowMessageAction } from "../actions/core.action";
 import { InitServerDataAction, UpdateServerDataAction } from "../actions/server-data.actions";
 import { ModulesService } from "../services/modules.service";
 import { ServerDataService } from "../services/server-data.services";
+import { UserService } from "../services/user.service";
 
 export interface ServerDataStateModel {
     servers: any,
-    terrains: any
+    terrains: any,
+    users: any
 }
       
 const initialState: ServerDataStateModel = { 
     servers: [],
-    terrains: []
+    terrains: [],
+    users: []
 };
 
 const CORE_STATE_TOKEN = new StateToken<ServerDataStateModel>('serverdata');
@@ -28,23 +32,22 @@ const CORE_STATE_TOKEN = new StateToken<ServerDataStateModel>('serverdata');
 
     @BlockUI() blockUI!: NgBlockUI;
 
-    constructor(private serverDataService: ServerDataService, private modulesService: ModulesService) {}
+    constructor(private serverDataService: ServerDataService, private modulesService: ModulesService, private userService: UserService) {}
 
     @Action(InitServerDataAction)
     initServerDataAction(ctx: StateContext<ServerDataStateModel>) {
         this.blockUI.start();
         
-        return this.serverDataService.getServers().pipe(
-            tap(servers => {
-                ctx.patchState({ servers })
-            }),
-            switchMap(() => {
-                return this.modulesService.getModules().pipe(
-                    tap((modules:any) => ctx.patchState({ terrains: modules.terrains }))
-                )
-            }),
-            finalize(() => this.blockUI.stop() )
-        )
+        return zip(
+            this.userService.getAllUsers(),
+            this.serverDataService.getServers(),
+            this.modulesService.getModules()
+            ).pipe(
+                tap(responses => {
+                    return ctx.patchState({ users: responses[0], servers: responses[1], terrains: responses[2].terrains })
+                }),
+                finalize(() => this.blockUI.stop() )
+            )
     }
 
     @Action(UpdateServerDataAction)
@@ -71,5 +74,10 @@ const CORE_STATE_TOKEN = new StateToken<ServerDataStateModel>('serverdata');
     @Selector()
     static getTerrains(state: ServerDataStateModel) {
       return state.terrains;
+    }
+
+    @Selector()
+    static getUsers(state: ServerDataStateModel) {
+      return state.users;
     }
   }

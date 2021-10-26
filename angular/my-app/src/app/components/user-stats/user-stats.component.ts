@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { InitUserStatsAction } from 'src/app/actions/user-stats.action';
-import { CoreState } from 'src/app/states/core.state';
 import { UserStatsState } from 'src/app/states/user-stats.state';
 
 @Component({

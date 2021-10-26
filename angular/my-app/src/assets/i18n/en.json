@@ -74,5 +74,6 @@
     "crash":"Crash",
     "connect":"Connect",
     "relinquished":"Relinquished",
-    "Target":"Target"
+    "Target":"Target",
+    "Owner":"Owner"
 }

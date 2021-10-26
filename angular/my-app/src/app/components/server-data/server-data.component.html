@@ -1,6 +1,6 @@
 <div class="container" *ngIf="getServers$ | async as servers">
 
-    <app-server-form *ngFor="let server of servers" [server]="server" [terrains]="getTerrains$ | async"></app-server-form>
+    <app-server-form *ngFor="let server of servers" [server]="server" [terrains]="getTerrains$ | async" [users]="getUsers$ | async"></app-server-form>
 
 
 </div>

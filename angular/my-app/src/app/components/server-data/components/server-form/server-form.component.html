@@ -4,6 +4,19 @@
         <mat-card-title>{{'Server'| translate }} {{server.id}}</mat-card-title>
 
         <mat-form-field class="field-full-width">
+            <mat-label>{{'Owner' | translate}}</mat-label>
+            <input type="text"
+                    formControlName="owner"
+                    placeholder="{{'Select user' | translate}}" matInput
+                    [matAutocomplete]="auto">
+            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn">
+            <mat-option *ngFor="let user of filteredOptions$ | async" [value]="user">
+                {{user.username}}
+            </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field class="field-full-width">
             <mat-label>{{'Name' | translate}}</mat-label>
             <input matInput placeholder="{{'Name' | translate}}" formControlName="name">
         </mat-form-field>

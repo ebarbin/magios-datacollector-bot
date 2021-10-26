@@ -26,12 +26,10 @@ export class UserServerEventTabsComponent implements OnInit, OnDestroy {
   constructor(private store: Store) { }
 
   ngOnInit(): void {
-
     this.store.dispatch([new InitServerDataAction()]);
   }
 
-  ngOnDestroy() {
-  }
+  ngOnDestroy() {}
 
   onBack() {
     this.store.dispatch(new Navigate(['user-stats']))
