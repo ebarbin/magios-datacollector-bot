@@ -67,12 +67,22 @@ const CORE_STATE_TOKEN = new StateToken<UserStatsStateModel>('userStats');
                   case 'lastVoiceChannelAccessDate': return this.compare(a.lastVoiceChannelAccessDate, b.lastVoiceChannelAccessDate, isAsc);
                   case 'joinVoiceChannelCount': return this.compare(a.joinVoiceChannelCount, b.joinVoiceChannelCount, isAsc);
                   case 'voiceChannelTotalTime': return this.compare(a.voiceChannelTotalTime, b.voiceChannelTotalTime, isAsc);
+                  
+                  case 'events': return this.compareEvents(a.events, b.events, isAsc);
+
                   default: return 0;
                 }
               });
         }
         ctx.patchState({users: sortedData});
     }
+
+    private compareEvents(a: string[], b: string[], isAsc: boolean) {
+      if ((a == null || a.length == 0) && (b == null || b.length == 0)) return 0;
+      else if (a == null || a.length == 0) return -1 * (isAsc ? 1 : -1);
+      else if (b == null || b.length == 0) return 1 * (isAsc ? 1 : -1);
+      else return 0;
+    }    
 
     private compareRoles(a: string[], b: string[], isAsc: boolean) {
       if ((a == null || a.length == 0) && (b == null || b.length == 0)) return 0;
