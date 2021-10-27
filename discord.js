@@ -681,7 +681,7 @@ notifyUsernameChangeOnGeneral = (member, user) => {
         const adminsRol = GUILD.roles.cache.find(r => r.name == 'Admins');
         const newJoinerRol = GUILD.roles.cache.find(r => r.name == 'NewJoiner');
         const magiosRol = GUILD.roles.cache.find(r => r.name == 'Magios');
-        await GENERAL_CHANNEL.send('Atención ' + `${adminsRol} ${newJoinerRol} ${magiosRol}` + ' el usuario anteriormente conocido como ' + _.camelCase(user.username) + ' ahora es ' + `${member}` + '.');
+        await GENERAL_CHANNEL.send('Atención ' + `${adminsRol} ${newJoinerRol} ${magiosRol}` + ' el usuario anteriormente conocido como "' + _.camelCase(user.username) + '" ahora es ' + `${member}` + '.');
         resolve();
     })
 }
@@ -694,7 +694,11 @@ notifyNewUserOnWelcome = (user) => {
         const members = await GUILD.members.fetch();
         const newMember = members.find(m => m.user.id == user.id);
         await WELCOME_CHANNEL.send('Atención ' + `${adminsRol} ${newJoinerRol} ${magiosRol}` + ' se ha unido al grupo ' + `${newMember}` + '.');
-        await WELCOME_CHANNEL.send('Es de ' + user.country + ' y tiene estos módulos: ' + user.modules.join(', ') + '.');
+        if (user.modules.lenght == 0) {
+            await WELCOME_CHANNEL.send('Es de ' + user.country + '.');
+        } else {
+            await WELCOME_CHANNEL.send('Es de ' + user.country + ' y tiene estos módulos: ' + user.modules.join(', ') + '.');
+        }
         resolve();
     })
 }

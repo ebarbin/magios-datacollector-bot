@@ -264,12 +264,14 @@ app.post('/api/server-alive/:serverId', async (req, res) => {
 
 app.post('/api/user/event/:serverId', async (req, res) => {
 
+    const serverId = parseInt(req.params.serverId);
+
     const username = req.body.username.toLowerCase();
     const eventType = req.body.event;
-    const serverId = parseInt(req.params.serverId);
     const date = req.body.date;
     const weapon = req.body.weapon;
     const target = req.body.target;
+    const place = req.body.place;
     const user = await datasource.findUserByUsername(username);
 
     if (!user) {
@@ -298,12 +300,14 @@ app.post('/api/user/event/:serverId', async (req, res) => {
             
             } else  if (eventType == 'takeoff') { 
 
+                event.place = place;
                 userStat.takeoff++;
                 await discordModule.sendMessageToReportChannel('The user "' + username + '" logged the event: "' + eventType + '" at Server ' + serverId + '. (' + date + ')');
                 console.log(TAG + 'The user "' + username + '" logged the event: "' + eventType + '" at Server ' + serverId + '. (' + date + ')');
 
             } else if (eventType == 'land') { 
 
+                event.place = place;
                 userStat.land++;
                 await discordModule.sendMessageToReportChannel('The user "' + username + '" logged the event: "' + eventType + '" at Server ' + serverId + '. (' + date + ')');
                 console.log(TAG + 'The user "' + username + '" logged the event: "' + eventType + '" at Server ' + serverId + '. (' + date + ')');
