@@ -43,11 +43,24 @@ client.login(process.env.DISCORD_BOT_TOKEN);
 
         console.log(TAG + ' - Discord bot is connected.')
 
-        await checkNewUserAndCreate();
-        await checkLeftUsersAndRemove();
+        //await checkNewUserAndCreate();
+        //await checkLeftUsersAndRemove();
     });
 
 if (common.ENABLE_DISCORD_EVENTS) {
+
+    client.on('guildMemberUpdate', async (oldMember, newMember) => {
+
+        const user = await datasource.getUser(newMember.user.id);
+        const roles = getUserRoles(newMember);
+
+        if (oldMember.displayName != newMember.displayName) await notifyUsernameChangeOnGeneral(oldMember, newMember);
+
+        user.username = newMember.displayName.toLowerCase();
+        user.roles = roles;
+
+        await datasource.updateUser(user);
+    });
 
     client.on('guildMemberRemove', async member => {
         const user = member.user;
@@ -662,7 +675,7 @@ checkNewUserAndCreate = () => {
                         await sendMessageToReportChannel('The user "' + newUser.username + '" was created.');
                     } else {
                         
-                        if (dbUser.username != member.displayName.toLowerCase()) await notifyUsernameChangeOnGeneral(member, dbUser);
+                       // if (dbUser.username != member.displayName.toLowerCase()) await notifyUsernameChangeOnGeneral(member, dbUser);
                              
                         dbUser.username = member.displayName.toLowerCase();
                         dbUser.roles = roles;
@@ -676,12 +689,12 @@ checkNewUserAndCreate = () => {
     })
 }
 
-notifyUsernameChangeOnGeneral = (member, user) => {
+notifyUsernameChangeOnGeneral = (oldMember, newMember) => {
     return new Promise(async (resolve, reject) => {
         const adminsRol = GUILD.roles.cache.find(r => r.name == 'Admins');
         const newJoinerRol = GUILD.roles.cache.find(r => r.name == 'NewJoiner');
         const magiosRol = GUILD.roles.cache.find(r => r.name == 'Magios');
-        await GENERAL_CHANNEL.send('Atención ' + `${adminsRol} ${newJoinerRol} ${magiosRol}` + ' el usuario anteriormente conocido como "' + _.camelCase(user.username) + '" ahora es ' + `${member}` + '.');
+        await GENERAL_CHANNEL.send('Atención ' + `${adminsRol} ${newJoinerRol} ${magiosRol}` + ' el usuario "' + _.camelCase(oldMember.displayName) + '" a cambiado su nombre por ' + `${newMember}` + '.');
         resolve();
     })
 }
@@ -847,8 +860,6 @@ exports.sendMessageToGeneralChannel = sendMessageToGeneralChannel;
 exports.cleanOldEvents = cleanOldEvents;
 exports.sendServerStatus = sendServerStatus;
 exports.cleanServerStatus = cleanServerStatus;
-exports.checkNewUserAndCreate = checkNewUserAndCreate;
-exports.checkLeftUsersAndRemove = checkLeftUsersAndRemove;
 exports.notifyOwner = notifyOwner;
 exports.registerUser = registerUser;
 exports.notifyLimboOrNonRoleUser = notifyLimboOrNonRoleUser;
