@@ -693,7 +693,7 @@ notifyUsernameChangeOnGeneral = (oldMember, newMember) => {
         const adminsRol = GUILD.roles.cache.find(r => r.name == 'Admins');
         const newJoinerRol = GUILD.roles.cache.find(r => r.name == 'NewJoiner');
         const magiosRol = GUILD.roles.cache.find(r => r.name == 'Magios');
-        await GENERAL_CHANNEL.send('Atención ' + `${adminsRol} ${newJoinerRol} ${magiosRol}` + ' el usuario "' + _.camelCase(oldMember.displayName) + '" a cambiado su nombre por ' + `${newMember}` + '.');
+        await GENERAL_CHANNEL.send('Atención ' + `${adminsRol} ${newJoinerRol} ${magiosRol}` + ' el usuario "' + oldMember.displayName + '" a cambiado su nombre por ' + `${newMember}` + '.');
         resolve();
     })
 }
