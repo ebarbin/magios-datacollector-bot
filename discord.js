@@ -63,12 +63,11 @@ if (common.ENABLE_DISCORD_EVENTS) {
     });
 
     client.on('guildMemberRemove', async member => {
-        const user = member.user;
-        if (!user.bot) {
-            let dataBaseUser = await datasource.getUser(user.id);
-            if (dataBaseUser) {
-                await datasource.removeUser(dataBaseUser);
-                await sendMessageToReportChannel('The user "' + dataBaseUser.username + '" left the group.');
+        if (!member.user.bot) {
+            let user = await datasource.getUser(member.user.id);
+            if (user) {
+                await datasource.removeUser(user);
+                await notifyUserLeftGroupOnGeneral(member);
             }
         }
     });
@@ -695,6 +694,16 @@ notifyUsernameChangeOnGeneral = (oldMember, newMember) => {
         const newJoinerRol = GUILD.roles.cache.find(r => r.name == 'NewJoiner');
         const magiosRol = GUILD.roles.cache.find(r => r.name == 'Magios');
         await GENERAL_CHANNEL.send('Atención ' + `${adminsRol} ${newJoinerRol} ${magiosRol}` + ' el usuario "' + _.camelCase(oldMember.displayName) + '" a cambiado su nombre por ' + `${newMember}` + '.');
+        resolve();
+    })
+}
+
+notifyUserLeftGroupOnGeneral = (member) => {
+    return new Promise(async (resolve, reject) => {
+        const adminsRol = GUILD.roles.cache.find(r => r.name == 'Admins');
+        const newJoinerRol = GUILD.roles.cache.find(r => r.name == 'NewJoiner');
+        const magiosRol = GUILD.roles.cache.find(r => r.name == 'Magios');
+        await GENERAL_CHANNEL.send('Atención ' + `${adminsRol} ${newJoinerRol} ${magiosRol}` + ' el usuario "' + `${member}` + '" a abandonado el grupo.');
         resolve();
     })
 }
