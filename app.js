@@ -334,7 +334,6 @@ app.post('/api/user/event/:serverId', async (req, res) => {
                 await discordModule.sendMessageToReportChannel('The user "' + username + '" logged the event: "' + eventType + '", weapon:"' + weapon + '", target: "'+ target +'" at Server ' + serverId + '. (' + date + ')');
                 console.log(TAG + 'The user "' + username + '" logged the event: "' + eventType + '", weapon:"' + weapon + '", target: "'+ target +'" at Server ' + serverId + '. (' + date + ')');
 
-
             } else if (eventType == 'shot') { 
 
                 event.weapon = weapon;
@@ -343,7 +342,7 @@ app.post('/api/user/event/:serverId', async (req, res) => {
                 await discordModule.sendMessageToReportChannel('The user "' + username + '" logged the event: "' + eventType + '", weapon:"' + weapon + '" at Server ' + serverId + '. (' + date + ')');
                 console.log(TAG + 'The user "' + username + '" logged the event: "' + eventType + '", weapon:"' + weapon + '" at Server ' + serverId + '. (' + date + ')');
 
-            } else if (eventType == 'dead') {
+            } else if (eventType == 'pilot dead') {
 
                 userStat.dead++; 
                 await discordModule.sendMessageToReportChannel('The user "' + username + '" logged the event: "' + eventType + '" at Server ' + serverId + '. (' + date + ')');
@@ -351,11 +350,35 @@ app.post('/api/user/event/:serverId', async (req, res) => {
 
             } else if (eventType == 'relinquished') {
 
-                userStat.dead++; 
                 await discordModule.sendMessageToReportChannel('The user "' + username + '" logged the event: "' + eventType + '" at Server ' + serverId + '. (' + date + ')');
                 console.log(TAG + 'The user "' + username + '" logged the event: "' + eventType + '" at Server ' + serverId + '. (' + date + ')');
 
-            }
+            } else if (eventType == 'eject') {
+
+                await discordModule.sendMessageToReportChannel('The user "' + username + '" logged the event: "' + eventType + '" at Server ' + serverId + '. (' + date + ')');
+                console.log(TAG + 'The user "' + username + '" logged the event: "' + eventType + '" at Server ' + serverId + '. (' + date + ')');
+
+            } else if (eventType == 'refuel stop') {
+
+                await discordModule.sendMessageToReportChannel('The user "' + username + '" logged the event: "' + eventType + '" at Server ' + serverId + '. (' + date + ')');
+                console.log(TAG + 'The user "' + username + '" logged the event: "' + eventType + '" at Server ' + serverId + '. (' + date + ')');
+
+            } else if (eventType == 'enemy-hit') {
+
+                event.weapon = weapon;
+                event.target = target;
+
+                await discordModule.sendMessageToReportChannel('The user "' + username + '" logged the event: "' + eventType + '" at Server ' + serverId + '. (' + date + ')');
+                console.log(TAG + 'The user "' + username + '" logged the event: "' + eventType + '" at Server ' + serverId + '. (' + date + ')');
+
+            } else if (eventType == 'enemy-kill') {
+
+                event.weapon = weapon;
+                event.target = target;
+
+                await discordModule.sendMessageToReportChannel('The user "' + username + '" logged the event: "' + eventType + '" at Server ' + serverId + '. (' + date + ')');
+                console.log(TAG + 'The user "' + username + '" logged the event: "' + eventType + '" at Server ' + serverId + '. (' + date + ')');
+            } 
     
             await datasource.updateUser(user);
         }
