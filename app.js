@@ -253,6 +253,10 @@ app.get('/error401', async (req, res) => {
     res.sendFile(__dirname + '/angular/my-app/dist/my-app/index.html');
 });
 
+app.get('/user-server-event-tabs', async (req, res) => {
+    res.sendFile(__dirname + '/angular/my-app/dist/my-app/index.html');
+});
+
 app.get('/new-users-guide.pdf', function(req, res){
     const file = `${__dirname}/new-users-guide.pdf`;
     res.download(file);
