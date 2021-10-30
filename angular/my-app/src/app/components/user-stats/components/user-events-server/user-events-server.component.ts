@@ -24,7 +24,7 @@ export class UserEventsServerComponent implements OnInit {
     if (this.user) {
       let events = this.user.events.filter((e:any) => e.serverId == this.server.id);
       events = events.map((e:any) => {
-        return { type: e.type, weapon: e.weapon, target: e.target, date: moment(e.date, 'YYYY-MM-DD HH:mm:ss.SSS'), key: moment(e.date, 'YYYY-MM-DD HH:mm:ss.SSS').format('DDMMYYYY') };
+        return { type: e.type, weapon: e.weapon, target: e.target, place: e.place, date: moment(e.date, 'YYYY-MM-DD HH:mm:ss.SSS'), key: moment(e.date, 'YYYY-MM-DD HH:mm:ss.SSS').format('DDMMYYYY') };
       });
       let aux = groupBy(events, 'key');
       let aux2 = [];
