@@ -15,27 +15,27 @@ th.terrains, td.terrains {
     white-space: nowrap;
     text-align: center;
     border: 1px solid #000000;
-    background-color:rgba(0, 174, 255, 0.775);
+    background-color:#37b1eac6;
 }
 th.jets, td.jets {
     text-align: center;
     border: 1px solid #000000;
-    background-color:rgba(255, 0, 247, 0.816);
+    background-color:#ca7dc8d0;
 }
 th.warbirds, td.warbirds {
     text-align: center;
     border: 1px solid #000000;
-    background-color:rgba(255, 145, 0, 0.809);
+    background-color:#c99653ce;
 }
 th.helis, td.helis {
     text-align: center;
     border: 1px solid #000000;
-    background-color:rgba(150, 150, 150, 0.789);
+    background-color:#cc5c5cc9;
 }
 th.others, td.others {
     text-align: center;
     border: 1px solid #000000;
-    background-color:rgba(255, 217, 0, 0.755);
+    background-color:#d4c156c1;
 }
 td.terrains, td.jets, td.warbirds, td.helis, td.others {
     cursor:pointer;
