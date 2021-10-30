@@ -145,7 +145,7 @@ export class CoreState {
 
     @Selector([CoreState.getUser])
     static isNewUser(user: any) {
-      return true;//user != null && (user.roles == null || user.roles.length == 0 || includes(user.roles, 'Limbo'));
+      return user != null && (user.roles == null || user.roles.length == 0 || includes(user.roles, 'Limbo'));
     }
 
     @Selector([CoreState.isNewUser])
