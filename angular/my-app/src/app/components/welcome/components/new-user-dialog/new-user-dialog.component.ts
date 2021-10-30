@@ -4,6 +4,7 @@ import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { CoreState } from 'src/app/states/core.state';
 import { faBars, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { DownloadNewUserGuideAction } from 'src/app/actions/core.action';
 
 @Component({
   selector: 'app-new-user-dialog',
@@ -19,7 +20,7 @@ export class NewUserDialogComponent implements OnInit {
 
   currentPage = 1;
 
-  constructor(private dialogRef: MatDialogRef<NewUserDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: any) { }
+  constructor(private store: Store, private dialogRef: MatDialogRef<NewUserDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit(): void {}
 
@@ -33,5 +34,9 @@ export class NewUserDialogComponent implements OnInit {
 
   onNext() {
     this.currentPage++;
+  }
+
+  onDownloadNewUserGuide() {
+    this.store.dispatch(new DownloadNewUserGuideAction());
   }
 }

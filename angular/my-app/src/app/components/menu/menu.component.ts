@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
-import { LogoutAction, RedirectToDiscordGeneralChannelAction, RedirectToDiscordLoginAction } from 'src/app/actions/core.action';
+import { DownloadNewUserGuideAction, LogoutAction, RedirectToDiscordGeneralChannelAction, RedirectToDiscordLoginAction } from 'src/app/actions/core.action';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { CoreState } from 'src/app/states/core.state';
 import { Observable } from 'rxjs';
@@ -41,6 +41,12 @@ export class MenuComponent implements OnInit {
   onDiscord(){
     this.store.dispatch([
       new RedirectToDiscordGeneralChannelAction()
+    ]);
+  }
+
+  onDownloadUserGuide() {
+    this.store.dispatch([
+      new DownloadNewUserGuideAction()
     ]);
   }
 }

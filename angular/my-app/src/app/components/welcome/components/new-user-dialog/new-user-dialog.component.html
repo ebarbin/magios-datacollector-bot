@@ -10,6 +10,7 @@
             <li>Los días miércoles: Charlas/Entrenamientos.</li>
             <li>Los días sábados: Misiones "oficiales".</li>
         </ul>
+        <p>Descarga y lee con atención la guía de nuevos usuarios haciendo click <a (click)="onDownloadNewUserGuide()">aquí</a>.</p>
     </ng-container>
     <ng-container *ngIf="currentPage == 2">
         <h3>¿Qué esperar de Los Magios?</h3>
@@ -44,7 +45,7 @@
 
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-    <button mat-button color="warn" (click)="onBack()" [disabled]="currentPage == 1">{{'Back' | translate }}</button>
-    <button mat-button color="primary" cdkFocusInitial (click)="onNext()" *ngIf="currentPage < 4">{{'Next' | translate}}</button>
-    <button mat-button color="primary" cdkFocusInitial (click)="onClose()" *ngIf="currentPage == 4">{{'Close' | translate}}</button>
+    <button mat-raised-button color="warn" (click)="onBack()" [disabled]="currentPage == 1">{{'Back' | translate }}</button>
+    <button mat-raised-button color="primary" cdkFocusInitial (click)="onNext()" *ngIf="currentPage < 4">{{'Next' | translate}}</button>
+    <button mat-raised-button color="primary" cdkFocusInitial (click)="onClose()" *ngIf="currentPage == 4">{{'Close' | translate}}</button>
 </mat-dialog-actions>

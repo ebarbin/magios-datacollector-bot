@@ -23,6 +23,10 @@ export class RedirectToDiscordGeneralChannelAction {
     static readonly type = '[Core] Redirect to Los Magios discord general channel';
 }
 
+export class DownloadNewUserGuideAction {
+    static readonly type = '[Core] Download new user guide';
+}
+
 export class RedirectToDiscordWelcomeChannelAction {
     static readonly type = '[Core] Redirect to Los Magios discord welcome channel';
 }

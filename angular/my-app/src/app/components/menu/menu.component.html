@@ -8,8 +8,7 @@
     <mat-divider></mat-divider>
     <mat-divider></mat-divider>
     <mat-divider></mat-divider>
-    <mat-divider></mat-divider>
-    <mat-divider></mat-divider>
+    <a mat-list-item (click)="onDownloadUserGuide()">{{ 'New users guide' | translate }}</a>
     <a mat-list-item *ngIf="isNonNewUser$ | async" (click)="onDiscord()">{{ 'Discord' | translate }}&nbsp;<img width="20" src="/assets/images/discord.png"> </a>
     <a mat-list-item (click)="onLogout()">{{ 'Logout' | translate }}&nbsp;<fa-icon [icon]="faSignOutAlt"></fa-icon> </a>
 </mat-nav-list>

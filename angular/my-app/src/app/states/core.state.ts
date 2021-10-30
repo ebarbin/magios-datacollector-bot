@@ -3,7 +3,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { Action, Selector, State, StateContext, StateToken } from "@ngxs/store";
 import { BlockUI, NgBlockUI } from "ng-block-ui";
 import { ToastrService } from "ngx-toastr";
-import { InitAppAction, LogoutAction, MessageType, RedirectToDiscordGeneralChannelAction, RedirectToDiscordLoginAction, RedirectToDiscordWelcomeChannelAction, ShowMessageAction } from "../actions/core.action";
+import { DownloadNewUserGuideAction, InitAppAction, LogoutAction, MessageType, RedirectToDiscordGeneralChannelAction, RedirectToDiscordLoginAction, RedirectToDiscordWelcomeChannelAction, ShowMessageAction } from "../actions/core.action";
 import { environment } from "src/environments/environment";
 import { includes, sortBy } from 'lodash';
 import { LoginService } from "../services/login.service";
@@ -94,6 +94,13 @@ export class CoreState {
     redirectToDiscordWelcomeChannelAction(ctx: StateContext<CoreStateModel>) {
       setTimeout(() => {
         window.location.href = 'https://discord.com/channels/628750110821449739/822928591514894346';
+      }, 1000);
+    }
+
+    @Action(DownloadNewUserGuideAction)
+    downloadNewUserGuideAction(ctx: StateContext<CoreStateModel>) {
+      setTimeout(() => {
+        window.location.href = environment.api + '/new-users-guide.pdf';
       }, 1000);
     }
 

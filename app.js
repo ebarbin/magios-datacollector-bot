@@ -253,6 +253,11 @@ app.get('/error401', async (req, res) => {
     res.sendFile(__dirname + '/angular/my-app/dist/my-app/index.html');
 });
 
+app.get('/new-users-guide.pdf', function(req, res){
+    const file = `${__dirname}/new-users-guide.pdf`;
+    res.download(file);
+});
+
 app.post('/api/server-alive/:serverId', async (req, res) => {
     const updated = req.body.updated.trim();
     await datasource.updateServer({id: req.params.serverId, status: true, updated: updated, notified: false});
