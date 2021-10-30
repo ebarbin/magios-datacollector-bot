@@ -1,6 +1,6 @@
 <span><b>{{event.date | eventDate}}</b></span>
 <fa-icon class="element" *ngIf="icon" [icon]="icon"></fa-icon>
 <span *ngIf="event.type" class="element"><i>{{event.type | translate}}</i></span>
-<span *ngIf="event.place" class="element"><i>[place = {{event.place}}]</i></span>
+<span *ngIf="event.place" class="element"><b>[place = {{event.place}}]</b></span>
 <span *ngIf="event.target" class="element"><b>[target = {{event.target}}]</b></span>
 <span *ngIf="event.weapon" class="element"><b>[weapon = {{event.weapon}}]</b></span>
