@@ -32,8 +32,6 @@ export class UserEventsServerComponent implements OnInit {
         aux2.push({dateStr: prop, date: moment(prop, 'DDMMYYYY'), events: aux[prop]});
       }
       this.groupEvents = orderBy(aux2, [(e => e.date.toDate() )], ['desc']);
-    } else {
-      this.store.dispatch(new Navigate(['user-stats']));
     }
 
   }
