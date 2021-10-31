@@ -257,6 +257,10 @@ app.get('/user-server-event-tabs', async (req, res) => {
     res.sendFile(__dirname + '/angular/my-app/dist/my-app/index.html');
 });
 
+app.get('/server-events', async (req, res) => {
+    res.sendFile(__dirname + '/angular/my-app/dist/my-app/index.html');
+});
+
 app.get('/new-users-guide.pdf', function(req, res){
     const file = `${__dirname}/new-users-guide.pdf`;
     res.download(file);
@@ -268,8 +272,6 @@ app.post('/api/server-alive/:serverId', async (req, res) => {
     console.log(TAG + ' - Server ' + req.params.serverId + ' status was updated as ONLINE.');
     res.status(200).send();
 });
-
-
 
 app.post('/api/user/event/:serverId', async (req, res) => {
 
