@@ -7,7 +7,7 @@
         <mat-panel-title> {{ item.dateStr | headerEventDate }} </mat-panel-title>
       </mat-expansion-panel-header>
       <mat-list role="list">
-        <mat-list-item  *ngFor="let event of item.events" role="listitem">
+        <mat-list-item  *ngFor="let event of item.events | orderBy: 'date'" role="listitem">
           <app-event-type [event]="event"></app-event-type>
         </mat-list-item>
       </mat-list>

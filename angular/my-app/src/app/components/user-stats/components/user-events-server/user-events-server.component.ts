@@ -2,7 +2,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import * as moment from 'moment';
 import { groupBy, orderBy } from 'lodash';
 import { Store } from '@ngxs/store';
-import { Navigate } from '@ngxs/router-plugin';
 
 
 @Component({

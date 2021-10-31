@@ -33,6 +33,7 @@ import { GlobalHttpInterceptor } from './interceptors/global-http.interceptor';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatStepperModule } from '@angular/material/stepper';
+import { OrderModule } from 'ngx-order-pipe';
 
 export const MOMENTJS_DATE_FORMAT = {
   parse: {
@@ -77,6 +78,7 @@ export const MOMENTJS_DATE_FORMAT = {
         MatInputModule,
         MatSortModule,
         MatTabsModule,
+        OrderModule,
         MatStepperModule,
         MatAutocompleteModule,
         BlockUIModule.forRoot(),
@@ -110,6 +112,7 @@ export const MOMENTJS_DATE_FORMAT = {
         MatDividerModule,
         MatBadgeModule,
         MatTabsModule,
+        OrderModule,
         MatSelectModule,
         MatDatepickerModule,
         MatAutocompleteModule,
