@@ -4,6 +4,10 @@ export class InitUserStatsAction {
     static readonly type = '[User stats] Init';
 }
 
+export class InitServerEventsAction {
+    static readonly type = '[User stats] Init server events';
+}
+
 export class ClearFiltersUserStatsAction {
     static readonly type = '[User stats] Clear filters';
 }

@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { faPlaneDeparture, faPlaneArrival, faSignInAlt, faSignOutAlt, faBahai, faSkullCrossbones, faDizzy, faPlaneSlash, faCrosshairs } from '@fortawesome/free-solid-svg-icons';
+import { faPlaneDeparture, faPlaneArrival, faSignInAlt, faSignOutAlt, faBahai, faSkullCrossbones, faDizzy, faPlaneSlash, 
+  faCrosshairs, faParachuteBox, faGasPump } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-event-type',
@@ -26,12 +27,18 @@ export class EventTypeComponent implements OnInit {
       this.icon = faCrosshairs;
     } else if (this.event.type == 'kill') {
       this.icon = faSkullCrossbones;
+    } else if (this.event.type == 'pilot dead') {
+      this.icon = faDizzy;
     } else if (this.event.type == 'dead') {
       this.icon = faDizzy;
     } else if (this.event.type == 'crash') {
       this.icon = faPlaneSlash;
     } else if (this.event.type == 'hit') {
       this.icon = faBahai;
+    } else if (this.event.type == 'eject') {
+      this.icon = faParachuteBox;
+    } else if (this.event.type == 'refuel stop') {
+      this.icon = faGasPump;
     }
     
   }

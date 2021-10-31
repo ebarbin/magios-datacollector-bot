@@ -1,10 +1,10 @@
-<div class="container" *ngIf="getUser$ | async as user">
+<div class="container" *ngIf="getEvents$ | async as data">
     <div class="user-header">
-      <img *ngIf="user?.avatar" class="rounded-circle" width="30" src="https://cdn.discordapp.com/avatars/{{user?.id}}/{{user?.avatar}}">&nbsp;<b>{{user?.username}}</b>
+      <img *ngIf="data?.user?.avatar" class="rounded-circle" width="30" src="https://cdn.discordapp.com/avatars/{{data?.user.id}}/{{data?.user?.avatar}}">&nbsp;<b>{{data?.user?.username}}</b>
     </div>
     <mat-tab-group backgroundColor="primary">
         <mat-tab *ngFor="let server of getServers$ | async" label="Server {{server.id}}">
-          <app-user-events-server [server]="server" [user]="user"></app-user-events-server>
+          <app-user-events-server [server]="server" [events]="data.events"></app-user-events-server>
         </mat-tab>
     </mat-tab-group>
 </div>

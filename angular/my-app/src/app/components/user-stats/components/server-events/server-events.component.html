@@ -1,0 +1,8 @@
+<div class="container" *ngIf="getEvents$ | async as data">
+<br>
+    <mat-tab-group backgroundColor="primary">
+        <mat-tab *ngFor="let server of getServers$ | async" label="Server {{server.id}}">
+          <app-user-events-server [server]="server" [events]="data.events"></app-user-events-server>
+        </mat-tab>
+    </mat-tab-group>
+</div>

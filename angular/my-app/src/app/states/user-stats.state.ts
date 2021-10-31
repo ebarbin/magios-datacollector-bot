@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 import { Action, Selector, State, StateContext, StateToken, Store } from "@ngxs/store";
 import { BlockUI, NgBlockUI } from "ng-block-ui";
-import { finalize, tap } from "rxjs/operators";
-import { ApplyChangeUserStatsAction, ApplyFilterUserStatsAction, ClearFiltersUserStatsAction, InitUserStatsAction, ShowUserServerEventTabsAction, SortUserStatsAction } from "../actions/user-stats.action";
+import { finalize, map, tap } from "rxjs/operators";
+import { ApplyChangeUserStatsAction, ApplyFilterUserStatsAction, ClearFiltersUserStatsAction, InitServerEventsAction, InitUserStatsAction, ShowUserServerEventTabsAction, SortUserStatsAction } from "../actions/user-stats.action";
 import { UserStatsService } from "../services/user-stats.service";
 import * as moment from 'moment';
 import { patch, updateItem } from "@ngxs/store/operators";
@@ -17,7 +17,8 @@ export interface UserStatsStateModel {
   rolesFilter: string[],
   allUsers: any,
   users: any,
-  user: any
+  user: any,
+  events: any
 }
     
 const initialState: UserStatsStateModel = { 
@@ -25,7 +26,8 @@ const initialState: UserStatsStateModel = {
   rolesFilter: ['Magios', 'Admins', 'NewJoiner', 'Limbo', ''],
   allUsers: [],
   users: [],
-  user: null
+  user: null,
+  events: null
 };
   
 const CORE_STATE_TOKEN = new StateToken<UserStatsStateModel>('userStats');
@@ -126,6 +128,25 @@ const CORE_STATE_TOKEN = new StateToken<UserStatsStateModel>('userStats');
       }
     }
 
+    @Action(InitServerEventsAction)
+    initServerEventsAction(ctx: StateContext<UserStatsStateModel>) {
+      return this.userService.getAllUsers().pipe(
+        map(users => {
+          const events: any = [];
+          users.forEach((user:any) => {
+            user.events.forEach((e:any) => {
+              e.user = user;
+              events.push(e)
+            });  
+          });
+          return events;
+        }),
+        tap(events => {
+           ctx.patchState({ events })
+        })
+      )
+    }
+
     @Action(InitUserStatsAction)
     initUserStatsAction(ctx: StateContext<UserStatsStateModel>) {
       return this.userService.getAllUsers().pipe(
@@ -150,7 +171,7 @@ const CORE_STATE_TOKEN = new StateToken<UserStatsStateModel>('userStats');
     showUserServerEventTabsAction(ctx: StateContext<UserStatsStateModel>, action: ShowUserServerEventTabsAction) {
         
         const { user } =  action.payload;
-        ctx.patchState({ user });
+        ctx.patchState( { events: user.events, user: user } );
 
         ctx.dispatch(new Navigate(['user-server-event-tabs']))
        
@@ -189,8 +210,8 @@ const CORE_STATE_TOKEN = new StateToken<UserStatsStateModel>('userStats');
     }
 
     @Selector()
-    static getUser(state: UserStatsStateModel) {
-      return state.user;
+    static getEvents(state: UserStatsStateModel) {
+      return {events: state.events, user: state.user};
     }
 
     @Selector([UserStatsState.getUsers])

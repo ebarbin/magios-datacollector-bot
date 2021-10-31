@@ -2,19 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { InitServerDataAction } from 'src/app/actions/server-data.actions';
+import { InitServerEventsAction, InitUserStatsAction } from 'src/app/actions/user-stats.action';
 import { ServerDataState } from 'src/app/states/server-data.state';
 import { UserStatsState } from 'src/app/states/user-stats.state';
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
-import { Navigate } from '@ngxs/router-plugin';
 
 @Component({
-  selector: 'app-user-server-events',
-  templateUrl: './user-server-event-tabs.component.html',
-  styleUrls: ['./user-server-event-tabs.component.scss']
+  selector: 'app-server-events',
+  templateUrl: './server-events.component.html',
+  styleUrls: ['./server-events.component.scss']
 })
-export class UserServerEventTabsComponent implements OnInit {
-
-  faChevronLeft = faChevronLeft;
+export class ServerEventsComponent implements OnInit {
 
   @Select(ServerDataState.getServers) getServers$: Observable<any> | undefined;
   @Select(UserStatsState.getEvents) getEvents$: Observable<any>| undefined;
@@ -22,11 +19,10 @@ export class UserServerEventTabsComponent implements OnInit {
   constructor(private store: Store) { }
 
   ngOnInit(): void {
-    this.store.dispatch([new InitServerDataAction()]);
-  }
-
-  onBack() {
-    this.store.dispatch(new Navigate(['user-stats']))
+    this.store.dispatch([
+      new InitServerEventsAction(),
+      new InitServerDataAction()
+    ]);
   }
 
 }

@@ -47,6 +47,7 @@ import { UserEventsServerComponent } from './components/user-stats/components/us
 import { HeaderEventDatePipe } from './pipes/header-event-date.pipe';
 import { EventDatePipe } from './pipes/event-date.pipe';
 import { EventTypeComponent } from './components/user-stats/components/event-type/event-type.component';
+import { ServerEventsComponent } from './components/user-stats/components/server-events/server-events.component';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -96,7 +97,8 @@ export const ngxsLoggerConfig = {
     UserEventsServerComponent,
     HeaderEventDatePipe,
     EventDatePipe,
-    EventTypeComponent
+    EventTypeComponent,
+    ServerEventsComponent
   ],
   imports: [
     BrowserModule,

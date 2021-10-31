@@ -13,7 +13,7 @@ import { Navigate } from '@ngxs/router-plugin';
 export class UserEventsServerComponent implements OnInit {
 
   @Input() server: any;
-  @Input() user: any;
+  @Input() events: any;
 
   groupEvents: any = [];
 
@@ -21,10 +21,10 @@ export class UserEventsServerComponent implements OnInit {
 
   ngOnInit(): void {
 
-    if (this.user) {
-      let events = this.user.events.filter((e:any) => e.serverId == this.server.id);
+    if (this.events) {
+      let events = this.events.filter((e:any) => e.serverId == this.server.id);
       events = events.map((e:any) => {
-        return { type: e.type, weapon: e.weapon, target: e.target, place: e.place, date: moment(e.date, 'YYYY-MM-DD HH:mm:ss.SSS'), key: moment(e.date, 'YYYY-MM-DD HH:mm:ss.SSS').format('DDMMYYYY') };
+        return { user: e.user, type: e.type, weapon: e.weapon, target: e.target, place: e.place, date: moment(e.date, 'YYYY-MM-DD HH:mm:ss.SSS'), key: moment(e.date, 'YYYY-MM-DD HH:mm:ss.SSS').format('DDMMYYYY') };
       });
       let aux = groupBy(events, 'key');
       let aux2 = [];
