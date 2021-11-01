@@ -3,8 +3,9 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { CoreState } from 'src/app/states/core.state';
-import { faBars, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faCheck, faQuestion } from '@fortawesome/free-solid-svg-icons';
 import { DownloadNewUserGuideAction } from 'src/app/actions/core.action';
+import { Navigate } from '@ngxs/router-plugin';
 
 @Component({
   selector: 'app-new-user-dialog',
@@ -15,6 +16,7 @@ export class NewUserDialogComponent implements OnInit {
 
   faBars = faBars;
   faCheck = faCheck;
+  faQuestion = faQuestion;
 
   @Select(CoreState.getUser) getUser$: Observable<any> | undefined;
 
@@ -26,6 +28,7 @@ export class NewUserDialogComponent implements OnInit {
 
   onClose() {
     this.dialogRef.close();
+    this.store.dispatch(new Navigate(['modules']));
   }
 
   onBack(){
