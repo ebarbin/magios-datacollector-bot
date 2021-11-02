@@ -4,7 +4,7 @@ import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { UpdateServerDataAction } from 'src/app/actions/server-data.actions';
-
+import { includes } from 'lodash';
 @Component({
   selector: 'app-server-form',
   templateUrl: './server-form.component.html',
@@ -16,6 +16,7 @@ export class ServerFormComponent implements OnInit {
   filteredOptions$: Observable<any[]> | undefined;
 
   @Input() users: any;
+  @Input() user: any;
   @Input() server: any;
   @Input() terrains: any;
 
@@ -43,8 +44,12 @@ export class ServerFormComponent implements OnInit {
     const user = this.users.find((u:any) => u.id == sv.owner);
     sv.owner = user;
     this.myControl.setValue(user ? user.username : "");
-    
+
     this.form.patchValue(sv);
+
+    if (!includes(this.user.roles, 'Admins') && this.user.id != this.server.owner) {
+      this.form.disable();
+    }
 
     this.filteredOptions$ = this.form.controls.owner.valueChanges.pipe(
       startWith(''),
