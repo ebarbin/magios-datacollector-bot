@@ -56,10 +56,16 @@ if (common.ENABLE_DISCORD_EVENTS) {
 
         if (oldMember.displayName != newMember.displayName) await notifyUsernameChangeOnGeneral(oldMember, newMember);
 
-        user.username = newMember.displayName.toLowerCase();
-        user.roles = roles;
-
-        await datasource.updateUser(user);
+        if (user) {
+            user.username = newMember.displayName.toLowerCase();
+            user.roles = roles;
+            await datasource.updateUser(user);
+        } else {
+            const newUser = common.createEmptyUser(newMember);
+            newUser.roles = roles;
+            newUser.joinDate = common.getToDay().format('DD/MM/YYYY HH:mm:ss');
+            await datasource.saveUser(newUser);
+        }
     });
 
     client.on('guildMemberRemove', async member => {
