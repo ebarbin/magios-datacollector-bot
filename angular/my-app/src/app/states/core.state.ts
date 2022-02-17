@@ -163,6 +163,7 @@ export class CoreState {
       return [
         { name:'', code:'', css:'' },
         { name:'Argentina', code:'ar', css:'flag-icon-ar' },
+        { name:'Brasil', code:'br', css:'flag-icon-br' },
         { name:'Bolivia', code:'bo', css:'flag-icon-bo' },
         { name:'Canada', code:'ca', css:'flag-icon-ca' },
         { name:'Chile', code:'cl', css:'flag-icon-cl' },
