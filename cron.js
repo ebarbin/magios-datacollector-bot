@@ -37,6 +37,9 @@ if (common.ENABLE_DISCORD_EVENTS) {
                 }
 
             } else {
+                if (!server.status) {
+                    await discordModule.sendMessageToLogDiscordChannel('Server ' + server.id + ' is ONLINE again.');
+                } 
                 server.status = true;
                 server.notified = false;
             }
