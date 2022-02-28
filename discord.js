@@ -26,6 +26,7 @@ let SERVER_STATUS_CHANNEL;
 let EVENTOS_CALENDARIO_CHANNEL;
 let REPORT_CHANNEL;
 let LOG_DISCORD_CHANNEL;
+let LOG_DCS_CHANNEL;
 let GENERAL_CHANNEL;
 let WELCOME_CHANNEL;
 let GUILD;
@@ -36,6 +37,7 @@ client.login(process.env.DISCORD_BOT_TOKEN);
 
         REPORT_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === 'report');
         LOG_DISCORD_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === 'log-discord');
+        LOG_DCS_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === 'log-dcs');
         WELCOME_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'Text Channels' && channel.name === 'welcome');
         GENERAL_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'Text Channels' && channel.name === 'general');
         EVENTOS_CALENDARIO_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'Text Channels' && channel.name === 'eventos-calendario');
@@ -662,7 +664,7 @@ checkLeftUsersAndRemove = () => {
             const toRemove = allUsers.filter(u => !u.exists);
             toRemove.forEach(async u => {
                 await datasource.removeUser(u);
-                await sendMessageToReportChannel('The user "' + u.username + '" was removed.');
+                await sendMessageToLogDiscordChannel('The user "' + u.username + '" was removed.');
             })
             resolve();
         })
@@ -680,7 +682,7 @@ checkNewUserAndCreate = () => {
                         const newUser = common.createEmptyUser(member);
                         newUser.roles = roles;
                         await datasource.saveUser(newUser);
-                        await sendMessageToReportChannel('The user "' + newUser.username + '" was created.');
+                        await sendMessageToLogDiscordChannel('The user "' + newUser.username + '" was created.');
                     } else {
                         
                        // if (dbUser.username != member.displayName.toLowerCase()) await notifyUsernameChangeOnGeneral(member, dbUser);
@@ -702,8 +704,8 @@ notifyUsernameChangeOnGeneral = (oldMember, newMember) => {
         const adminsRol = GUILD.roles.cache.find(r => r.name == 'Admins');
         const newJoinerRol = GUILD.roles.cache.find(r => r.name == 'NewJoiner');
         const magiosRol = GUILD.roles.cache.find(r => r.name == 'Magios');
-        //await GENERAL_CHANNEL.send('Atención ' + `${adminsRol} ${newJoinerRol} ${magiosRol}` + ' el usuario "' + oldMember.displayName + '" a cambiado su nombre por ' + `${newMember}` + '.');
-        await LOG_DISCORD_CHANNEL.send('Atención ' + `${adminsRol} ${newJoinerRol} ${magiosRol}` + ' el usuario "' + oldMember.displayName + '" a cambiado su nombre por ' + `${newMember}` + '.');
+        await GENERAL_CHANNEL.send('Atención ' + `${adminsRol} ${newJoinerRol} ${magiosRol}` + ' el usuario "' + oldMember.displayName + '" a cambiado su nombre por ' + `${newMember}` + '.');
+        await LOG_DISCORD_CHANNEL.send('Atención el usuario "' + oldMember.displayName + '" a cambiado su nombre por ' + `${newMember}` + '.');
         resolve();
     })
 }
@@ -773,6 +775,12 @@ sendMessageToReportChannel = (msg) => {
     })
 }
 
+sendMessageToDcsChannel = (msg) => {
+    return new Promise((resolve, reject) => {
+        LOG_DCS_CHANNEL.send(msg).then(() => resolve());
+    })
+}
+
 sendMessageToLogDiscordChannel = (msg) => {
     return new Promise((resolve, reject) => {
         LOG_DISCORD_CHANNEL.send(msg).then(() => resolve());
@@ -792,7 +800,7 @@ notifyOwner = (server) => {
         const allMembers = await GUILD.members.fetch();
         const ownerMember = allMembers.find(m => m.user.id == server.owner);
         await ownerMember.user.send(+ `${ownerMember}` + ': Server ' + server.id + ' is OFFLINE. Please check pick it up. Thanks!');
-        await sendMessageToReportChannel('Server ' + server.id + ' is OFFLINE. The owner @' + ownerMember.displayName + ' was notified.');
+        await sendMessageToLogDiscordChannel('Server ' + server.id + ' is OFFLINE. The owner @' + ownerMember.displayName + ' was notified.');
         resolve();
     })
 }
@@ -879,7 +887,7 @@ cleanOldEvents = () => {
                             console.log('originalMsg ' + originalMsg);
                             console.log('embed ' + originalMsg);
                             const eventName = originalMsg.embeds[0].title.split(":calendar_spiral:")[1].trim().split('**')[1]
-                            await sendMessageToReportChannel('The old event "' + eventName + '" was removed.');
+                            await sendMessageToLogDiscordChannel('The old event "' + eventName + '" was removed.');
                         }
                     }
                 }
@@ -894,6 +902,7 @@ cleanOldEvents = () => {
 exports.notifyNewUserOnWelcome = notifyNewUserOnWelcome;
 exports.sendMessageToReportChannel = sendMessageToReportChannel;
 exports.sendMessageToLogDiscordChannel = sendMessageToLogDiscordChannel;
+exports.sendMessageToDcsChannel = sendMessageToDcsChannel;
 exports.sendMessageToGeneralChannel = sendMessageToGeneralChannel;
 exports.cleanOldEvents = cleanOldEvents;
 exports.sendServerStatus = sendServerStatus;
