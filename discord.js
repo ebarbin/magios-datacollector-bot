@@ -56,7 +56,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
         const user = await datasource.getUser(newMember.user.id);
         const roles = getUserRoles(newMember);
 
-        if (oldMember.displayName != newMember.displayName) await notifyUsernameChangeOnGeneral(oldMember, newMember);
+        await notifyUsernameChangeOnGeneral(oldMember, newMember);
 
         if (user) {
             user.username = newMember.displayName.toLowerCase();
@@ -702,7 +702,8 @@ notifyUsernameChangeOnGeneral = (oldMember, newMember) => {
         const adminsRol = GUILD.roles.cache.find(r => r.name == 'Admins');
         const newJoinerRol = GUILD.roles.cache.find(r => r.name == 'NewJoiner');
         const magiosRol = GUILD.roles.cache.find(r => r.name == 'Magios');
-        await GENERAL_CHANNEL.send('Atención ' + `${adminsRol} ${newJoinerRol} ${magiosRol}` + ' el usuario "' + oldMember.displayName + '" a cambiado su nombre por ' + `${newMember}` + '.');
+        //await GENERAL_CHANNEL.send('Atención ' + `${adminsRol} ${newJoinerRol} ${magiosRol}` + ' el usuario "' + oldMember.displayName + '" a cambiado su nombre por ' + `${newMember}` + '.');
+        await LOG_DISCORD_CHANNEL.send('Atención ' + `${adminsRol} ${newJoinerRol} ${magiosRol}` + ' el usuario "' + oldMember.displayName + '" a cambiado su nombre por ' + `${newMember}` + '.');
         resolve();
     })
 }
