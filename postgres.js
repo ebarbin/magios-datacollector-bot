@@ -63,6 +63,7 @@ const saveUser = async (user) => {
       } catch (err) {
       }
 }
+
 const getLimboOrNoneRoleUsers = async () => {
     const users = await getAllUsers();
     return users.filter(u => u.roles == null || _.includes(u.roles, 'Limbo'));

@@ -25,6 +25,7 @@ const GUILD_ID = '628750110821449739';
 let SERVER_STATUS_CHANNEL;
 let EVENTOS_CALENDARIO_CHANNEL;
 let REPORT_CHANNEL;
+let LOG_DISCORD_CHANNEL;
 let GENERAL_CHANNEL;
 let WELCOME_CHANNEL;
 let GUILD;
@@ -34,6 +35,7 @@ client.login(process.env.DISCORD_BOT_TOKEN);
     client.once('ready', async () => {
 
         REPORT_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === 'report');
+        LOG_DISCORD_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === 'log-discord');
         WELCOME_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'Text Channels' && channel.name === 'welcome');
         GENERAL_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'Text Channels' && channel.name === 'general');
         EVENTOS_CALENDARIO_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'Text Channels' && channel.name === 'eventos-calendario');
@@ -74,6 +76,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
             if (user) {
                 await datasource.removeUser(user);
                 await notifyUserLeftGroupOnGeneral(member);
+                await sendMessageToLogDiscordChannel('The user "' + user.username + '" was removed.');
             }
         }
     });
@@ -88,7 +91,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
                 newUser.roles = roles;
                 newUser.joinDate = common.getToDay().format('DD/MM/YYYY HH:mm:ss');
                 await datasource.saveUser(newUser);
-                await sendMessageToReportChannel('The user "' + newUser.username + '" was created.');
+                await sendMessageToLogDiscordChannel('The user "' + newUser.username + '" was created.');
 
                 await member.user.send('Hola! ' + `${member}` + ' Bienvenido a Los Magios. Te pido que ingreses a este link para completar el proceso de ingreso al grupo: ' + process.env.APP_URL);
                 await member.user.send('Si tenes alguna duda podes escribir en el canal ' + `${WELCOME_CHANNEL}` + '.');
@@ -709,7 +712,7 @@ notifyUserLeftGroupOnGeneral = (member) => {
         const adminsRol = GUILD.roles.cache.find(r => r.name == 'Admins');
         const newJoinerRol = GUILD.roles.cache.find(r => r.name == 'NewJoiner');
         const magiosRol = GUILD.roles.cache.find(r => r.name == 'Magios');
-        await GENERAL_CHANNEL.send('Atención ' + `${adminsRol} ${newJoinerRol} ${magiosRol}` + ' el usuario "' + `${member}` + '" a abandonado el grupo.');
+        await GENERAL_CHANNEL.send('Atención ' + `${adminsRol} ${newJoinerRol} ${magiosRol}` + ' el usuario "' + `${member}` + '" (' + member.displayName + ') a abandonado el grupo.');
         resolve();
     })
 }
@@ -722,7 +725,7 @@ notifyNewUserOnWelcome = (user) => {
         const members = await GUILD.members.fetch();
         const newMember = members.find(m => m.user.id == user.id);
         await WELCOME_CHANNEL.send('Atención ' + `${adminsRol} ${newJoinerRol} ${magiosRol}` + ' se ha unido al grupo ' + `${newMember}` + '.');
-        if (user.modules.lenght == 0) {
+        if (user.modules.length == 0) {
             await WELCOME_CHANNEL.send('Es de ' + user.country + '.');
         } else {
             await WELCOME_CHANNEL.send('Es de ' + user.country + ' y tiene estos módulos: ' + user.modules.join(', ') + '.');
@@ -745,6 +748,18 @@ notifyLimboOrNonRoleUser = (user) => {
     })
 }
 
+notifyUsers = (user) => {
+    return new Promise(async (resolve, reject) => {
+
+        const members = await GUILD.members.fetch();
+        const member = members.find(m => m.user.id == user.id);
+
+        await member.user.send('Hola! ' + `${member}` + ' ¿como estás? Notamos que hace tiempo que no te pasas por los canales. Esperamos que andes muy bien y ya sabes que puedes pasar cuando quieras :).');
+
+        resolve();
+    })
+}
+
 sendMessageToGeneralChannel = (msg) => {
     return new Promise((resolve, reject) => {
         GENERAL_CHANNEL.send(msg).then(() => resolve());
@@ -754,6 +769,12 @@ sendMessageToGeneralChannel = (msg) => {
 sendMessageToReportChannel = (msg) => {
     return new Promise((resolve, reject) => {
         REPORT_CHANNEL.send(msg).then(() => resolve());
+    })
+}
+
+sendMessageToLogDiscordChannel = (msg) => {
+    return new Promise((resolve, reject) => {
+        LOG_DISCORD_CHANNEL.send(msg).then(() => resolve());
     })
 }
 
@@ -871,6 +892,7 @@ cleanOldEvents = () => {
 
 exports.notifyNewUserOnWelcome = notifyNewUserOnWelcome;
 exports.sendMessageToReportChannel = sendMessageToReportChannel;
+exports.sendMessageToLogDiscordChannel = sendMessageToLogDiscordChannel;
 exports.sendMessageToGeneralChannel = sendMessageToGeneralChannel;
 exports.cleanOldEvents = cleanOldEvents;
 exports.sendServerStatus = sendServerStatus;

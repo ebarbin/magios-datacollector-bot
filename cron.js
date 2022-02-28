@@ -62,8 +62,16 @@ if (common.ENABLE_DISCORD_EVENTS) {
 
         console.log(TAG + ' - Notifying limbo/none rol users - Running a task every month.');
         const limbosOrNoneRoleUsers = await datasource.getLimboOrNoneRoleUsers();
-        limbosOrNoneRoleUsers.forEach(async u => {
-            await discordModule.notifyLimboOrNonRoleUser(u);
-        })
+        limbosOrNoneRoleUsers.forEach(async u => { await discordModule.notifyLimboOrNonRoleUser(u); });
+        await discordModule.sendMessageToLogDiscordChannel('Monthly message sended to user in limbo.');
+
+        console.log(TAG + ' - Notifying users.');
+        const allUsers = await datasource.getAllUsers();
+        allUsers.forEach(async u => {
+            if (common.getToDay().diff(moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss'), 'days') > 30) {
+                await discordModule.notifyUsers(u);
+            }
+        });
+        await discordModule.sendMessageToLogDiscordChannel('Monthly message sended to users that we know nothing about them.');
     });
 }
