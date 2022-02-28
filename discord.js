@@ -54,21 +54,22 @@ client.login(process.env.DISCORD_BOT_TOKEN);
 if (common.ENABLE_DISCORD_EVENTS) {
 
     client.on('guildMemberUpdate', async (oldMember, newMember) => {
-
-        const user = await datasource.getUser(newMember.user.id);
-        const roles = getUserRoles(newMember);
-
-        await notifyUsernameChangeOnGeneral(oldMember, newMember);
-
-        if (user) {
-            user.username = newMember.displayName.toLowerCase();
-            user.roles = roles;
-            await datasource.updateUser(user);
-        } else {
-            const newUser = common.createEmptyUser(newMember);
-            newUser.roles = roles;
-            newUser.joinDate = common.getToDay().format('DD/MM/YYYY HH:mm:ss');
-            await datasource.saveUser(newUser);
+        if (!newMember.user.bot) {
+            const user = await datasource.getUser(newMember.user.id);
+            const roles = getUserRoles(newMember);
+    
+            await notifyUsernameChangeOnGeneral(oldMember, newMember);
+    
+            if (user) {
+                user.username = newMember.displayName.toLowerCase();
+                user.roles = roles;
+                await datasource.updateUser(user);
+            } else {
+                const newUser = common.createEmptyUser(newMember);
+                newUser.roles = roles;
+                newUser.joinDate = common.getToDay().format('DD/MM/YYYY HH:mm:ss');
+                await datasource.saveUser(newUser);
+            }
         }
     });
 
