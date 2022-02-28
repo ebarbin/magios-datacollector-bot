@@ -20,31 +20,9 @@ const client = new DiscordClient({
 
 const TEMPLATE = fs.readFileSync("template.html", "utf8");
 
-const GUILD_ID = '628750110821449739';
-
-let SERVER_STATUS_CHANNEL;
-let EVENTOS_CALENDARIO_CHANNEL;
-let REPORT_CHANNEL;
-let LOG_DISCORD_CHANNEL;
-let LOG_DCS_CHANNEL;
-let GENERAL_CHANNEL;
-let WELCOME_CHANNEL;
-let GUILD;
-
 client.login(process.env.DISCORD_BOT_TOKEN);
 
 client.once('ready', async () => {
-
-    REPORT_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === 'report');
-    LOG_DISCORD_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === 'log-discord');
-    LOG_DCS_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === 'log-dcs');
-    WELCOME_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'Text Channels' && channel.name === 'welcome');
-    GENERAL_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'Text Channels' && channel.name === 'general');
-    EVENTOS_CALENDARIO_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'Text Channels' && channel.name === 'eventos-calendario');
-    SERVER_STATUS_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'Server Data' && channel.name === 'server-status');
-
-    GUILD = client.guilds.cache.find((g) => g.id === GUILD_ID );
-
     console.log(TAG + ' - Discord bot is connected.')
 });
 
@@ -94,7 +72,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
                 await sendMessageToLogDiscordChannel('The user "' + newUser.username + '" was created.');
 
                 await member.user.send('Hola! ' + `${member}` + ' Bienvenido a Los Magios. Te pido que ingreses a este link para completar el proceso de ingreso al grupo: ' + process.env.APP_URL);
-                await member.user.send('Si tenes alguna duda podes escribir en el canal ' + `${WELCOME_CHANNEL}` + '.');
+                await member.user.send('Si tenes alguna duda podes escribir en el canal ' + `${getWelcomeChannel()}` + '.');
             }
         }
     });
@@ -534,7 +512,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
                                 { name: 'Ingreso', value: user.joinDate ? user.joinDate : '-', inline: true },
                                 { name: 'Ultimo mensaje', value: user.lastTextChannelDate || '-', inline: true })
                         })
-                        REPORT_CHANNEL.send(embed);
+                        getReportChannel().send(embed);
                 }
 
             } else if (message.content == '!limbo') {
@@ -565,7 +543,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
                                 { name: 'Ingreso', value: user.joinDate ? user.joinDate : '-', inline: true },
                                 { name: 'Ultimo mensaje', value: user.lastTextChannelDate || '-', inline: true })
                         })
-                        REPORT_CHANNEL.send(embed);
+                        getReportChannel().send(embed);
                 }
 
             } else if (message.content == '!newjoiner') {
@@ -596,7 +574,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
                                 { name: 'Ingreso', value: user.joinDate ? user.joinDate : '-', inline: true },
                                 { name: 'Ultimo mensaje', value: user.lastTextChannelDate || '-', inline: true })
                         })
-                        REPORT_CHANNEL.send(embed);
+                        getReportChannel().send(embed);
                 }
 
             } else if (message.content.indexOf('!getid') >= 0) {
@@ -624,9 +602,9 @@ if (common.ENABLE_DISCORD_EVENTS) {
                             { name: '6. Canal texto', value: user.lastTextChannelName || '-', inline: true },
                             { name: '7. Ultimo mensaje (fec.)', value: user.lastTextChannelDate || '-', inline: true },
                             { name: 'Ingreso (fec.)', value: user.joinDate ? user.joinDate : '-', inline: false }
-                            )
+                        );
                     
-                        REPORT_CHANNEL.send(embed);
+                        getReportChannel().send(embed);
                     }
                 }
 
@@ -641,7 +619,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
 getUserRoles = (member) => {
     const roles = [];
     member.roles.cache.forEach(role => {
-        let rol = GUILD.roles.cache.find(r => r.id == role.id)
+        let rol = getGuild().roles.cache.find(r => r.id == role.id)
         if (rol.name != '@everyone') {
             roles.push(rol.name);
         }
@@ -652,8 +630,7 @@ getUserRoles = (member) => {
 checkLeftUsersAndRemove = () => {
     return new Promise(async (resolve, reject) => {
         const allUsers = await datasource.getAllUsers();
-        let user;
-        GUILD.members.fetch().then((members) => {
+        getGuild().members.fetch().then((members) => {
             members.forEach((member) => {
                 allUsers.forEach(u => {
                     if (u.id == member.user.id) u.exists = true;
@@ -671,7 +648,7 @@ checkLeftUsersAndRemove = () => {
 
 checkNewUserAndCreate = () => { 
     return new Promise((resolve, reject) => {
-        GUILD.members.fetch().then((members) => {
+        getGuild().members.fetch().then((members) => {
             members.forEach(async (member) => {
                 if (!member.user.bot) {
                     const roles = getUserRoles(member);
@@ -699,37 +676,37 @@ checkNewUserAndCreate = () => {
 
 notifyUsernameChangeOnGeneral = (oldMember, newMember) => {
     return new Promise(async (resolve, reject) => {
-        const adminsRol = GUILD.roles.cache.find(r => r.name == 'Admins');
-        const newJoinerRol = GUILD.roles.cache.find(r => r.name == 'NewJoiner');
-        const magiosRol = GUILD.roles.cache.find(r => r.name == 'Magios');
-        await GENERAL_CHANNEL.send('Atención ' + `${adminsRol} ${newJoinerRol} ${magiosRol}` + ' el usuario "' + oldMember.displayName + '" a cambiado su nombre por ' + `${newMember}` + '.');
-        await LOG_DISCORD_CHANNEL.send('Atención el usuario "' + oldMember.displayName + '" a cambiado su nombre por ' + `${newMember}` + '.');
+        const adminsRol = getGuild().roles.cache.find(r => r.name == 'Admins');
+        const newJoinerRol = getGuild().roles.cache.find(r => r.name == 'NewJoiner');
+        const magiosRol = getGuild().roles.cache.find(r => r.name == 'Magios');
+        await getGeneralChannel().send('Atención ' + `${adminsRol} ${newJoinerRol} ${magiosRol}` + ' el usuario "' + oldMember.displayName + '" a cambiado su nombre por ' + `${newMember}` + '.');
+        await getlogDiscordChannel().send('Atención el usuario "' + oldMember.displayName + '" a cambiado su nombre por ' + `${newMember}` + '.');
         resolve();
     })
 }
 
 notifyUserLeftGroupOnGeneral = (member) => {
     return new Promise(async (resolve, reject) => {
-        const adminsRol = GUILD.roles.cache.find(r => r.name == 'Admins');
-        const newJoinerRol = GUILD.roles.cache.find(r => r.name == 'NewJoiner');
-        const magiosRol = GUILD.roles.cache.find(r => r.name == 'Magios');
-        await GENERAL_CHANNEL.send('Atención ' + `${adminsRol} ${newJoinerRol} ${magiosRol}` + ' el usuario "' + `${member}` + '" (' + member.displayName + ') a abandonado el grupo.');
+        const adminsRol = getGuild().roles.cache.find(r => r.name == 'Admins');
+        const newJoinerRol = getGuild().roles.cache.find(r => r.name == 'NewJoiner');
+        const magiosRol = getGuild().roles.cache.find(r => r.name == 'Magios');
+        await getGeneralChannel().send('Atención ' + `${adminsRol} ${newJoinerRol} ${magiosRol}` + ' el usuario "' + `${member}` + '" (' + member.displayName + ') a abandonado el grupo.');
         resolve();
     })
 }
 
 notifyNewUserOnWelcome = (user) => {
     return new Promise(async (resolve, reject) => {
-        const adminsRol = GUILD.roles.cache.find(r => r.name == 'Admins');
-        const newJoinerRol = GUILD.roles.cache.find(r => r.name == 'NewJoiner');
-        const magiosRol = GUILD.roles.cache.find(r => r.name == 'Magios');
-        const members = await GUILD.members.fetch();
+        const adminsRol = getGuild().roles.cache.find(r => r.name == 'Admins');
+        const newJoinerRol = getGuild().roles.cache.find(r => r.name == 'NewJoiner');
+        const magiosRol = getGuild().roles.cache.find(r => r.name == 'Magios');
+        const members = await getGuild().members.fetch();
         const newMember = members.find(m => m.user.id == user.id);
-        await WELCOME_CHANNEL.send('Atención ' + `${adminsRol} ${newJoinerRol} ${magiosRol}` + ' se ha unido al grupo ' + `${newMember}` + '.');
+        await getWelcomeChannel().send('Atención ' + `${adminsRol} ${newJoinerRol} ${magiosRol}` + ' se ha unido al grupo ' + `${newMember}` + '.');
         if (user.modules.length == 0) {
-            await WELCOME_CHANNEL.send('Es de ' + user.country + '.');
+            await getWelcomeChannel().send('Es de ' + user.country + '.');
         } else {
-            await WELCOME_CHANNEL.send('Es de ' + user.country + ' y tiene estos módulos: ' + user.modules.join(', ') + '.');
+            await getWelcomeChannel().send('Es de ' + user.country + ' y tiene estos módulos: ' + user.modules.join(', ') + '.');
         }
         resolve();
     })
@@ -738,12 +715,12 @@ notifyNewUserOnWelcome = (user) => {
 notifyLimboOrNonRoleUser = (user) => {
     return new Promise(async (resolve, reject) => {
 
-        const members = await GUILD.members.fetch();
+        const members = await getGuild().members.fetch();
         const member = members.find(m => m.user.id == user.id);
 
         await member.user.send('Hola! ' + `${member}` + ' ¿como estás? Notamos que te has quedado en el canal de bienvenida. ¿Sigues interesado en formar parte de Los Magios?');
         await member.user.send('Para continuar el proceso de ingreso debes ingresar en el siguiente link y completar con tus datos. ' + process.env.APP_URL);
-        await member.user.send('Si tenes alguna duda puedes escribir en el canal ' + `${WELCOME_CHANNEL}` + '.');
+        await member.user.send('Si tenes alguna duda puedes escribir en el canal ' + `${getWelcomeChannel()}` + '.');
 
         resolve();
     })
@@ -752,7 +729,7 @@ notifyLimboOrNonRoleUser = (user) => {
 notifyUsers = (user) => {
     return new Promise(async (resolve, reject) => {
 
-        const members = await GUILD.members.fetch();
+        const members = await getGuild().members.fetch();
         const member = members.find(m => m.user.id == user.id);
 
         await member.user.send('Hola! ' + `${member}` + ' ¿como estás? Notamos que hace tiempo que no te pasas por los canales. Esperamos que andes muy bien y ya sabes que puedes pasar cuando quieras :).');
@@ -763,7 +740,7 @@ notifyUsers = (user) => {
 
 sendMessageToGeneralChannel = (msg) => {
     return new Promise((resolve, reject) => {
-        GENERAL_CHANNEL.send(msg).then(() => resolve());
+        getGeneralChannel().send(msg).then(() => resolve());
     })
 }
 
@@ -777,21 +754,49 @@ getReportChannel = () => {
     return client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === 'report');
 }
 
+getlogDiscordChannel = () => {
+    return client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === 'log-discord');
+}
+
+getlogDcsChannel = () => {
+    return client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === 'log-dcs');
+}
+
+getWelcomeChannel = () => {
+    return client.channels.cache.find(channel => channel.parent && channel.parent.name == 'Text Channels' && channel.name === 'welcome');
+}
+
+getGeneralChannel = () => {
+    return client.channels.cache.find(channel => channel.parent && channel.parent.name == 'Text Channels' && channel.name === 'general');
+}
+
+getEventosCalendarioChannel = () => {
+    return client.channels.cache.find(channel => channel.parent && channel.parent.name == 'Text Channels' && channel.name === 'eventos-calendario');
+}
+
+getServerStatusChannel = () => {
+    return client.channels.cache.find(channel => channel.parent && channel.parent.name == 'Server Data' && channel.name === 'server-status');
+}
+
+getGuild = () => {
+    return client.guilds.cache.find((g) => g.id === process.env.GUILD_ID );
+}
+
 sendMessageToDcsChannel = (msg) => {
     return new Promise((resolve, reject) => {
-        LOG_DCS_CHANNEL.send(msg).then(() => resolve());
+        getlogDcsChannel().send(msg).then(() => resolve());
     })
 }
 
 sendMessageToLogDiscordChannel = (msg) => {
     return new Promise((resolve, reject) => {
-        LOG_DISCORD_CHANNEL.send(msg).then(() => resolve());
+        getlogDiscordChannel().send(msg).then(() => resolve());
     })
 }
 
 cleanServerStatus = () => {
     return new Promise(async (resolve, reject) => {
-        const messages = await SERVER_STATUS_CHANNEL.messages.fetch({ limit: 100 });
+        const messages = await getServerStatusChannel().messages.fetch({ limit: 100 });
         messages.forEach( async msg => await msg.delete() );
         resolve();
     })
@@ -799,7 +804,7 @@ cleanServerStatus = () => {
 
 notifyOwner = (server) => {
     return new Promise(async (resolve, reject) => {
-        const allMembers = await GUILD.members.fetch();
+        const allMembers = await getGuild().members.fetch();
         const ownerMember = allMembers.find(m => m.user.id == server.owner);
         await ownerMember.user.send(+ `${ownerMember}` + ': Server ' + server.id + ' is OFFLINE. Please check pick it up. Thanks!');
         await sendMessageToLogDiscordChannel('Server ' + server.id + ' is OFFLINE. The owner @' + ownerMember.displayName + ' was notified.');
@@ -851,7 +856,7 @@ sendServerStatus = (server) => {
             embed.addFields({ name: 'Dueño', value: owner.username, inline: true })
         }
 
-        await SERVER_STATUS_CHANNEL.send(embed);
+        await getServerStatusChannel().send(embed);
         console.log(TAG + ' - Server ' + server.id + ' status was reported to discord as ' + (server.status ? 'ONLINE.' : 'OFFLINE.'));
         resolve();
     })
@@ -859,9 +864,9 @@ sendServerStatus = (server) => {
 
 registerUser = (user) => {
     return new Promise(async (resolve, reject) => {
-        const allMembers = await GUILD.members.fetch();
+        const allMembers = await getGuild().members.fetch();
         const member = allMembers.find(m => m.user.id == user.id);
-        const limboRol = GUILD.roles.cache.find(r => r.name == 'Limbo');
+        const limboRol = getGuild().roles.cache.find(r => r.name == 'Limbo');
         await member.roles.add(limboRol);
         resolve();
     })
@@ -870,7 +875,7 @@ registerUser = (user) => {
 cleanOldEvents = () => {
     return new Promise((resolve, reject) => {
         let quantity = 0;
-        EVENTOS_CALENDARIO_CHANNEL.messages.fetch({ limit: 100 }).then(messages => {
+        getEventosCalendarioChannel().messages.fetch({ limit: 100 }).then(messages => {
             messages.forEach(async m => {
                 if (m.author.bot && m.author.username == 'sesh' && m.embeds && m.embeds.length > 0) {
                     const embed = m.embeds[0];
