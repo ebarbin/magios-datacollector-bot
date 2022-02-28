@@ -59,12 +59,16 @@ if (common.ENABLE_DISCORD_EVENTS) {
             ];
             await datasource.updateUser(user);
         });
+    });
 
+    cron.schedule('0 0 0 2 */1 *', async () => {
         console.log(TAG + ' - Notifying limbo/none rol users - Running a task every month.');
         const limbosOrNoneRoleUsers = await datasource.getLimboOrNoneRoleUsers();
         limbosOrNoneRoleUsers.forEach(async u => { await discordModule.notifyLimboOrNonRoleUser(u); });
         await discordModule.sendMessageToLogDiscordChannel('Monthly message sended to user in limbo.');
+    });
 
+    cron.schedule('0 0 0 3 */1 *', async () => {
         console.log(TAG + ' - Notifying users.');
         const allUsers = await datasource.getAllUsers();
         allUsers.forEach(async u => {
