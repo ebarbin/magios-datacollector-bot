@@ -505,7 +505,7 @@ if (common.ENABLE_DISCORD_EVENTS) {
 
             } else if (message.content == '!clear') {
 
-                const messages = await REPORT_CHANNEL.messages.fetch();
+                const messages = await getReportChannel().messages.fetch();
                 messages.forEach(async ms => {
                     await ms.delete();
                 })
@@ -769,8 +769,12 @@ sendMessageToGeneralChannel = (msg) => {
 
 sendMessageToReportChannel = (msg) => {
     return new Promise((resolve, reject) => {
-        REPORT_CHANNEL.send(msg).then(() => resolve());
+        getReportChannel().send(msg).then(() => resolve());
     })
+}
+
+getReportChannel = () => {
+    return client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === 'report');
 }
 
 sendMessageToDcsChannel = (msg) => {
