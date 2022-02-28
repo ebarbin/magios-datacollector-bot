@@ -33,7 +33,9 @@ if (process.env.environment != 'dev') {
             const user = await datasource.getUser(newMember.user.id);
             const roles = getUserRoles(newMember);
     
-            await notifyUsernameChangeOnGeneral(oldMember, newMember);
+            if (oldMember.displayName != newMember.displayName) {
+                await notifyUsernameChangeOnGeneral(oldMember, newMember);
+            }
     
             if (user) {
                 user.username = newMember.displayName.toLowerCase();
@@ -679,8 +681,8 @@ notifyUsernameChangeOnGeneral = (oldMember, newMember) => {
         const adminsRol = getGuild().roles.cache.find(r => r.name == 'Admins');
         const newJoinerRol = getGuild().roles.cache.find(r => r.name == 'NewJoiner');
         const magiosRol = getGuild().roles.cache.find(r => r.name == 'Magios');
-        await getGeneralChannel().send('Atención ' + `${adminsRol} ${newJoinerRol} ${magiosRol}` + ' el usuario "' + oldMember.displayName + '" a cambiado su nombre por ' + `${newMember}` + '.');
-        await getlogDiscordChannel().send('Atención el usuario "' + oldMember.displayName + '" a cambiado su nombre por ' + `${newMember}` + '.');
+        await getGeneralChannel().send('Atención ' + `${adminsRol} ${newJoinerRol} ${magiosRol}` + ' el usuario "' + oldMember.displayName + '" ha cambiado su nombre por ' + `${newMember}` + '.');
+        await getlogDiscordChannel().send('Atención el usuario "' + oldMember.displayName + '" ha cambiado su nombre por ' + `${newMember}` + '.');
         resolve();
     })
 }
@@ -690,7 +692,7 @@ notifyUserLeftGroupOnGeneral = (member) => {
         const adminsRol = getGuild().roles.cache.find(r => r.name == 'Admins');
         const newJoinerRol = getGuild().roles.cache.find(r => r.name == 'NewJoiner');
         const magiosRol = getGuild().roles.cache.find(r => r.name == 'Magios');
-        await getGeneralChannel().send('Atención ' + `${adminsRol} ${newJoinerRol} ${magiosRol}` + ' el usuario "' + `${member}` + '" (' + member.displayName + ') a abandonado el grupo.');
+        await getGeneralChannel().send('Atención ' + `${adminsRol} ${newJoinerRol} ${magiosRol}` + ' el usuario "' + `${member}` + '" (' + member.displayName + ') ha abandonado el grupo.');
         resolve();
     })
 }
