@@ -1,6 +1,6 @@
 require('dotenv').config();
-require('./cron');
 
+const cron = require('./cron');
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
@@ -402,4 +402,31 @@ app.get('/api/server-alive/:serverId', async  (req, res) => {
     console.log(TAG + ' - Server ' + req.params.serverId + ' requesting last alive date.');
     const serverStatus = await datasource.getServerStatusById(req.params.serverId);
     res.json({response: serverStatus});
-});
+})
+
+app.get('/api/task/status/:taskId', async  (req, res) => {
+    try {
+        const status = cron.getTaskStatus(parseInt(req.params.taskId));
+        res.json({success: true, status: status});
+    } catch(e) {
+        res.json({success: false, errorDesc: e.message});
+     }
+})
+
+app.get('/api/task/toggle/status/:taskId', async  (req, res) => {
+    try {
+        const status = cron.toggleTasktatus(parseInt(req.params.taskId));
+        res.json({success: true, status: status});
+    } catch(e) {
+        res.json({success: false, errorDesc: e.message});
+    }
+})
+
+app.get('/api/task/', async  (req, res) => {
+    try {
+        const tasks = cron.getAllTask();
+        res.json({success: true, tasks: tasks});
+    } catch(e) {
+        res.json({success: false, errorDesc: e.message});
+    }
+})

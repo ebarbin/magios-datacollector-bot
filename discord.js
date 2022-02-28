@@ -26,7 +26,7 @@ client.once('ready', async () => {
     console.log(TAG + ' - Discord bot is connected.')
 });
 
-if (common.ENABLE_DISCORD_EVENTS) {
+if (process.env.environment != 'dev') {
 
     client.on('guildMemberUpdate', async (oldMember, newMember) => {
         if (!newMember.user.bot) {
