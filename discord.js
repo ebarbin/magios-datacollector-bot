@@ -33,23 +33,20 @@ let GUILD;
 
 client.login(process.env.DISCORD_BOT_TOKEN);
 
-    client.once('ready', async () => {
+client.once('ready', async () => {
 
-        REPORT_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === 'report');
-        LOG_DISCORD_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === 'log-discord');
-        LOG_DCS_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === 'log-dcs');
-        WELCOME_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'Text Channels' && channel.name === 'welcome');
-        GENERAL_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'Text Channels' && channel.name === 'general');
-        EVENTOS_CALENDARIO_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'Text Channels' && channel.name === 'eventos-calendario');
-        SERVER_STATUS_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'Server Data' && channel.name === 'server-status');
+    REPORT_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === 'report');
+    LOG_DISCORD_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === 'log-discord');
+    LOG_DCS_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'ADMIN' && channel.name === 'log-dcs');
+    WELCOME_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'Text Channels' && channel.name === 'welcome');
+    GENERAL_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'Text Channels' && channel.name === 'general');
+    EVENTOS_CALENDARIO_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'Text Channels' && channel.name === 'eventos-calendario');
+    SERVER_STATUS_CHANNEL = client.channels.cache.find(channel => channel.parent && channel.parent.name == 'Server Data' && channel.name === 'server-status');
 
-        GUILD = client.guilds.cache.find((g) => g.id === GUILD_ID );
+    GUILD = client.guilds.cache.find((g) => g.id === GUILD_ID );
 
-        console.log(TAG + ' - Discord bot is connected.')
-
-        //await checkNewUserAndCreate();
-        //await checkLeftUsersAndRemove();
-    });
+    console.log(TAG + ' - Discord bot is connected.')
+});
 
 if (common.ENABLE_DISCORD_EVENTS) {
 
