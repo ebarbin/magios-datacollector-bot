@@ -287,7 +287,7 @@ app.post('/api/user/event/:serverId', async (req, res) => {
 
     if (!user) {
 
-        await discordModule.sendMessageToLogDiscordChannel('Unknown user "' + username + '" has making stuff at Server ' + serverId + '.');
+        await discordModule.sendMessageToDcsChannel('Unknown user "' + username + '" has making stuff at Server ' + serverId + '.');
         console.log(TAG + ' - Unknown user "' + username + '" has making stuff at Server ' + serverId + '.');
 
     } else {
