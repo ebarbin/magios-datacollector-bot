@@ -67,8 +67,11 @@ const task3 = cron.schedule('0 0 0 1 */1 *', async () => {
             { lastEvent: null, lastDate: null, takeoff:0, land: 0, kill: 0, crash: 0, hit: 0, shot: 0, dead: 0 },
             { lastEvent: null, lastDate: null, takeoff:0, land: 0, kill: 0, crash: 0, hit: 0, shot: 0, dead: 0 }
         ];
+        user.eventsHistory = [...user.events];
+        user.events = [];
         await datasource.updateUser(user);
     });
+    await discordModule.sendMessageToLogDiscordChannel('Monthly moving user events/stats to history and reset currents.');
 });
 task3.id = 3;
 task3.running = true;
