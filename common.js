@@ -12,7 +12,7 @@ const createEmptyUser = (member) => {
         joinDate: moment(new Date(member.joinedTimestamp)).format('DD/MM/YYYY HH:mm:ss'),
         voiceChannelTotalTime: 0, joinVoiceChannelCount: 0, msgChannelCount: 0,
         lastVoiceChannelAccessDate: null, lastVoiceChannelName: null, lastTextChannelName: null, lastTextChannelDate: null,
-        status: true, country: '', modules: [], statsHistory:[],
+        status: true, country: '', modules: [], statsHistory:[], events: [], eventsHistory: [],
         stats: [
             { lastEvent: null, lastDate: null, takeoff:0, land: 0, kill: 0, crash: 0, hit: 0, shot: 0, dead: 0 },
             { lastEvent: null, lastDate: null, takeoff:0, land: 0, kill: 0, crash: 0, hit: 0, shot: 0, dead: 0 },
