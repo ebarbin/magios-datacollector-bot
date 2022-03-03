@@ -9,6 +9,7 @@ import { Error401Component } from './components/error401/error401.component';
 import { AuthGuard } from './guards/auth.guard';
 import { UserServerEventTabsComponent } from './components/user-stats/components/user-server-event-tabs/user-server-event-tabs.component';
 import { ServerEventsComponent } from './components/user-stats/components/server-events/server-events.component';
+import { TasksComponent } from './components/tasks/tasks.component';
 
 const routes: Routes = [
   {
@@ -38,6 +39,10 @@ const routes: Routes = [
   {
     path: 'server-events',
     component: ServerEventsComponent, canActivate: [AuthGuard]
+  },
+  {
+    path: 'tasks',
+    component: TasksComponent, canActivate: [AuthGuard]
   },
   {
     path: 'error401',

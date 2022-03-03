@@ -20,11 +20,11 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { UserHeaderComponent } from './components/user-header/user-header.component';
 import { ModulesComponent } from './components/modules/modules.component';
 import { MenuComponent } from './components/menu/menu.component';
-import { ModuleTableComponent } from './components/modules/module-table/module-table.component';
+import { ModuleTableComponent } from './components/modules/components/module-table/module-table.component';
 import { ModuleState } from './states/module.state';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { FilterDialogComponent } from './components/modules/filter-dialog/filter-dialog.component';
-import { ShowHideDialogComponent } from './components/modules/show-hide-dialog/show-hide-dialog.component';
+import { FilterDialogComponent } from './components/modules/components/filter-dialog/filter-dialog.component';
+import { ShowHideDialogComponent } from './components/modules/components/show-hide-dialog/show-hide-dialog.component';
 import { UserStatsComponent } from './components/user-stats/user-stats.component';
 import { UserStatsTableComponent } from './components/user-stats/components/user-stats-table/user-stats-table.component';
 import { MomentModule } from 'ngx-moment';
@@ -48,6 +48,9 @@ import { HeaderEventDatePipe } from './pipes/header-event-date.pipe';
 import { EventDatePipe } from './pipes/event-date.pipe';
 import { EventTypeComponent } from './components/user-stats/components/event-type/event-type.component';
 import { ServerEventsComponent } from './components/user-stats/components/server-events/server-events.component';
+import { TasksComponent } from './components/tasks/tasks.component';
+import { TaskState } from './states/task.state';
+import { TaskItemComponent } from './components/tasks/components/task-item/task-item.component';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -98,7 +101,9 @@ export const ngxsLoggerConfig = {
     HeaderEventDatePipe,
     EventDatePipe,
     EventTypeComponent,
-    ServerEventsComponent
+    ServerEventsComponent,
+    TasksComponent,
+    TaskItemComponent
   ],
   imports: [
     BrowserModule,
@@ -119,7 +124,7 @@ export const ngxsLoggerConfig = {
       },
       defaultLanguage: 'es'
     }),
-    NgxsModule.forRoot([CoreState, ModuleState, UserStatsState, DashboardState, ServerDataState], ngxsConfig),
+    NgxsModule.forRoot([CoreState, ModuleState, UserStatsState, DashboardState, ServerDataState, TaskState], ngxsConfig),
     NgxsRouterPluginModule.forRoot(),
     NgxsResetPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot(ngxsLoggerConfig),

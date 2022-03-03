@@ -1,0 +1,7 @@
+<div class="container" *ngIf="getTasks$ | async as tasks">
+
+    <ng-container *ngFor="let task of tasks">
+        <app-task-item [task]="task"></app-task-item>
+    </ng-container>
+
+</div>

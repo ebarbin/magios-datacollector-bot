@@ -3,7 +3,7 @@ import { Action, Selector, State, StateContext, StateToken } from "@ngxs/store";
 import { patch, updateItem } from "@ngxs/store/operators";
 import { BlockUI, NgBlockUI } from "ng-block-ui";
 import { zip } from "rxjs";
-import { finalize, switchMap, tap } from "rxjs/operators";
+import { finalize, tap } from "rxjs/operators";
 import { MessageType, ShowMessageAction } from "../actions/core.action";
 import { InitServerDataAction, UpdateServerDataAction } from "../actions/server-data.actions";
 import { ModulesService } from "../services/modules.service";

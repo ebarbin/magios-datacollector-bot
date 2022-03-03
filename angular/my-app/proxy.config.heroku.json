@@ -1,0 +1,6 @@
+{
+    "/api": {
+      "target": "https://magios-datacollector-bot.herokuapp.com",
+      "secure": false
+    }
+  }

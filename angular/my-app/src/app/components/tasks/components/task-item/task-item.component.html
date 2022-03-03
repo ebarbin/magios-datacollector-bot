@@ -1,0 +1,23 @@
+<div class="task-item">
+    <mat-card>
+        <mat-card-title>
+            <div class="task-id">
+                {{'Task'| translate }} {{task.id}}
+            </div> 
+            <div class="task-status">
+                <img width="20" [src]="task.running ? '/assets/images/green.png': '/assets/images/red.png' ">
+            </div>
+        </mat-card-title>    
+        <mat-card-subtitle>{{task.desc}}</mat-card-subtitle>
+        <mat-card-content>
+            
+        </mat-card-content>
+        
+        <mat-card-actions align="end">
+            <button mat-raised-button *ngIf="task.running" color="warn" (click)="onToggleStatus()">{{'Stop' | translate }}</button>
+            <button mat-raised-button *ngIf="!task.running" color="primary" (click)="onToggleStatus()">{{'Start' | translate }}</button>
+            <button mat-raised-button (click)="onRunNow()">{{'Run now' | translate }}</button>
+        </mat-card-actions>
+
+    </mat-card>
+</div>
