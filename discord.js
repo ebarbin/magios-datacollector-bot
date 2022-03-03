@@ -720,9 +720,11 @@ notifyLimboOrNonRoleUser = (user) => {
         const members = await getGuild().members.fetch();
         const member = members.find(m => m.user.id == user.id);
 
-        await member.user.send('Hola! ' + `${member}` + ' ¿como estás? Notamos que te has quedado en el canal de bienvenida. ¿Sigues interesado en formar parte de Los Magios?');
-        await member.user.send('Para continuar el proceso de ingreso debes ingresar en el siguiente link y completar con tus datos. ' + process.env.APP_URL);
-        await member.user.send('Si tenes alguna duda puedes escribir en el canal ' + `${getWelcomeChannel()}` + '.');
+        if (member) {
+            await member.user.send('Hola! ' + `${member}` + ' ¿como estás? Notamos que te has quedado en el canal de bienvenida. ¿Sigues interesado en formar parte de Los Magios?');
+            await member.user.send('Para continuar el proceso de ingreso debes ingresar en el siguiente link y completar con tus datos. ' + process.env.APP_URL);
+            await member.user.send('Si tenes alguna duda puedes escribir en el canal ' + `${getWelcomeChannel()}` + '.');
+        }
 
         resolve();
     })
@@ -734,7 +736,9 @@ notifyUsers = (user) => {
         const members = await getGuild().members.fetch();
         const member = members.find(m => m.user.id == user.id);
 
-        await member.user.send('Hola! ' + `${member}` + ' ¿como estás? Notamos que hace tiempo que no te pasas por los canales. Esperamos que andes muy bien y ya sabes que puedes pasar cuando quieras :).');
+        if (member) {
+            await member.user.send('Hola! ' + `${member}` + ' ¿como estás? Notamos que hace tiempo que no te pasas por los canales. Esperamos que andes muy bien y ya sabes que puedes pasar cuando quieras :).');
+        }
 
         resolve();
     })
