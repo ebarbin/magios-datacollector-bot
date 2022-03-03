@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Action, Selector, State, StateContext, StateToken, Store } from "@ngxs/store";
 import { BlockUI, NgBlockUI } from "ng-block-ui";
-import { finalize, map, tap } from "rxjs/operators";
+import { finalize, map, switchMap, tap } from "rxjs/operators";
 import { ApplyChangeUserStatsAction, ApplyFilterUserStatsAction, ClearFiltersUserStatsAction, InitServerEventsAction, InitUserStatsAction, ShowUserServerEventTabsAction, SortUserStatsAction } from "../actions/user-stats.action";
 import { UserStatsService } from "../services/user-stats.service";
 import * as moment from 'moment';
@@ -11,6 +11,7 @@ import { UserService } from "../services/user.service";
 import { Navigate } from "@ngxs/router-plugin";
 import { CoreState } from "./core.state";
 import { MessageType, ShowMessageAction } from "../actions/core.action";
+import { of } from "rxjs";
 
 export interface UserStatsStateModel {
   userFilter: string,
@@ -131,7 +132,7 @@ const CORE_STATE_TOKEN = new StateToken<UserStatsStateModel>('userStats');
     @Action(InitServerEventsAction)
     initServerEventsAction(ctx: StateContext<UserStatsStateModel>) {
       return this.userService.getAllUsers().pipe(
-        map(users => {
+        switchMap(users => {
           const events: any = [];
           users.forEach((user:any) => {
             user.events.forEach((e:any) => {
@@ -139,7 +140,7 @@ const CORE_STATE_TOKEN = new StateToken<UserStatsStateModel>('userStats');
               events.push(e)
             });  
           });
-          return events;
+          return of(events);
         }),
         tap(events => {
            ctx.patchState({ events })
