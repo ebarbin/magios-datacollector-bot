@@ -59,20 +59,23 @@ app.get('/api/servers', checkUserAuth, async (req, res) => {
     res.json({ servers: servers });
 });
 
-app.put('/api/servers/:serverId', checkUserAuth, async (req, res) => {
-    const serverId = req.params.serverId;
-    const updatedServer = req.body;
-    const server = await datasource.getServerStatusById(serverId);
-    if (!server) {
-        return res.status(400).send({ errorDesc: 'Server not found' });
-    } else {
-        await datasource.updateServerInfo(updatedServer);
-        await discordModule.cleanServerStatus();
-        const servers = await datasource.getServerStatus();
-        servers.forEach(async sv => await discordModule.sendServerStatus(sv) )
-        return res.status(200).send();
-    }
-});
+if (process.env.environment != 'dev') {
+    app.put('/api/servers/:serverId', checkUserAuth, async (req, res) => {
+        const serverId = req.params.serverId;
+        const updatedServer = req.body;
+        const server = await datasource.getServerStatusById(serverId);
+        if (!server) {
+            return res.status(400).send({ errorDesc: 'Server not found' });
+        } else {
+            console.log(12312312321312)
+            await datasource.updateServerInfo(updatedServer);
+            await discordModule.cleanServerStatus();
+            const servers = await datasource.getServerStatus();
+            servers.forEach(async sv => await discordModule.sendServerStatus(sv) )
+            return res.status(200).send();
+        }
+    });
+}
 
 app.get('/api/modules', checkUserAuth, async (req, res) => {
     const terrains = [];
@@ -184,6 +187,33 @@ app.get('/api/users', checkUserAuth, async (req, res) =>{
     res.json({users: all});
 });
 
+app.put('/api/task/toggle/status/:taskId', checkUserAuth, async (req, res) => {
+    try {
+        const task = cron.toggleTasktatus(parseInt(req.params.taskId));
+        res.json({success: true, task: task});
+    } catch(e) {
+        res.json({success: false, errorDesc: e.message});
+    }
+})
+
+app.put('/api/task/run-now/:taskId', checkUserAuth, async (req, res) => {
+    try {
+        const task = await cron.executeTask(parseInt(req.params.taskId));
+        res.json({success: true, task: task});
+    } catch(e) {
+        res.json({success: false, errorDesc: e.message});
+    }
+})
+
+app.get('/api/task/', checkUserAuth, async (req, res) => {
+    try {
+        const tasks = cron.getAllTask();
+        res.json({success: true, tasks: tasks});
+    } catch(e) {
+        res.json({success: false, errorDesc: e.message});
+    }
+})
+
 app.post('/oauth/login', async (req, res) => {
 
     const creds = btoa(process.env.DISCORD_CLIENT_ID + ':' + process.env.DISCORD_AUTH_SECRET);
@@ -258,6 +288,10 @@ app.get('/user-server-event-tabs', async (req, res) => {
 });
 
 app.get('/server-events', async (req, res) => {
+    res.sendFile(__dirname + '/angular/my-app/dist/my-app/index.html');
+});
+
+app.get('/tasks', async (req, res) => {
     res.sendFile(__dirname + '/angular/my-app/dist/my-app/index.html');
 });
 
@@ -402,31 +436,4 @@ app.get('/api/server-alive/:serverId', async  (req, res) => {
     console.log(TAG + ' - Server ' + req.params.serverId + ' requesting last alive date.');
     const serverStatus = await datasource.getServerStatusById(req.params.serverId);
     res.json({response: serverStatus});
-})
-
-app.get('/api/task/status/:taskId', async  (req, res) => {
-    try {
-        const status = cron.getTaskStatus(parseInt(req.params.taskId));
-        res.json({success: true, status: status});
-    } catch(e) {
-        res.json({success: false, errorDesc: e.message});
-     }
-})
-
-app.get('/api/task/toggle/status/:taskId', async  (req, res) => {
-    try {
-        const status = cron.toggleTasktatus(parseInt(req.params.taskId));
-        res.json({success: true, status: status});
-    } catch(e) {
-        res.json({success: false, errorDesc: e.message});
-    }
-})
-
-app.get('/api/task/', async  (req, res) => {
-    try {
-        const tasks = cron.getAllTask();
-        res.json({success: true, tasks: tasks});
-    } catch(e) {
-        res.json({success: false, errorDesc: e.message});
-    }
-})
+});

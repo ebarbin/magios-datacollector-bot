@@ -5,6 +5,7 @@
     <a mat-list-item *ngIf="isNonNewUser$ | async" (click)="navigate('server-events')">{{ 'Server events' | translate }}</a>
     <a mat-list-item *ngIf="isNonNewUser$ | async" (click)="navigate('dashboard')">{{ 'Dashboard' | translate }}</a>
     <a mat-list-item *ngIf="isNonNewUser$ | async" (click)="navigate('server-data')">{{ 'Servers' | translate }}</a>
+    <a mat-list-item *ngIf="isAdmin$ | async" (click)="navigate('tasks')">{{ 'Tasks' | translate }}</a>
     <mat-divider></mat-divider>
     <mat-divider></mat-divider>
     <mat-divider></mat-divider>
