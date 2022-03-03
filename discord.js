@@ -919,3 +919,4 @@ exports.cleanServerStatus = cleanServerStatus;
 exports.notifyOwner = notifyOwner;
 exports.registerUser = registerUser;
 exports.notifyLimboOrNonRoleUser = notifyLimboOrNonRoleUser;
+exports.notifyUsers = notifyUsers;
