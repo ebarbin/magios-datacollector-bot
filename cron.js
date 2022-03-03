@@ -12,7 +12,8 @@ console.log(TAG + ' - Cron module is started.');
 const tasks = [];
 const task1 = cron.schedule('*/120 * * * *', async () => {
     await executeTask1();
-});
+}, { scheduled: false, timezone: "America/Argentina/Buenos_Aires" });
+
 task1.id = 1;
 task1.running = process.env.environment != 'dev';
 task1.desc = 'Cleaning old events - Running a task every 2 hours';
@@ -25,11 +26,13 @@ executeTask1 = async () => {
 
 const task2 = cron.schedule('*/10 * * * *', async () => {
     await executeTask2();
-});
+}, { scheduled: false, timezone: "America/Argentina/Buenos_Aires" });
+
 task2.id = 2;
 task2.running = process.env.environment != 'dev';
 task2.desc = 'Checking server status - Running a task every 10 minutes';
 tasks.push(task2);
+
 executeTask2 = async () => {
     console.log(TAG + ' - Checking server status - Running a task every 10 minutes.');
     await discordModule.cleanServerStatus();
@@ -61,11 +64,13 @@ executeTask2 = async () => {
 
 const task3 = cron.schedule('0 0 0 1 */1 *', async () => {
     await executeTask3();
-});
+}, { scheduled: false, timezone: "America/Argentina/Buenos_Aires" });
+
 task3.id = 3;
 task3.running = process.env.environment != 'dev';
 task3.desc = 'Moving stats to history and reset current - Running a task every month';
 tasks.push(task3);
+
 executeTask3 = async () => {
     console.log(TAG + ' - Moving stats to history and reset current - Running a task every month.');
     const users = await datasource.getAllUsers();
@@ -89,11 +94,13 @@ executeTask3 = async () => {
 
 const task4 = cron.schedule('0 0 0 2 */1 *', async () => {
     await executeTask4();
-});
+}, { scheduled: false, timezone: "America/Argentina/Buenos_Aires" });
+
 task4.id = 4;
 task4.running = process.env.environment != 'dev';
 task4.desc = 'Notifying limbo/none rol users - Running a task every month';
 tasks.push(task4);
+
 executeTask4 = async () => {
     console.log(TAG + ' - Notifying limbo/none rol users - Running a task every month.');
     const limbosOrNoneRoleUsers = await datasource.getLimboOrNoneRoleUsers();
@@ -103,11 +110,13 @@ executeTask4 = async () => {
 
 const task5 = cron.schedule('0 0 0 3 */1 *', async () => {
     await executeTask5();
-});
+}, { scheduled: false, timezone: "America/Argentina/Buenos_Aires" });
+
 task5.id = 5;
 task5.running = process.env.environment != 'dev';
 task5.desc = 'Notifying non active users - Running a task every month';
 tasks.push(task5);
+
 executeTask5 = async () => {
     console.log(TAG + ' - Notifying non active users - Running a task every month');
     const allUsers = await datasource.getAllUsers();
@@ -117,6 +126,12 @@ executeTask5 = async () => {
         }
     });
     await discordModule.sendMessageToLogDiscordChannel('Monthly message sended to users that we know nothing about them.');
+}
+
+if (process.env.environment != 'dev') {
+    tasks.forEach(t => { t.start(); });
+} else {
+    tasks.forEach(t => { t.stop(); });
 }
 
 executeTask = async (taskId) => {
