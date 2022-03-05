@@ -43,7 +43,7 @@ executeTask2 = async () => {
         if (common.getToDay().diff(moment(server.updated, 'YYYY-MM-DD HH:mm:ss.SSS'), 'minutes') > 15) {
             server.status = false;
 
-            if (!server.notified) {
+            if (!server.notified && !server.skipnotification) {
                 server.notified = true;
                 await discordModule.notifyOwner(server);
             }

@@ -861,6 +861,8 @@ sendServerStatus = (server) => {
             const owner = await datasource.getUser(server.owner);
             embed.addFields({ name: 'Dueño', value: owner.username, inline: true })
         }
+        
+        embed.addFields({ name: 'Evitar notificación', value: server.skipnotification ? 'Si': 'No', inline: true })
 
         await getServerStatusChannel().send(embed);
         console.log(TAG + ' - Server ' + server.id + ' status was reported to discord as ' + (server.status ? 'ONLINE.' : 'OFFLINE.'));

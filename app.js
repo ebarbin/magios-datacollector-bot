@@ -59,23 +59,20 @@ app.get('/api/servers', checkUserAuth, async (req, res) => {
     res.json({ servers: servers });
 });
 
-if (process.env.environment != 'dev') {
-    app.put('/api/servers/:serverId', checkUserAuth, async (req, res) => {
-        const serverId = req.params.serverId;
-        const updatedServer = req.body;
-        const server = await datasource.getServerStatusById(serverId);
-        if (!server) {
-            return res.status(400).send({ errorDesc: 'Server not found' });
-        } else {
-            console.log(12312312321312)
-            await datasource.updateServerInfo(updatedServer);
-            await discordModule.cleanServerStatus();
-            const servers = await datasource.getServerStatus();
-            servers.forEach(async sv => await discordModule.sendServerStatus(sv) )
-            return res.status(200).send();
-        }
-    });
-}
+app.put('/api/servers/:serverId', checkUserAuth, async (req, res) => {
+    const serverId = req.params.serverId;
+    const updatedServer = req.body;
+    const server = await datasource.getServerStatusById(serverId);
+    if (!server) {
+        return res.status(400).send({ errorDesc: 'Server not found' });
+    } else {
+        await datasource.updateServerInfo(updatedServer);
+        await discordModule.cleanServerStatus();
+        const servers = await datasource.getServerStatus();
+        servers.forEach(async sv => await discordModule.sendServerStatus(sv) )
+        return res.status(200).send();
+    }
+});
 
 app.get('/api/modules', checkUserAuth, async (req, res) => {
     const terrains = [];
