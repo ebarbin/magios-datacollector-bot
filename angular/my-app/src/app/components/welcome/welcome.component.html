@@ -2,12 +2,12 @@
     <img class="welcome-img" src="/assets/images/welcome.png">
     <div class="flag-list" >
         <ng-container *ngFor="let country of getCountries$ | async">
-            <span class="flag-icon {{country.css}} flag-icon-squared"></span>&nbsp;
+            <span class="flag-icon {{country.css}} flag-icon-squared" (click)="onCountryClick(country)"></span>&nbsp;
         </ng-container>
     </div>
 </div>
 <div class="footer">
     <div class="footer-content">
-        @ Powered by Magios <img class="rounded-circle" width="15" src="/assets/images/logo.png">
+        {{ 'Language' | translate }}: {{ getLang$ | async | translate }}  |  @ Powered by Magios <img class="rounded-circle" width="15" src="/assets/images/logo.png">
     </div>    
 </div>

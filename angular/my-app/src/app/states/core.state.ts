@@ -3,16 +3,16 @@ import { TranslateService } from "@ngx-translate/core";
 import { Action, Selector, State, StateContext, StateToken } from "@ngxs/store";
 import { BlockUI, NgBlockUI } from "ng-block-ui";
 import { ToastrService } from "ngx-toastr";
-import { DownloadNewUserGuideAction, InitAppAction, LogoutAction, MessageType, RedirectToDiscordGeneralChannelAction, RedirectToDiscordLoginAction, RedirectToDiscordWelcomeChannelAction, ShowMessageAction } from "../actions/core.action";
+import { ChangeAppLanguageAction, DownloadNewUserGuideAction, InitAppAction, LogoutAction, MessageType, RedirectToDiscordGeneralChannelAction, RedirectToDiscordLoginAction, RedirectToDiscordWelcomeChannelAction, ShowMessageAction } from "../actions/core.action";
 import { environment } from "src/environments/environment";
 import { includes, sortBy } from 'lodash';
 import { LoginService } from "../services/login.service";
 import { finalize, tap } from "rxjs/operators";
 import { EMPTY } from "rxjs";
 
-export interface CoreStateModel { user: any }
+export interface CoreStateModel { user: any, lang: any }
   
-const initialState: CoreStateModel = { user: null };
+const initialState: CoreStateModel = { user: null, lang: null };
 
 const CORE_STATE_TOKEN = new StateToken<CoreStateModel>('core');
 @State<CoreStateModel>({
@@ -33,6 +33,9 @@ export class CoreState {
     @Action(InitAppAction)
     initAppAction(ctx: StateContext<CoreStateModel>) {
       
+      ctx.patchState({lang: 'es' });
+      this.translate.use('es');
+
       this.blockUI.start();
 
       if (window.location.href.indexOf('/oauth/redirect') >=0) {
@@ -104,6 +107,13 @@ export class CoreState {
       }, 1000);
     }
 
+    @Action(ChangeAppLanguageAction)
+    changeAppLanguageAction(ctx: StateContext<CoreStateModel>, action: ChangeAppLanguageAction) {
+      const { values } = action.payload;
+      ctx.patchState({lang: values.lang});
+      this.translate.use(values.lang);
+    }
+
     @Action(ShowMessageAction)
     showMessageAction(ctx: StateContext<CoreStateModel>, action: ShowMessageAction) {
   
@@ -138,6 +148,11 @@ export class CoreState {
       return state.user;
     }
 
+    @Selector()
+    static getLang(state: CoreStateModel) {
+      return state.lang;
+    }
+
     @Selector([CoreState.getUser])
     static hasUser(user: any) {
       return user != null;
@@ -162,22 +177,22 @@ export class CoreState {
     static getCountries() {
       return [
         { name:'', code:'', css:'' },
-        { name:'Argentina', code:'ar', css:'flag-icon-ar' },
-        { name:'Bolivia', code:'bo', css:'flag-icon-bo' },
-        { name:'Brasil', code:'br', css:'flag-icon-br' },
-        { name:'Canada', code:'ca', css:'flag-icon-ca' },
-        { name:'Chile', code:'cl', css:'flag-icon-cl' },
-        { name:'Colombia', code:'co', css:'flag-icon-co' },
-        { name:'Costa Rica', code:'cr', css:'flag-icon-cr' },
-        { name:'Cuba', code:'cu', css:'flag-icon-cu' },
-        { name:'Ecuador', code:'ec', css:'flag-icon-ec' },
-        { name:'España', code:'es', css:'flag-icon-es' },
-        { name:'Estados Unidos', code:'us', css:'flag-icon-us' },
-        { name:'Guatemala', code:'gt', css:'flag-icon-gt' },
-        { name:'Mexico', code:'mx', css:'flag-icon-mx' },
-        { name:'Perú', code:'pe', css:'flag-icon-pe' },
-        { name:'Puerto Rico', code:'pr', css:'flag-icon-pr' },
-        { name:'Uruguay', code:'uy', css:'flag-icon-uy' }
+        { name:'Argentina', code:'ar', css:'flag-icon-ar', lang: 'es' },
+        { name:'Bolivia', code:'bo', css:'flag-icon-bo', lang: 'es' },
+        { name:'Brasil', code:'br', css:'flag-icon-br', lang: 'es' },
+        { name:'Canada', code:'ca', css:'flag-icon-ca', lang: 'en' },
+        { name:'Chile', code:'cl', css:'flag-icon-cl', lang: 'es' },
+        { name:'Colombia', code:'co', css:'flag-icon-co', lang: 'es' },
+        { name:'Costa Rica', code:'cr', css:'flag-icon-cr', lang: 'es' },
+        { name:'Cuba', code:'cu', css:'flag-icon-cu', lang: 'es' },
+        { name:'Ecuador', code:'ec', css:'flag-icon-ec', lang: 'es' },
+        { name:'España', code:'es', css:'flag-icon-es', lang: 'es' },
+        { name:'Estados Unidos', code:'us', css:'flag-icon-us', lang: 'en' },
+        { name:'Guatemala', code:'gt', css:'flag-icon-gt', lang: 'es' },
+        { name:'Mexico', code:'mx', css:'flag-icon-mx', lang: 'es' },
+        { name:'Perú', code:'pe', css:'flag-icon-pe', lang: 'es' },
+        { name:'Puerto Rico', code:'pr', css:'flag-icon-pr', lang: 'es' },
+        { name:'Uruguay', code:'uy', css:'flag-icon-uy', lang: 'es' }
       ]
     }
 

@@ -30,3 +30,8 @@ export class DownloadNewUserGuideAction {
 export class RedirectToDiscordWelcomeChannelAction {
     static readonly type = '[Core] Redirect to Los Magios discord welcome channel';
 }
+
+export class ChangeAppLanguageAction {
+    static readonly type = '[Core] Change app language';
+    constructor(public payload: { values: any}) {}
+}

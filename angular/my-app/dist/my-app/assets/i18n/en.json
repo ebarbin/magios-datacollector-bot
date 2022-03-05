@@ -81,5 +81,8 @@
     "Owner":"Owner",
     "New users guide":"New users guide",
     "Tasks":"Tasks",
-    "Skip notification when offline":"Skip notification"
+    "Skip notification when offline":"Skip notification",
+    "Language":"Language",
+    "en":"English",
+    "es":"Spanish"
 }
