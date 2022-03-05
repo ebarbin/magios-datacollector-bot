@@ -80,5 +80,6 @@
     "Target":"Target",
     "Owner":"Owner",
     "New users guide":"New users guide",
-    "Tasks":"Tasks"
+    "Tasks":"Tasks",
+    "Skip notification when offline":"Skip notification"
 }

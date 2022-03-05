@@ -21,10 +21,8 @@ const initialState: ServerDataStateModel = {
     terrains: [],
     users: []
 };
-
-const CORE_STATE_TOKEN = new StateToken<ServerDataStateModel>('serverdata');
   @State<ServerDataStateModel>({
-      name: CORE_STATE_TOKEN,
+      name: new StateToken<ServerDataStateModel>('serverdata'),
       defaults: initialState
     })
   @Injectable()

@@ -80,5 +80,6 @@
     "Target":"Objetivo",
     "Owner":"Dueño",
     "New users guide":"Guía Magios",
-    "Tasks":"Tareas"
+    "Tasks":"Tareas",
+    "Skip notification when offline":"Evitar notificación"
 }

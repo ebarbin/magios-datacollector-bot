@@ -71,6 +71,10 @@
             {{'ATIS' | translate}}
         </mat-slide-toggle>
 
+        <mat-slide-toggle class="toggle-field" formControlName="skipnotification" color="primary">
+            {{'Skip notification when offline' | translate}}
+        </mat-slide-toggle>
+
         <mat-card-actions align="end">
             <button mat-raised-button color="primary" [disabled]="!form.valid" (click)="onSave()">{{'Save' | translate }}</button>
         </mat-card-actions>

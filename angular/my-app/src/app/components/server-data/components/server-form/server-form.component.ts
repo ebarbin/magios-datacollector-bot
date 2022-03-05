@@ -37,6 +37,7 @@ export class ServerFormComponent implements OnInit {
       others: [''],
       srs: [false],
       atis: [false],
+      skipnotification: [false],
       owner: ['', [Validators.required, this.customValidation]]
     });
 
