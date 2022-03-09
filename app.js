@@ -109,6 +109,8 @@ app.put('/api/modules/user/status/:userId', checkUserAuth, async (req, res) => {
         if (!user.status) user.status = true;
         else user.status = false;
         await datasource.updateUser(user);
+        let strStatus = user.status ? 'active' : 'inactive';
+        await discordModule.sendMessageToLogDiscordChannel('The user "' + user.username + '" has updated his status to ' + strStatus + '.');
         return res.status(200).send();
     } else {
         return res.status(401).send();
@@ -122,6 +124,7 @@ app.put('/api/modules/user/country/:userId', checkUserAuth, async (req, res) => 
     if (user) {
         user.country = country;
         await datasource.updateUser(user);
+        await discordModule.sendMessageToLogDiscordChannel('The user "' + user.username + '" has updated his country to ' + country + '.');
         return res.status(200).send();
     } else {
         return res.status(401).send();
@@ -170,7 +173,8 @@ app.put('/api/modules/user/:userId', checkUserAuth, async (req, res) => {
         else user.modules = user.modules.filter(m => m !== module);
         
         await datasource.updateUser(user);
-    
+        await discordModule.sendMessageToLogDiscordChannel('The user "' + user.username + '" has updated his modules.');
+
         res.json({user: user});
 
     } else {
@@ -242,7 +246,7 @@ app.post('/oauth/login', async (req, res) => {
             const token = jwt.sign({ check:  true }, app.get('jwt-secret'), { expiresIn: 1440 });
             return res.json({user: user, token: token});
         } else {
-            await discordModule.sendMessageToLogDiscordChannel('The not authorized user "' + discordUser.username + '" was trying to login Magios Web Site.');
+            await discordModule.sendMessageToLogDiscordChannel('Not authorized user "' + discordUser.username + '(' + discordUser.id + ') " was trying to login Magios Site.');
             return res.status(401).send();
         }
     }
