@@ -39,6 +39,7 @@ if (process.env.environment != 'dev') {
     
             if (user) {
                 user.username = newMember.displayName.toLowerCase();
+                user.avatar = newMember.user.avatar;
                 user.roles = roles;
                 await datasource.updateUser(user);
             } else {
@@ -121,7 +122,7 @@ if (process.env.environment != 'dev') {
         if (message.channel.type == 'dm') {
 
             const user = await datasource.getUser(message.author.id);
-            if (user /*&& user.roles && user.roles.find(r => r == 'Magios' || r == 'NewJoiner' || r == 'Admins')*/) {
+            if (user) {
 
                 if (message.content == '!terrains') {
                     message.reply(common.terrains.join(', '));
@@ -366,100 +367,61 @@ if (process.env.environment != 'dev') {
                         } else if (message.content == '!download all') {
                             let users = await datasource.getAllUsers();
 
-                            const document = {
-                                html: TEMPLATE,
-                                data: { users: users, title:'Reporte Todos' },
-                                path: "./magios_report_all.pdf",
-                                type: "",
-                            };
+                            const document = { html: TEMPLATE, data: { users: users, title:'Reporte Todos' }, path: "./magios_report_all.pdf", type: "" };
         
                             pdf.create(document, common.exportsOptions).then((res) => {
-                                message.channel.send({
-                                files: [res.filename]
-                                });
-                            })
-                            .catch((error) => {
+                                message.channel.send({ files: [res.filename] });
+                            }).catch((error) => {
                                 console.error(error);
                             });
 
                         } else if (message.content == '!download magios') {
                             let users = await datasource.getAllUsers();
                             users = users.filter(user => user.roles && user.roles.find(r => r == 'Magios'));
-                            users = _.sortBy(users, [ u => {
-                                return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); 
-                            }], ['asc']);
+                            users = _.sortBy(users, [ u => { return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); }], ['asc']);
         
-                            const document = {
-                                html: TEMPLATE,
-                                data: { users: users, title:'Reporte Magios' },
-                                path: "./magios_report_magios.pdf",
-                                type: "",
-                            };
+                            const document = { html: TEMPLATE, data: { users: users, title:'Reporte Magios' }, path: "./magios_report_magios.pdf", type: "" };
         
                             pdf.create(document, options).then((res) => {
-                                message.channel.send({
-                                files: [res.filename]
-                                });
-                            })
-                            .catch((error) => {
-                            console.error(error);
+                                message.channel.send({ files: [res.filename] });
+                            }).catch((error) => {
+                                console.error(error);
                             });
 
                         } else if (message.content == '!download limbo') {
                             let users = await datasource.getAllUsers();
                             users = users.filter(user => user.roles && user.roles.find(r => r == 'Limbo'));
-                            users = _.sortBy(users, [ u => {
-                                return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); 
-                            }], ['asc']);
+                            users = _.sortBy(users, [ u => { return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); }], ['asc']);
         
-                            const document = {
-                                html: TEMPLATE,
-                                data: { users: users, title:'Reporte Limbo' },
-                                path: "./magios_report_limbo.pdf",
-                                type: "",
-                            };
+                            const document = { html: TEMPLATE, data: { users: users, title:'Reporte Limbo' }, path: "./magios_report_limbo.pdf", type: "" };
         
                             pdf.create(document, options).then((res) => {
-                                message.channel.send({
-                                files: [res.filename]
-                                });
-                            })
-                            .catch((error) => {
-                            console.error(error);
+                                message.channel.send({ files: [res.filename] });
+                            }).catch((error) => {
+                                console.error(error);
                             });
 
                         } else if (message.content == '!download newjoiner') {
 
                             let users = await datasource.getAllUsers();
                             users = users.filter(user => user.roles && user.roles.find(r => r == 'NewJoiner'));
-                            users = _.sortBy(users, [ u => {
-                                return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); 
-                            }], ['asc']);
+                            users = _.sortBy(users, [ u => { return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); }], ['asc']);
         
-                            const document = {
-                                html: TEMPLATE,
-                                data: { users: users, title:'Reporte NewJoiner'},
-                                path: "./magios_report_newjoiner.pdf",
-                                type: "",
-                            };
+                            const document = { html: TEMPLATE, data: { users: users, title:'Reporte NewJoiner'}, path: "./magios_report_newjoiner.pdf", type: "" };
         
                             pdf.create(document, options).then((res) => {
-                                message.channel.send({
-                                files: [res.filename]
-                                });
-                            })
-                            .catch((error) => {
-                            console.error(error);
+                                message.channel.send({ files: [res.filename] });
+                            }).catch((error) => {
+                                console.error(error);
                             });
                         }
                     }
-
                 }
-                
             }
 
         } else if (message.channel.parent.name != 'ADMIN') {
 
+            //
             let dataBaseUser = await datasource.getUser(message.author.id);
 
             if (dataBaseUser) {
