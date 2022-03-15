@@ -285,7 +285,8 @@ if (process.env.environment != 'dev') {
                             const module = message.content.split("!allwithmodule")[1].trim();
                             let users = await datasource.getAllUsers();
                             users = users.filter(u => u.modules && u.modules.find(m => m == module));
-                            message.channel.send(users.map(u => u.username).join());
+                            message.channel.send('Users: ' + users.map(u => u.username).join());
+                            message.channel.send('Total: ' + users.length);
 
                         } else if (message.content == '!limbo' || message.content == '!newjoiner' || message.content == '!magios') {
 
