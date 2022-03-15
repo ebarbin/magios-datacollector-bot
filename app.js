@@ -173,7 +173,12 @@ app.put('/api/modules/user/:userId', checkUserAuth, async (req, res) => {
         else user.modules = user.modules.filter(m => m !== module);
         
         await datasource.updateUser(user);
-        await discordModule.sendMessageToLogDiscordChannel('The user "' + user.username + '" has updated his modules.');
+
+        if (flag) {
+            await discordModule.sendMessageToLogDiscordChannel('The user "' + user.username + '" has added module: ' + module + '.');
+        } else {
+            await discordModule.sendMessageToLogDiscordChannel('The user "' + user.username + '" has removed module: ' + module + '.');
+        }
 
         res.json({user: user});
 
