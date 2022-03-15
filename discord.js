@@ -252,7 +252,7 @@ if (process.env.environment != 'dev') {
                 } else if (message.content.indexOf('!help') >= 0) {
 
                     let embed = new MessageEmbed().setTitle('Ayuda').setColor('#00830b').setTimestamp();
-                    embed.addFields(
+                    const fields = [
                         { name: '!terrains', value: 'List all terrains.', inline: false },
                         { name: '!jets', value: 'List all jets.', inline: true },
                         { name: '!warbirds', value: 'List all warbirds.', inline: true },
@@ -264,15 +264,19 @@ if (process.env.environment != 'dev') {
                         { name: '!myhelis', value: 'List my helis.', inline: true },
                         { name: '!myothers', value: 'List my others.', inline: true },
 
-                        { name: '!limbo', value: 'List all limbos.', inline: true },
-                        { name: '!newjoiner', value: 'List all newjoiners.', inline: true },
-                        { name: '!magios', value: 'List all magios.', inline: true },
-
-                        { name: '!addmodules <param>', value: 'Add list of modules comma separated.', inline: true },
-                        { name: '!addmodule <param>', value: 'Add module.', inline: true },
-                        { name: '!removemodule <param>', value: 'Remove module.', inline: true },
+                        { name: '!addmodules <param>', value: 'Add list of modules (comma separated values) to your user.', inline: true },
+                        { name: '!addmodule <param>', value: 'Add module to your user.', inline: true },
+                        { name: '!removemodule <param>', value: 'Remove module from your user.', inline: true },
                         { name: '!allwithmodule <param>', value: 'List of users with module.', inline: true },
-                    );
+                    ];
+
+                    if (user.roles.find(r => r == 'Admins')) {
+                        fields.push({ name: '!limbo', value: 'List all limbos.', inline: true });
+                        fields.push({ name: '!newjoiner', value: 'List all newjoiners.', inline: true });
+                        fields.push({ name: '!magios', value: 'List all magios.', inline: true });
+                    }
+                    
+                    embed.addFields(fields);
                     
                     message.channel.send(embed);
 
