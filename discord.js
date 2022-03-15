@@ -248,220 +248,207 @@ if (process.env.environment != 'dev') {
                     } catch(e) {
                         message.reply("Fail removing module.");
                     }
-                } else if (message.content == '!limbo' && user.roles.find(r => r == 'Admins')) {
+                
+                } else if (message.content.indexOf('!help') >= 0) {
 
-                    let users = await datasource.getAllUsers();
-                    users = users.filter(u => u.roles && u.roles.find(r => r == 'Limbo'));
-                    users = _.sortBy(users, [ u => {
-                        return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); 
-                    }], ['asc']);
+                    let embed = new MessageEmbed().setTitle('Ayuda').setColor('#00830b').setTimestamp();
+                    embed.addFields(
+                        { name: '!terrains', value: 'List all terrains.', inline: false },
+                        { name: '!jets', value: 'List all jets.', inline: true },
+                        { name: '!warbirds', value: 'List all warbirds.', inline: true },
+                        { name: '!helis', value: 'List all helis.', inline: true },
+                        { name: '!others', value: 'List all others.', inline: true },
+                        { name: '!myterrains', value: 'List my terrains.', inline: true },
+                        { name: '!myjets', value: 'List my jets.', inline: true },
+                        { name: '!mywarbirds', value: 'List my warbirds.', inline: true },
+                        { name: '!myhelis', value: 'List my helis.', inline: true },
+                        { name: '!myothers', value: 'List my others.', inline: true },
+
+                        { name: '!limbo', value: 'List all limbos.', inline: true },
+                        { name: '!newjoiner', value: 'List all newjoiners.', inline: true },
+                        { name: '!magios', value: 'List all magios.', inline: true },
+
+                        { name: '!addmodules <param>', value: 'Add list of modules comma separated.', inline: true },
+                        { name: '!addmodule <param>', value: 'Add module.', inline: true },
+                        { name: '!removemodule <param>', value: 'Remove module.', inline: true },
+                        { name: '!allwithmodule <param>', value: 'List of users with module.', inline: true },
+                    );
                     
-                    const pageSize = 3;
-                    const pages = Math.round((users.length +1)/ pageSize);
-        
-                    for (let i = 1; i <= pages; i++) {
-                        
-                        let paginatedUsers = paginate(users, pageSize, i);
-        
-                        let embed = new MessageEmbed()
-                            .setTitle('Roles Limbo - ' + i + ' de ' + pages)
-                            .setColor('#00830b')
-                            .setTimestamp();
-        
-                            paginatedUsers.forEach(user => {
-                        
-                                embed.addFields(
-                                    { name: '--> ' + user.username, value: '('+user.id+')', inline: false },
-                                    { name: 'Rol/es', value: user.roles ? user.roles.join(',') : '-', inline: true },
-                                    { name: 'Ingreso', value: user.joinDate ? user.joinDate : '-', inline: true },
-                                    { name: 'Ultimo mensaje', value: user.lastTextChannelDate || '-', inline: true })
-                            })
-                            message.channel.send(embed);
-                    }
-        
-                } else if (message.content == '!newjoiner' && user.roles.find(r => r == 'Admins')) {
+                    message.channel.send(embed);
 
-                    let users = await datasource.getAllUsers();
-                    users = users.filter(u => u.roles && u.roles.find(r => r == 'NewJoiner'));
-                    users = _.sortBy(users, [ u => {
-                        return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); 
-                    }], ['asc']);
-                    
-                    const pageSize = 3;
-                    const pages = Math.round((users.length +1)/ pageSize);
-        
-                    for (let i = 1; i <= pages; i++) {
-                        
-                        let paginatedUsers = paginate(users, pageSize, i);
-        
-                        let embed = new MessageEmbed()
-                            .setTitle('Roles NewJoiner - ' + i + ' de ' + pages)
-                            .setColor('#00830b')
-                            .setTimestamp();
-        
-                            paginatedUsers.forEach(user => {
-                        
-                                embed.addFields(
-                                    { name: '--> ' + user.username, value: '('+user.id+')', inline: false },
-                                    { name: 'Rol/es', value: user.roles ? user.roles.join(',') : '-', inline: true },
-                                    { name: 'Ingreso', value: user.joinDate ? user.joinDate : '-', inline: true },
-                                    { name: 'Ultimo mensaje', value: user.lastTextChannelDate || '-', inline: true })
-                            })
-                            message.channel.send(embed);
-                    }
-                } else if (message.content == '!magios' && user.roles.find(r => r == 'Admins')) {
+                } else {
 
-                    let users = await datasource.getAllUsers();
-                    users = users.filter(u => u.roles && u.roles.find(r => r == 'Magios'));
-                    users = _.sortBy(users, [ u => {
-                        return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); 
-                    }], ['asc']);
-                    
-                    const pageSize = 3;
-                    const pages = Math.round((users.length +1)/ pageSize);
-        
-                    for (let i = 1; i <= pages; i++) {
-                        
-                        let paginatedUsers = paginate(users, pageSize, i);
-        
-                        let embed = new MessageEmbed()
-                            .setTitle('Roles Magios - ' + i + ' de ' + pages)
-                            .setColor('#00830b')
-                            .setTimestamp();
-        
-                            paginatedUsers.forEach(user => {
-                        
-                                embed.addFields(
-                                    { name: '--> ' + user.username, value: '('+user.id+')', inline: false },
-                                    { name: 'Rol/es', value: user.roles ? user.roles.join(',') : '-', inline: true },
-                                    { name: 'Ingreso', value: user.joinDate ? user.joinDate : '-', inline: true },
-                                    { name: 'Ultimo mensaje', value: user.lastTextChannelDate || '-', inline: true })
-                            })
-                            message.channel.send(embed);
-                    }
+                    if (user.roles.find(r => r == 'Admins')) {
 
-                } else if (message.content.indexOf('!getid') >= 0 && user.roles.find(r => r == 'Admins')) {
+                        if (message.content.indexOf('!allwithmodule') >= 0) {
 
-                    const arr = message.content.split(' ');
-                    if (arr.length == 2) {
-                        const param = arr[1].trim();    
-        
-                        const uuser = await datasource.getUser(param);
-        
-                        if (uuser) {
-                            let embed = new MessageEmbed()
-                            .setTitle('Detalle usuario')
-                            .setColor('#00830b')
-                            .setTimestamp()
-                            .setThumbnail(common.AVATAR_BASE_PATH + uuser.id + '/' + uuser.avatar + '.jpg');
+                            const module = message.content.split("!allwithmodule")[1].trim();
+                            let users = await datasource.getAllUsers();
+                            users = users.filter(u => u.modules && u.modules.find(m => m == module));
+                            message.channel.send(users.map(u => u.username).join());
+
+                        } else if (message.content == '!limbo' || message.content == '!newjoiner' || message.content == '!magios') {
+
+                            let role;
+
+                            if (message.content == '!limbo') {
+                                role = 'Limbo';
+                            } else if (message.content == '!newjoiner') {
+                                role = 'NewJoiner';
+                            } else if (message.content == '!magios') {
+                                role = 'Magios';
+                            }
+
+                            let users = await datasource.getAllUsers();
+                            users = users.filter(u => u.roles && u.roles.find(r => r == role));
+                            users = _.sortBy(users, [ u => {
+                                return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); 
+                            }], ['asc']);
                             
-                            embed.addFields(
-                                { name: uuser.username, value:'('+uuser.id+')', inline: false },
-                                { name: '1. Canal audio (seg.)', value: uuser.voiceChannelTotalTime || 0, inline: true },
-                                { name: '2. Ingresos audio (cant.)', value: uuser.joinVoiceChannelCount || 0, inline: true },
-                                { name: '3. Ultimo acceso audio (fec.)', value: uuser.lastVoiceChannelAccess || '-', inline: true },
-                                { name: '4. Canal audio', value: uuser.lastVoiceChannelName || '-', inline: true },
-                                { name: '5. Mensajes (cant.)', value: uuser.msgChannelCount || 0, inline: true },
-                                { name: '6. Canal texto', value: uuser.lastTextChannelName || '-', inline: true },
-                                { name: '7. Ultimo mensaje (fec.)', value: uuser.lastTextChannelDate || '-', inline: true },
-                                { name: 'Ingreso (fec.)', value: uuser.joinDate ? uuser.joinDate : '-', inline: false }
-                                )
-                        
-                            message.channel.send(embed);
+                            const pageSize = 3;
+                            const pages = Math.round((users.length +1)/ pageSize);
+                
+                            for (let i = 1; i <= pages; i++) {
+                                
+                                let paginatedUsers = paginate(users, pageSize, i);
+                
+                                let embed = new MessageEmbed()
+                                    .setTitle('Roles '+role+' - ' + i + ' de ' + pages)
+                                    .setColor('#00830b')
+                                    .setTimestamp();
+                
+                                    paginatedUsers.forEach(user => {
+                                
+                                        embed.addFields(
+                                            { name: '--> ' + user.username, value: '('+user.id+')', inline: false },
+                                            { name: 'Rol/es', value: user.roles ? user.roles.join(',') : '-', inline: true },
+                                            { name: 'Ingreso', value: user.joinDate ? user.joinDate : '-', inline: true },
+                                            { name: 'Ultimo mensaje', value: user.lastTextChannelDate || '-', inline: true })
+                                    })
+                                    message.channel.send(embed);
+                            }
+
+                        } else if (message.content.indexOf('!getid') >= 0) {
+                            const arr = message.content.split(' ');
+                            if (arr.length == 2) {
+                                const param = arr[1].trim();    
+                
+                                const uuser = await datasource.getUser(param);
+                
+                                if (uuser) {
+                                    let embed = new MessageEmbed()
+                                    .setTitle('Detalle usuario')
+                                    .setColor('#00830b')
+                                    .setTimestamp()
+                                    .setThumbnail(common.AVATAR_BASE_PATH + uuser.id + '/' + uuser.avatar + '.jpg');
+                                    
+                                    embed.addFields(
+                                        { name: uuser.username, value:'('+uuser.id+')', inline: false },
+                                        { name: '1. Canal audio (seg.)', value: uuser.voiceChannelTotalTime || 0, inline: true },
+                                        { name: '2. Ingresos audio (cant.)', value: uuser.joinVoiceChannelCount || 0, inline: true },
+                                        { name: '3. Ultimo acceso audio (fec.)', value: uuser.lastVoiceChannelAccess || '-', inline: true },
+                                        { name: '4. Canal audio', value: uuser.lastVoiceChannelName || '-', inline: true },
+                                        { name: '5. Mensajes (cant.)', value: uuser.msgChannelCount || 0, inline: true },
+                                        { name: '6. Canal texto', value: uuser.lastTextChannelName || '-', inline: true },
+                                        { name: '7. Ultimo mensaje (fec.)', value: uuser.lastTextChannelDate || '-', inline: true },
+                                        { name: 'Ingreso (fec.)', value: uuser.joinDate ? uuser.joinDate : '-', inline: false }
+                                        )
+                                
+                                    message.channel.send(embed);
+                                }
+                            }
+
+                        } else if (message.content == '!download all') {
+                            let users = await datasource.getAllUsers();
+
+                            const document = {
+                                html: TEMPLATE,
+                                data: { users: users, title:'Reporte Todos' },
+                                path: "./magios_report_all.pdf",
+                                type: "",
+                            };
+        
+                            pdf.create(document, common.exportsOptions).then((res) => {
+                                message.channel.send({
+                                files: [res.filename]
+                                });
+                            })
+                            .catch((error) => {
+                                console.error(error);
+                            });
+
+                        } else if (message.content == '!download magios') {
+                            let users = await datasource.getAllUsers();
+                            users = users.filter(user => user.roles && user.roles.find(r => r == 'Magios'));
+                            users = _.sortBy(users, [ u => {
+                                return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); 
+                            }], ['asc']);
+        
+                            const document = {
+                                html: TEMPLATE,
+                                data: { users: users, title:'Reporte Magios' },
+                                path: "./magios_report_magios.pdf",
+                                type: "",
+                            };
+        
+                            pdf.create(document, options).then((res) => {
+                                message.channel.send({
+                                files: [res.filename]
+                                });
+                            })
+                            .catch((error) => {
+                            console.error(error);
+                            });
+
+                        } else if (message.content == '!download limbo') {
+                            let users = await datasource.getAllUsers();
+                            users = users.filter(user => user.roles && user.roles.find(r => r == 'Limbo'));
+                            users = _.sortBy(users, [ u => {
+                                return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); 
+                            }], ['asc']);
+        
+                            const document = {
+                                html: TEMPLATE,
+                                data: { users: users, title:'Reporte Limbo' },
+                                path: "./magios_report_limbo.pdf",
+                                type: "",
+                            };
+        
+                            pdf.create(document, options).then((res) => {
+                                message.channel.send({
+                                files: [res.filename]
+                                });
+                            })
+                            .catch((error) => {
+                            console.error(error);
+                            });
+
+                        } else if (message.content == '!download newjoiner') {
+
+                            let users = await datasource.getAllUsers();
+                            users = users.filter(user => user.roles && user.roles.find(r => r == 'NewJoiner'));
+                            users = _.sortBy(users, [ u => {
+                                return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); 
+                            }], ['asc']);
+        
+                            const document = {
+                                html: TEMPLATE,
+                                data: { users: users, title:'Reporte NewJoiner'},
+                                path: "./magios_report_newjoiner.pdf",
+                                type: "",
+                            };
+        
+                            pdf.create(document, options).then((res) => {
+                                message.channel.send({
+                                files: [res.filename]
+                                });
+                            })
+                            .catch((error) => {
+                            console.error(error);
+                            });
                         }
                     }
 
-                } else if (message.content == '!download all' && user.roles.find(r => r == 'Admins')) {
-                    
-                    let users = await datasource.getAllUsers();
-
-                    const document = {
-                        html: TEMPLATE,
-                        data: { users: users, title:'Reporte Todos' },
-                        path: "./magios_report_all.pdf",
-                        type: "",
-                    };
-
-                    pdf.create(document, common.exportsOptions).then((res) => {
-                        message.channel.send({
-                        files: [res.filename]
-                        });
-                    })
-                    .catch((error) => {
-                    console.error(error);
-                    });
-
-                } else if (message.content == '!download magios' && user.roles.find(r => r == 'Admins')) {
-                    
-                    let users = await datasource.getAllUsers();
-                    users = users.filter(user => user.roles && user.roles.find(r => r == 'Magios'));
-                    users = _.sortBy(users, [ u => {
-                        return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); 
-                    }], ['asc']);
-
-                    const document = {
-                        html: TEMPLATE,
-                        data: { users: users, title:'Reporte Magios' },
-                        path: "./magios_report_magios.pdf",
-                        type: "",
-                    };
-
-                    pdf.create(document, options).then((res) => {
-                        message.channel.send({
-                        files: [res.filename]
-                        });
-                    })
-                    .catch((error) => {
-                    console.error(error);
-                    });
-
-                } else if (message.content == '!download limbo' && user.roles.find(r => r == 'Admins')) {
-                    
-                    let users = await datasource.getAllUsers();
-                    users = users.filter(user => user.roles && user.roles.find(r => r == 'Limbo'));
-                    users = _.sortBy(users, [ u => {
-                        return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); 
-                    }], ['asc']);
-
-                    const document = {
-                        html: TEMPLATE,
-                        data: { users: users, title:'Reporte Limbo' },
-                        path: "./magios_report_limbo.pdf",
-                        type: "",
-                    };
-
-                    pdf.create(document, options).then((res) => {
-                        message.channel.send({
-                        files: [res.filename]
-                        });
-                    })
-                    .catch((error) => {
-                    console.error(error);
-                    });
-
-                } else if (message.content == '!download newjoiner' && user.roles.find(r => r == 'Admins')) {
-                    
-                    let users = await datasource.getAllUsers();
-                    users = users.filter(user => user.roles && user.roles.find(r => r == 'NewJoiner'));
-                    users = _.sortBy(users, [ u => {
-                        return !u.lastTextChannelDate || moment(u.lastTextChannelDate, 'DD/MM/YYYY HH:mm:ss').toDate(); 
-                    }], ['asc']);
-
-                    const document = {
-                        html: TEMPLATE,
-                        data: { users: users, title:'Reporte NewJoiner'},
-                        path: "./magios_report_newjoiner.pdf",
-                        type: "",
-                    };
-
-                    pdf.create(document, options).then((res) => {
-                        message.channel.send({
-                        files: [res.filename]
-                        });
-                    })
-                    .catch((error) => {
-                    console.error(error);
-                    });
                 }
                 
             }
@@ -912,6 +899,10 @@ cleanOldEvents = () => {
             reject(err);
         });
     });
+}
+
+paginate = (data, pageSize, page) => {
+    return _.take(_.drop(data, pageSize * (page - 1)), pageSize)
 }
 
 exports.notifyNewUserOnWelcome = notifyNewUserOnWelcome;
