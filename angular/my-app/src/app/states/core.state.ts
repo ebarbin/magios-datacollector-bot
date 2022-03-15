@@ -179,7 +179,7 @@ export class CoreState {
         { name:'', code:'', css:'' },
         { name:'Argentina', code:'ar', css:'flag-icon-ar', lang: 'es' },
         { name:'Bolivia', code:'bo', css:'flag-icon-bo', lang: 'es' },
-        { name:'Brasil', code:'br', css:'flag-icon-br', lang: 'es' },
+        { name:'Brasil', code:'br', css:'flag-icon-br', lang: 'pt' },
         { name:'Canada', code:'ca', css:'flag-icon-ca', lang: 'en' },
         { name:'Chile', code:'cl', css:'flag-icon-cl', lang: 'es' },
         { name:'Colombia', code:'co', css:'flag-icon-co', lang: 'es' },

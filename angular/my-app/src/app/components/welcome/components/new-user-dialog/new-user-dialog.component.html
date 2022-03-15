@@ -1,47 +1,47 @@
-<h2 mat-dialog-title>Portal de nuevos ingresos</h2>
+<h2 mat-dialog-title>{{ 'New Income Portal' | translate }}</h2>
 <mat-dialog-content class="mat-typography">
     <ng-container *ngIf="currentPage == 1">
-        <h3>Bienvenido/a <span *ngIf="getUser$ | async as user">{{user.username}}</span>!!</h3>
-        <p>Los Magios es un escuadrón virtual formado a principios del 2021 con integrantes de todo LATAM.</p>
-        <p>Somos un grupo apasionado por la simulación que busca pasarla bien en un ambiente de camaraderia y respeto.</p>
-        <p>Contamos con tres servidores que funcionan 24x7 cada uno de ellos con misiones sandbox en distintos mapas.</p>
-        <p>Las actividades que realizamos son:</p>
+        <h3>{{'Welcome' | translate }}<span *ngIf="getUser$ | async as user"> {{user.username}}</span>!!</h3>
+        <p>{{'Los Magios is a virtual squad formed in early 2021 with members from all over LATAM' | translate}}.</p>
+        <p>{{'We are a group passionate about simulation that seeks to have a good time in an atmosphere of camaraderie and respect' | translate}}.</p>
+        <p>{{'We have three servers that work 24x7 each with sandbox missions on different maps' | translate}}.</p>
+        <p>{{'The activities we carry out are' | translate}}:</p>
         <ul>
-            <li>Los días miércoles: Charlas/Entrenamientos.</li>
-            <li>Los días sábados: Misiones "oficiales".</li>
+            <li>{{'Wednesdays: Talks/Trainings' | translate}}.</li>
+            <li>{{'On Saturdays: Official missions' | translate}}.</li>
         </ul>
-        <p>Descarga y lee con atención la guía de nuevos usuarios haciendo click <a (click)="onDownloadNewUserGuide()">aquí</a>.</p>
+        <p>{{'Download and carefully read the guide for new users by clicking' | translate}} <a (click)="onDownloadNewUserGuide()">{{'here'|translate}}</a>.</p>
     </ng-container>
     <ng-container *ngIf="currentPage == 2">
-        <h3>¿Qué esperar de Los Magios?</h3>
+        <h3>{{'What to expect from Los Magios?' | translate}}</h3>
         <ul>
-            <li>La idea es que <b>TODOS</b>, sin importar nivel, gustos y capacidad pueda volar.</li>
-            <li>No hay requerimientos de habilidad pero si de llevar un órden mínimo para que todos los que colaboren y participen puedan disfrutar.</li>
-            <li>No se requiere exclusividad de ningún tipo; los miembros pueden ser parte de otros grupos libremente.</li>
-            <li>No tenemos exámenes de habilidad.</li>
-            <li>No somos una academia. Pero si nos ayudamos entre todos para seguir aprendiendo.</li>
-            <li>No se acepta Trolling, abusos, insultos, bullying, etc.</li>
-            <li><b>No usamos (ni tenemos en los servidores mods) no oficiales de DCS.</b></li>
+            <li>{{'The idea is that' | translate}} <b>{{'ALL' | translate}}</b>, {{'regardless of level, tastes and ability can fly' | translate}}.</li>
+            <li>{{'There are no skill requirements but there is a minimum order requirement so that everyone who collaborates and participates can enjoy' | translate}}.</li>
+            <li>{{'No exclusivity of any kind is required; members can be part of other groups freely' | translate}}.</li>
+            <li>{{'We don't have skill tests' | translate}}.</li>
+            <li>{{'We are not an academy. But if we help each other to continue learning' | translate}}.</li>
+            <li>{{'Trolling, abuse, insults, bullying, etc. is not accepted' | translate}}.</li>
+            <li><b>{{'We do not use (nor do we have on the servers) mods unofficial from DCS' | translate}}.</b></li>
         </ul> 
     </ng-container>
     <ng-container *ngIf="currentPage == 3">
-        <h3>¿Qué pedimos?</h3>
+        <h3>{{'What do we ask?' | translate}}</h3>
         <ul>
-            <li>Uso de los canales de voz al ingresar a alguno de los servidores.</li>
-            <li>Uso de SRS para misiones y eventos.</li>
-            <li><b>El callsign de dcs debe ser el mismo al apodo/username de discord.</b></li>
-            <li>El uso adecuado de srs y canales de voz.</li>
+            <li>{{'Use of voice channels when entering any of the servers' | translate}}.</li>
+            <li>{{'Use of SRS for missions and events' | translate}}.</li>
+            <li><b>{{'The dcs callsign must be the same as the discord nickname/username' | translate}}.</b></li>
+            <li>{{'Proper use of srs and voice channels' | translate}}.</li>
         </ul> 
     </ng-container>
     <ng-container *ngIf="currentPage == 4">
-        <h3>¿Como completar el ingreso a Los Magios?</h3>
-        <p>Una vez que cierres este popup se te redireccionará a la sección 'Módulos'.</p>
-        <p>Allí verás una grilla con un registro que correspondera con tu usuario.</p>
-        <p>Deberás completar tu país y los módulos que tienes.<i>Esta información la utilizamos para el armado de misiones.</i></p>
-        <p>Activa/desactiva los módulos haciendo en la casilla que corresponda. Deja <img width="20" src="/assets/images/green.png"> para indicar que tienes el módulo y <img width="20" src="/assets/images/red.png"> para indicar lo contrario.</p>
-        <p>Una vez finalizada la carga, has click en <fa-icon [icon]="faCheck" ></fa-icon> (sobre el margen inferior derecho) para finalizar.</p>
-        <p>Este proceso notificará a un administrador para que te de acceso al resto de los canales de discord de <b>Los Magios</b>.</p>
-        <p><i>Si quieres volver a leer estas intrucciones puedes hacerlo pulsando sobre <fa-icon [icon]="faQuestion" ></fa-icon> que se encuentra en el marguen superior derecho.</i></p>
+        <h3>{{'How to complete the entrance to Los Magios?' | translate}}</h3>
+        <p>{{'Once you close this popup you will be redirected to the Modules section' | translate}}.</p>
+        <p>{{'There you will see a grid with a record that corresponds to your user' | translate}}.</p>
+        <p>{{'You must complete your country and the modules you have' | translate}}.<i>{{'We use this information for the assembly of missions' | translate}}.</i></p>
+        <p>{{'Activate/deactivate the modules by clicking on the corresponding box. Let' | translate}} <img width="20" src="/assets/images/green.png"> {{'to indicate that you have the module and' | translate}} <img width="20" src="/assets/images/red.png"> {{'to indicate the opposite' | translate}}.</p>
+        <p>{{'Once the upload is complete, click on' | translate}} <fa-icon [icon]="faCheck" ></fa-icon> {{'(on the lower right margin) to finish' | translate}}.</p>
+        <p>{{'This process will notify an admin to give you access to the rest of Discord's channels' | translate}} <b>{{'Los Magios' | translate}}</b>.</p>
+        <p><i>{{'If you want to read these instructions again, you can do so by clicking on' | translate}} <fa-icon [icon]="faQuestion" ></fa-icon> {{'which is in the upper right corner' | translate}}.</i></p>
     </ng-container>
 
 </mat-dialog-content>
