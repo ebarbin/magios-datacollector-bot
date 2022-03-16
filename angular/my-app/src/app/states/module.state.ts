@@ -2,11 +2,13 @@ import { Injectable } from "@angular/core";
 import { Action, Selector, State, StateContext, StateToken, Store } from "@ngxs/store";
 import { BlockUI, NgBlockUI } from "ng-block-ui";
 import { finalize, switchMap, tap } from "rxjs/operators";
-import { LogoutAction, MessageType, RedirectToDiscordGeneralChannelAction, RedirectToDiscordWelcomeChannelAction, ShowMessageAction } from "../actions/core.action";
+import { LogoutAction, MessageType, RedirectToDiscordWelcomeChannelAction, ShowMessageAction } from "../actions/core.action";
 import { ModulesService } from "../services/modules.service";
 import { CoreState } from "./core.state";
-import { ApplyFilterModulesAction, ClearFiltersModulesAction, FilterByUserModulesAction, InitModulesAction, RefreshElementModulesAction, RegisterUserAction, ShowHideModulesAction, SortUsersModuleAction, ToggleModuleValueAction, ToggleUserStatusValueAction, UpdateCountryUserValueAction } from "../actions/module.action";
-import { includes } from 'lodash';
+import { ApplyFilterModulesAction, ClearFiltersModulesAction, FilterByUserModulesAction, InitModulesAction, ClearCountriesSelectionAction, ClearModulesSelectionAction,
+    RefreshElementModulesAction, RegisterUserAction, ShowHideModulesAction, SortUsersModuleAction, ToggleModuleValueAction, 
+    ToggleUserStatusValueAction, UpdateCountryUserValueAction } from "../actions/module.action";
+import { includes, flattenDeep } from 'lodash';
 import { patch, updateItem } from '@ngxs/store/operators';
 import { of, zip } from "rxjs";
 import { RegisterService } from "../services/register.service";
@@ -18,6 +20,7 @@ export interface ModuleStateModel {
     countriesFilter: string[],
     modules: any,
     usersModules: any[],
+    modulesFilter: any[],
     userModulesAll: any[]
 }
   
@@ -25,18 +28,14 @@ const initialState: ModuleStateModel = {
     userFilter: '',
     rolesFilter: ['Magios', 'Admins', 'NewJoiner'],
     statusFilter: ['ACTIVE'],
+    modulesFilter: [],
     countriesFilter: [],
     modules: {},
     usersModules: [],
     userModulesAll: []
 };
 
-const CORE_STATE_TOKEN = new StateToken<ModuleStateModel>('module');
-
-@State<ModuleStateModel>({
-    name: CORE_STATE_TOKEN,
-    defaults: initialState
-  })
+@State<ModuleStateModel>({ name: new StateToken<ModuleStateModel>('module'), defaults: initialState })
 @Injectable()
 export class ModuleState {
 
@@ -177,8 +176,8 @@ export class ModuleState {
         }
 
         const {userFilter, rolesFilter, statusFilter, countriesFilter} = ctx.getState();
-        
-        return ctx.dispatch(new ApplyFilterModulesAction({countriesFilter,  statusFilter,  userFilter, rolesFilter}))
+        const modulesFilter = this.store.selectSnapshot(ModuleState.getListModules);
+        return ctx.dispatch(new ApplyFilterModulesAction({countriesFilter,  statusFilter,  userFilter, rolesFilter, modulesFilter}))
     }
         
     @Action(ToggleModuleValueAction)
@@ -220,15 +219,18 @@ export class ModuleState {
 
         const countries = this.store.selectSnapshot(CoreState.getCountries);
         const user = this.store.selectSnapshot(CoreState.getUser);
+        const modulesFilter = this.store.selectSnapshot(ModuleState.getListModules);
 
         return this.store.dispatch(new ApplyFilterModulesAction({
-            countriesFilter: countries.map(c => c.name), statusFilter: ['ACTIVE'], userFilter: user.username, rolesFilter: ['Magios', 'Admins', 'NewJoiner'] 
+            countriesFilter: countries.map(c => c.name), statusFilter: ['ACTIVE'], userFilter: user.username, rolesFilter: ['Magios', 'Admins', 'NewJoiner'], modulesFilter
         }));
     }
 
     @Action(ClearFiltersModulesAction)
     clearFiltersModulesAction(ctx: StateContext<ModuleStateModel>) {
         const countries = this.store.selectSnapshot(CoreState.getCountries);
+        const listModules = this.store.selectSnapshot(ModuleState.getListModules);
+
         const { userModulesAll } = ctx.getState();
         
         ctx.patchState({ 
@@ -236,31 +238,37 @@ export class ModuleState {
             statusFilter: ['ACTIVE'], 
             rolesFilter: ['Magios', 'Admins', 'NewJoiner'], 
             usersModules: userModulesAll.filter(u => u.status),
-            userFilter: ''
+            userFilter: '', modulesFilter: listModules
         });
     }
 
     @Action(ApplyFilterModulesAction)
     applyFilterModulesAction(ctx: StateContext<ModuleStateModel>, action: ApplyFilterModulesAction) {
         const { userModulesAll } = ctx.getState();
-        const { countriesFilter, statusFilter, userFilter, rolesFilter } =  action.payload;
+        const { countriesFilter, statusFilter, userFilter, rolesFilter, modulesFilter } =  action.payload;
 
         const results: any[] = [];
-        let countryFlag, statusFlag, userFlag, roleFlag;
+        let countryFlag, statusFlag, userFlag, roleFlag, modulesFlag;
         
         userModulesAll.forEach(u => {
             if (rolesFilter.length > 2) roleFlag = true;
+            else if (rolesFilter.length == 0) roleFlag = true;
             else if (u.roles.length > 1) roleFlag = includes(rolesFilter, 'Admins');
             else roleFlag = includes(rolesFilter, u.roles[0]);
             
+            if (modulesFilter.length == 0) modulesFlag = true;
+            else if (includes(modulesFilter, '') && u.modules.length == 0) modulesFlag = true;
+            else modulesFlag = u.modules.find((m:any) => includes(modulesFilter, m));
+            
             userFlag = userFilter == '' || userFilter.toLowerCase() == u.username.toLowerCase()
             
-            countryFlag = includes(countriesFilter, u.country);
-            statusFlag = statusFilter.length > 1 || (statusFilter[0] == 'ACTIVE' && u.status) || (statusFilter[0] == 'INACTIVE' && !u.status);
-            if (roleFlag && userFlag && countryFlag && statusFlag) results.push(u);
+            countryFlag = countriesFilter.length == 0 || includes(countriesFilter, u.country);
+            statusFlag = statusFilter.length == 0 || statusFilter.length > 1 || (statusFilter[0] == 'ACTIVE' && u.status) || (statusFilter[0] == 'INACTIVE' && !u.status);
+
+            if (roleFlag && userFlag && countryFlag && statusFlag && modulesFlag) results.push(u);
         });
 
-        ctx.patchState({ countriesFilter, statusFilter, usersModules: results, userFilter: userFilter, rolesFilter: rolesFilter});
+        ctx.patchState({ countriesFilter, statusFilter, usersModules: results, userFilter: userFilter, rolesFilter: rolesFilter, modulesFilter});
     }
 
     @Action(RegisterUserAction)
@@ -313,15 +321,29 @@ export class ModuleState {
             
                     for(let i = 0; i < modules.others.length; i++) 
                         result['others_'+i] = u.modules.find((m:any) => m == modules.others[i].name) ? true : false;
-
+                    result.modules = u.modules;
                     results.push(result);
                 });
 
-                ctx.patchState({ countriesFilter: countries.map(c => c.name), usersModules: results.filter(u => u.status), userModulesAll:results });
+                const listModules = this.store.selectSnapshot(ModuleState.getListModules);
+
+                ctx.patchState({ 
+                    countriesFilter: countries.map(c => c.name), usersModules: results.filter(u => u.status), 
+                    userModulesAll: results, modulesFilter: listModules
+                });
             }),
             finalize(() => this.blockUI.stop() )
         )
+    }
 
+    @Action(ClearCountriesSelectionAction)
+    clearCountriesSelectionAction(ctx: StateContext<ModuleStateModel>) {
+        ctx.patchState({ countriesFilter: [] });
+    }
+
+    @Action(ClearModulesSelectionAction)
+    clearModulesSelectionAction(ctx: StateContext<ModuleStateModel>) {
+        ctx.patchState({ modulesFilter: [] });
     }
 
     @Selector()
@@ -347,6 +369,24 @@ export class ModuleState {
       return state.modules;
     }
 
+    @Selector([ModuleState.getModules])
+    static getGroupListModules(modules: any) {
+        return [
+            {name: 'Terrains', values: modules.terrains},
+            {name: 'Jets', values: modules.jets},
+            {name: 'Warbirds', values: modules.warbirds},
+            {name: 'Helis', values: modules.helis},
+            {name: 'Others', values: modules.others},
+        ];
+    }
+
+    @Selector([ModuleState.getGroupListModules])
+    static getListModules(group: any) {
+        const modulesFilter = flattenDeep(group.map((v:any) => v.values)).map((v:any) => v.name);
+        modulesFilter.unshift('');
+        return modulesFilter;
+    }
+
     @Selector()
     static getAllUsernames(state: ModuleStateModel) {
       return state.userModulesAll.map(u => u.username);
@@ -358,7 +398,8 @@ export class ModuleState {
           statusFilter: state.statusFilter, 
           countriesFilter: state.countriesFilter,
           userFilter: state.userFilter,
-          rolesFilter: state.rolesFilter
+          rolesFilter: state.rolesFilter,
+          modulesFilter: state.modulesFilter
         };
     }
 }

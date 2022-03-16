@@ -35,7 +35,7 @@ export class ShowHideModulesAction {
 }
 export class ApplyFilterModulesAction {
     static readonly type = '[Module] Apply filter modules';
-    constructor(public payload: { countriesFilter: string[], statusFilter: string[], userFilter: string, rolesFilter: string[]}) {}
+    constructor(public payload: { countriesFilter: string[], statusFilter: string[], userFilter: string, rolesFilter: string[], modulesFilter: string[]}) {}
 }
 
 export class FilterByUserModulesAction {
@@ -44,6 +44,14 @@ export class FilterByUserModulesAction {
 
 export class ClearFiltersModulesAction {
     static readonly type = '[Module] Clear filters modules';
+}
+
+export class ClearCountriesSelectionAction {
+    static readonly type = '[Module] Clear countries selection';
+}
+
+export class ClearModulesSelectionAction {
+    static readonly type = '[Module] Clear modules selection';
 }
 
 export class RegisterUserAction {

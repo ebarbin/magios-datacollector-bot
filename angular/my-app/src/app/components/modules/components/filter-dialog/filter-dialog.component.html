@@ -51,18 +51,41 @@
               <mat-option *ngFor="let country of getCountries$ | async" [value]="country.name">
                 <ng-container *ngIf="country.code == ''">
                     {{'Empty' | translate}}
-                  </ng-container>
-                  <ng-container *ngIf="country.code != ''">
+                </ng-container>
+                <ng-container *ngIf="country.code != ''">
                     {{country.name}}&nbsp;<span class="flag-icon {{country.css}} flag-icon-squared"></span>
-                  </ng-container>
+                </ng-container>
                 </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="filter-element">
+            <mat-label>{{'Modules' | translate}}</mat-label>
+            <mat-select [value]="selectedModules" [ngModel]="selectedModules" multiple (ngModelChange)="onModulesFilterChange($event)">
+                <mat-option value="">
+                    {{'Empty' | translate}}
+                </mat-option>
+                <mat-optgroup *ngFor="let group of getGroupListModules$ | async" [label]="group.name | translate">
+                    <mat-option *ngFor="let value of group.values" [value]="value.name">
+                        <ng-container *ngIf="value.name == ''">
+                            {{'Empty' | translate}}
+                        </ng-container>
+                        <ng-container *ngIf="value.name != ''">
+                            {{value.name}}
+                        </ng-container>
+                    </mat-option>
+                </mat-optgroup>
             </mat-select>
         </mat-form-field>
     </div>
 
 
 </mat-dialog-content>
+
 <mat-dialog-actions align="end">
+    <button mat-raised-button (click)="onClearCountries()">{{'Clear countries' | translate }}</button>
+    <button mat-raised-button (click)="onClearModules()">{{'Clear modules' | translate }}</button>
+
     <button mat-raised-button color="warn" mat-dialog-close>{{'Cancel' | translate }}</button>
     <button mat-raised-button (click)="onClear()">{{'Clear' | translate }}</button>
     <button mat-raised-button color="primary" cdkFocusInitial (click)="onAccept()">{{'Accept' | translate}}</button>

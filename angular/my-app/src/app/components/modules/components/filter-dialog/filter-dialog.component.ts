@@ -4,7 +4,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { Select, Store } from '@ngxs/store';
 import { Observable, Subscription } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { ApplyFilterModulesAction, ClearFiltersModulesAction } from 'src/app/actions/module.action';
+import { ApplyFilterModulesAction, ClearFiltersModulesAction, ClearCountriesSelectionAction, ClearModulesSelectionAction } from 'src/app/actions/module.action';
 import { CoreState } from 'src/app/states/core.state';
 import { ModuleState } from 'src/app/states/module.state';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -21,12 +21,16 @@ export class FilterDialogComponent implements OnInit, OnDestroy {
 
   @Select(CoreState.getRawSortedCountries) getCountries$: Observable<any> | undefined;
   @Select(ModuleState.getSelectedFilters) getSelectedFilters$: Observable<any> | undefined;
+  @Select(ModuleState.getModules) getModules$: Observable<any> | undefined;
+  @Select(ModuleState.getGroupListModules) getGroupListModules$: Observable<any> | undefined;
+  
   subs: Subscription | undefined;
 
   statusFilter: string[] = [];
   rolesFilter: string[] = [];
 
   selectedCountries: string[] = [];
+  selectedModules: string[] = [];
   selectedUser: string = '';
   
   constructor(private store: Store, private dialogRef: MatDialogRef<FilterDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: any) {}
@@ -44,6 +48,7 @@ export class FilterDialogComponent implements OnInit, OnDestroy {
       this.myControl.setValue(this.selectedUser);
       this.statusFilter = value.statusFilter;
       this.rolesFilter = value.rolesFilter;
+      this.selectedModules = value.modulesFilter;
     });
   }
 
@@ -60,6 +65,10 @@ export class FilterDialogComponent implements OnInit, OnDestroy {
     this.selectedCountries = values;
   }
 
+  onModulesFilterChange(values: string[]) {
+    this.selectedModules = values;
+  }
+  
   onUsersFilterChange(event: any) {
     this.selectedUser = event.option.value;
   }
@@ -73,9 +82,18 @@ export class FilterDialogComponent implements OnInit, OnDestroy {
       countriesFilter: this.selectedCountries, 
       statusFilter: this.statusFilter, 
       userFilter: this.selectedUser == this.myControl.value ? this.selectedUser : '',
-      rolesFilter: this.rolesFilter
+      rolesFilter: this.rolesFilter,
+      modulesFilter: this.selectedModules
     }));
     this.dialogRef.close();
+  }
+
+  onClearCountries() {
+    this.store.dispatch(new ClearCountriesSelectionAction());
+  }
+
+  onClearModules () {
+    this.store.dispatch(new ClearModulesSelectionAction());
   }
 
   onClear() {
