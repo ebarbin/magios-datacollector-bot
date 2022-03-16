@@ -12,6 +12,9 @@ export class ClearFiltersUserStatsAction {
     static readonly type = '[User stats] Clear filters';
 }
 
+export class FilterByUserUserStatsAction {
+    static readonly type = '[User stats] Filter by user';
+}
 
 export class ApplyFilterUserStatsAction {
     static readonly type = '[User stats] Apply filter';

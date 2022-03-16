@@ -5,7 +5,7 @@ import { finalize, switchMap, tap } from "rxjs/operators";
 import { LogoutAction, MessageType, RedirectToDiscordGeneralChannelAction, RedirectToDiscordWelcomeChannelAction, ShowMessageAction } from "../actions/core.action";
 import { ModulesService } from "../services/modules.service";
 import { CoreState } from "./core.state";
-import { ApplyFilterModulesAction, ClearFiltersModulesAction, InitModulesAction, RefreshElementModulesAction, RegisterUserAction, ShowHideModulesAction, SortUsersModuleAction, ToggleModuleValueAction, ToggleUserStatusValueAction, UpdateCountryUserValueAction } from "../actions/module.action";
+import { ApplyFilterModulesAction, ClearFiltersModulesAction, FilterByUserModulesAction, InitModulesAction, RefreshElementModulesAction, RegisterUserAction, ShowHideModulesAction, SortUsersModuleAction, ToggleModuleValueAction, ToggleUserStatusValueAction, UpdateCountryUserValueAction } from "../actions/module.action";
 import { includes } from 'lodash';
 import { patch, updateItem } from '@ngxs/store/operators';
 import { of, zip } from "rxjs";
@@ -212,6 +212,18 @@ export class ModuleState {
                 new RefreshElementModulesAction({user: user, update: false})
             ]);
         }
+    }
+
+
+    @Action(FilterByUserModulesAction)
+    filterByUserModulesAction(ctx: StateContext<ModuleStateModel>) {
+
+        const countries = this.store.selectSnapshot(CoreState.getCountries);
+        const user = this.store.selectSnapshot(CoreState.getUser);
+
+        return this.store.dispatch(new ApplyFilterModulesAction({
+            countriesFilter: countries.map(c => c.name), statusFilter: ['ACTIVE'], userFilter: user.username, rolesFilter: ['Magios', 'Admins', 'NewJoiner'] 
+        }));
     }
 
     @Action(ClearFiltersModulesAction)

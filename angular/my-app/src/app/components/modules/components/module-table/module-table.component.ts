@@ -1,10 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { RegisterUserAction, SortUsersModuleAction, ToggleModuleValueAction, ToggleUserStatusValueAction, UpdateCountryUserValueAction } from 'src/app/actions/module.action';
+import { RegisterUserAction, SortUsersModuleAction, ToggleModuleValueAction, ToggleUserStatusValueAction, UpdateCountryUserValueAction, FilterByUserModulesAction, ClearFiltersModulesAction } from 'src/app/actions/module.action';
 import { CoreState } from 'src/app/states/core.state';
-import { faFilter, faCheck } from '@fortawesome/free-solid-svg-icons';
-import { faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { faFilter, faCheck, faUser, faEraser, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { MatDialog } from '@angular/material/dialog';
 import { FilterDialogComponent } from '../filter-dialog/filter-dialog.component';
 import { ShowHideDialogComponent } from '../show-hide-dialog/show-hide-dialog.component';
@@ -20,6 +19,8 @@ export class ModuleTableComponent implements OnInit {
   faCheck = faCheck;
   faEyeSlash = faEyeSlash;
   faFilter = faFilter;
+  faUser = faUser;
+  faEraser = faEraser;
   
   @Select(CoreState.getCountries) getCountries$: Observable<any> | undefined;
 
@@ -46,6 +47,14 @@ export class ModuleTableComponent implements OnInit {
 
   onFilter() {
     this.dialog.open(FilterDialogComponent, {data: this.allUsernames});
+  }
+
+  onFilterByUser(){
+    this.store.dispatch(new FilterByUserModulesAction());
+  }
+
+  onClearFilters() {
+    this.store.dispatch(new ClearFiltersModulesAction())
   }
 
   onShowHide() {

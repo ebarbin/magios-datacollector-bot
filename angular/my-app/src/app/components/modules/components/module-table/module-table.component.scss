@@ -68,6 +68,18 @@ td.terrains, td.jets, td.warbirds, td.helis, td.others {
     cursor: pointer;
 }
 
+.clear-filter-btn {
+    z-index: 1000 !important;
+    bottom:330px;	
+	background-color:#980923;
+}
+
+.filter-user-btn {
+    z-index: 1000 !important;
+    bottom:250px;	
+	background-color:#099872;
+}
+
 .filter-btn {
     z-index: 1000 !important;
     bottom:120px;	

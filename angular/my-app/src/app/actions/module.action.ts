@@ -38,6 +38,10 @@ export class ApplyFilterModulesAction {
     constructor(public payload: { countriesFilter: string[], statusFilter: string[], userFilter: string, rolesFilter: string[]}) {}
 }
 
+export class FilterByUserModulesAction {
+    static readonly type = '[Module] Filter by user modules';
+}
+
 export class ClearFiltersModulesAction {
     static readonly type = '[Module] Clear filters modules';
 }

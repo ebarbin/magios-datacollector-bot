@@ -60,6 +60,15 @@
   </tbody>
 </table>
 
+<button mat-button matBadgePosition="before" matBadgeColor="warn" class="float-btn clear-filter-btn" (click)="onClearFilter()">
+  <fa-icon [icon]="faEraser" class="float-btn-icon"></fa-icon>
+</button>
+
+<button mat-button matBadgePosition="before" matBadgeColor="warn" class="float-btn filter-user-btn" (click)="onFilterByUser()">
+  <fa-icon [icon]="faUser" class="float-btn-icon"></fa-icon>
+</button>
+
+
 <button mat-button matBadgePosition="before" matBadgeColor="warn" class="float-btn filter-btn" (click)="onFilter()">
   <fa-icon [icon]="faFilter" class="float-btn-icon"></fa-icon>
 </button>

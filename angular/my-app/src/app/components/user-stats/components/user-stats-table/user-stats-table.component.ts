@@ -2,10 +2,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Sort } from '@angular/material/sort';
 import { Store } from '@ngxs/store';
-import { ShowUserServerEventTabsAction, SortUserStatsAction } from 'src/app/actions/user-stats.action';
+import { ShowUserServerEventTabsAction, SortUserStatsAction, ClearFiltersUserStatsAction, FilterByUserUserStatsAction } from 'src/app/actions/user-stats.action';
 import { FilterUserStatsDialogComponent } from '../filter-user-stats-dialog/filter-user-stats-dialog.component';
 import { ValueChangeDialogComponent } from '../value-change-dialog/value-change-dialog.component';
-import { faFilter } from '@fortawesome/free-solid-svg-icons';
+import { faFilter, faEraser, faUser } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'app-user-stats-table',
   templateUrl: './user-stats-table.component.html',
@@ -14,6 +14,8 @@ import { faFilter } from '@fortawesome/free-solid-svg-icons';
 export class UserStatsTableComponent implements OnInit {
 
   faFilter = faFilter;
+  faEraser = faEraser;
+  faUser = faUser;
 
   @Input() users: any;
   @Input() allUsernames: any;
@@ -31,6 +33,14 @@ export class UserStatsTableComponent implements OnInit {
 
   onSortData(sort: Sort) {
     this.store.dispatch(new SortUserStatsAction({sort}));
+  }
+
+  onFilterByUser() {
+    this.store.dispatch(new FilterByUserUserStatsAction());
+  }
+
+  onClearFilter() {
+    this.store.dispatch(new ClearFiltersUserStatsAction());
   }
 
   onFilter() {

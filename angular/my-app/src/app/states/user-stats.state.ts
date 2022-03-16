@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Action, Selector, State, StateContext, StateToken, Store } from "@ngxs/store";
 import { BlockUI, NgBlockUI } from "ng-block-ui";
 import { finalize, map, switchMap, tap } from "rxjs/operators";
-import { ApplyChangeUserStatsAction, ApplyFilterUserStatsAction, ClearFiltersUserStatsAction, InitServerEventsAction, InitUserStatsAction, ShowUserServerEventTabsAction, SortUserStatsAction } from "../actions/user-stats.action";
+import { ApplyChangeUserStatsAction, ApplyFilterUserStatsAction, ClearFiltersUserStatsAction, FilterByUserUserStatsAction, InitServerEventsAction, InitUserStatsAction, ShowUserServerEventTabsAction, SortUserStatsAction } from "../actions/user-stats.action";
 import { UserStatsService } from "../services/user-stats.service";
 import * as moment from 'moment';
 import { patch, updateItem } from "@ngxs/store/operators";
@@ -150,11 +150,23 @@ const CORE_STATE_TOKEN = new StateToken<UserStatsStateModel>('userStats');
 
     @Action(InitUserStatsAction)
     initUserStatsAction(ctx: StateContext<UserStatsStateModel>) {
+      this.blockUI.start();
       return this.userService.getAllUsers().pipe(
         tap(users => {
           return ctx.patchState({ users: users, allUsers: users  })
-        })
+        }),
+        finalize(() => this.blockUI.stop() )
       )
+    }
+
+    @Action(FilterByUserUserStatsAction)
+    filterByUserUserStatsAction(ctx: StateContext<UserStatsStateModel>) {
+        const user = this.store.selectSnapshot(CoreState.getUser);
+
+        return this.store.dispatch(new ApplyFilterUserStatsAction({
+          userFilter: user.username,
+          rolesFilter: ['Magios', 'Admins', 'NewJoiner', 'Limbo', '']
+        }));
     }
 
     @Action(ClearFiltersUserStatsAction)
