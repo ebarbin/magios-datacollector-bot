@@ -1,91 +1,106 @@
 <h2 mat-dialog-title>{{'Filters' | translate}}</h2>
 <mat-dialog-content class="mat-typography">
     <h3>{{'Select filters' | translate}}</h3>
+    
     <div class="row">
-        
-        <form class="example-form">
+
+        <div>
             <mat-form-field class="filter-element">
                 <mat-label>{{'Users' | translate}}</mat-label>
-              <input type="text"
-                     placeholder="{{'Select one' | translate}}" matInput
-                     [formControl]="myControl"
-                     [matAutocomplete]="auto">
-              <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onUsersFilterChange($event)">
+                <input type="text"
+                        placeholder="{{'Select one' | translate}}" matInput
+                        [formControl]="myControl"
+                        [matAutocomplete]="auto">
+                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onUsersFilterChange($event)">
                 <mat-option *ngFor="let user of filteredOptions$ | async" [value]="user">
-                  {{user}}
+                    {{user}}
                 </mat-option>
-              </mat-autocomplete>
+                </mat-autocomplete>
             </mat-form-field>
-        </form>
+            <button mat-flat-button (click)="onClearField('users')"><mat-icon>delete</mat-icon></button>
+        </div>
 
-        <mat-form-field class="filter-element">
-            <mat-label>{{'User status' | translate}}</mat-label>
-            <mat-select [value]="statusFilter" [ngModel]="statusFilter" multiple (ngModelChange)="onStatusFilterChange($event)">
-                <mat-option value="ACTIVE">
-                    {{'Actives' | translate}}
-                </mat-option>
-                <mat-option value="INACTIVE">
-                    {{'Inactives' | translate}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-
-        <mat-form-field class="filter-element">
-            <mat-label>{{'Role' | translate}}</mat-label>
-            <mat-select [value]="rolesFilter" [ngModel]="rolesFilter" multiple (ngModelChange)="onRolesFilterChange($event)">
-                <mat-option value="Admins">
-                    {{'Admins' | translate}}
-                </mat-option>
-                <mat-option value="Magios">
-                    {{'Magios' | translate}}
-                </mat-option>
-                <mat-option value="NewJoiner">
-                    {{'NewJoiner' | translate}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-
-        <mat-form-field class="filter-element">
-            <mat-label>{{'Countries' | translate}}</mat-label>
-            <mat-select [value]="selectedCountries" [ngModel]="selectedCountries" multiple (ngModelChange)="onCountriesFilterChange($event)">
-              <mat-option *ngFor="let country of getCountries$ | async" [value]="country.name">
-                <ng-container *ngIf="country.code == ''">
-                    {{'Empty' | translate}}
-                </ng-container>
-                <ng-container *ngIf="country.code != ''">
-                    {{country.name}}&nbsp;<span class="flag-icon {{country.css}} flag-icon-squared"></span>
-                </ng-container>
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-
-        <mat-form-field class="filter-element">
-            <mat-label>{{'Modules' | translate}}</mat-label>
-            <mat-select [value]="selectedModules" [ngModel]="selectedModules" multiple (ngModelChange)="onModulesFilterChange($event)">
-                <mat-option value="">
-                    {{'Empty' | translate}}
-                </mat-option>
-                <mat-optgroup *ngFor="let group of getGroupListModules$ | async" [label]="group.name | translate">
-                    <mat-option *ngFor="let value of group.values" [value]="value.name">
-                        <ng-container *ngIf="value.name == ''">
-                            {{'Empty' | translate}}
-                        </ng-container>
-                        <ng-container *ngIf="value.name != ''">
-                            {{value.name}}
-                        </ng-container>
+        <div>
+            <mat-form-field class="filter-element">
+                <mat-label>{{'User status' | translate}}</mat-label>
+                <mat-select [value]="statusFilter" [ngModel]="statusFilter" multiple (ngModelChange)="onStatusFilterChange($event)">
+                    <mat-option value="ACTIVE">
+                        {{'Actives' | translate}}
                     </mat-option>
-                </mat-optgroup>
-            </mat-select>
-        </mat-form-field>
+                    <mat-option value="INACTIVE">
+                        {{'Inactives' | translate}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <button mat-flat-button (click)="onClearField('status')"><mat-icon>delete</mat-icon></button>
+        </div>
+    
+        <div>
+            <mat-form-field class="filter-element">
+                <mat-label>{{'Role' | translate}}</mat-label>
+                <mat-select [value]="rolesFilter" [ngModel]="rolesFilter" multiple (ngModelChange)="onRolesFilterChange($event)">
+                    <mat-option value="Admins">
+                        {{'Admins' | translate}}
+                    </mat-option>
+                    <mat-option value="Magios">
+                        {{'Magios' | translate}}
+                    </mat-option>
+                    <mat-option value="NewJoiner">
+                        {{'NewJoiner' | translate}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <button mat-flat-button (click)="onClearField('roles')"><mat-icon>delete</mat-icon></button>
+        </div>
+
     </div>
 
+    <div class="row">
+
+        <div>
+            <mat-form-field class="filter-element">
+                <mat-label>{{'Countries' | translate}}</mat-label>
+                <mat-select [value]="selectedCountries" [ngModel]="selectedCountries" multiple (ngModelChange)="onCountriesFilterChange($event)">
+                  <mat-option *ngFor="let country of getCountries$ | async" [value]="country.name">
+                    <ng-container *ngIf="country.code == ''">
+                        {{'Empty' | translate}}
+                    </ng-container>
+                    <ng-container *ngIf="country.code != ''">
+                        {{country.name}}&nbsp;<span class="flag-icon {{country.css}} flag-icon-squared"></span>
+                    </ng-container>
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <button mat-flat-button (click)="onClearField('countries')"><mat-icon>delete</mat-icon></button>
+        </div>
+
+        <div>
+            <mat-form-field class="filter-element">
+                <mat-label>{{'Modules' | translate}}</mat-label>
+                <mat-select [value]="selectedModules" [ngModel]="selectedModules" multiple (ngModelChange)="onModulesFilterChange($event)">
+                    <mat-option value="">
+                        {{'Empty' | translate}}
+                    </mat-option>
+                    <mat-optgroup *ngFor="let group of getGroupListModules$ | async" [label]="group.name | translate">
+                        <mat-option *ngFor="let value of group.values" [value]="value.name">
+                            <ng-container *ngIf="value.name == ''">
+                                {{'Empty' | translate}}
+                            </ng-container>
+                            <ng-container *ngIf="value.name != ''">
+                                {{value.name}}
+                            </ng-container>
+                        </mat-option>
+                    </mat-optgroup>
+                </mat-select>
+            </mat-form-field>
+            <button mat-flat-button (click)="onClearField('modules')"><mat-icon>delete</mat-icon></button>
+        </div>
+
+    </div>
 
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-    <button mat-raised-button (click)="onClearCountries()">{{'Clear countries' | translate }}</button>
-    <button mat-raised-button (click)="onClearModules()">{{'Clear modules' | translate }}</button>
-
     <button mat-raised-button color="warn" mat-dialog-close>{{'Cancel' | translate }}</button>
     <button mat-raised-button (click)="onClear()">{{'Clear' | translate }}</button>
     <button mat-raised-button color="primary" cdkFocusInitial (click)="onAccept()">{{'Accept' | translate}}</button>

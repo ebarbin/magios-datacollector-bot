@@ -3,7 +3,7 @@
     <h3>{{'Select filters' | translate}}</h3>
     <div class="row">
         
-        <form class="example-form">
+        <div>
             <mat-form-field class="filter-element">
                 <mat-label>{{'Users' | translate}}</mat-label>
                 <input type="text"
@@ -16,28 +16,33 @@
                 </mat-option>
                 </mat-autocomplete>
             </mat-form-field>
-        </form>
+            <button mat-flat-button (click)="onClearField('users')"><mat-icon>delete</mat-icon></button>
+        </div>
 
-        <mat-form-field class="filter-element">
-            <mat-label>{{'Role' | translate}}</mat-label>
-            <mat-select [value]="rolesFilter" [ngModel]="rolesFilter" multiple (ngModelChange)="onRolesFilterChange($event)">
-                <mat-option value="">
-                    {{'Empty' | translate}}
-                </mat-option>
-                <mat-option value="Admins">
-                    {{'Admins' | translate}}
-                </mat-option>
-                <mat-option value="Magios">
-                    {{'Magios' | translate}}
-                </mat-option>
-                <mat-option value="NewJoiner">
-                    {{'NewJoiner' | translate}}
-                </mat-option>
-                <mat-option value="Limbo">
-                    {{'Limbo' | translate}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
+        <div>
+            <mat-form-field class="filter-element">
+                <mat-label>{{'Roles' | translate}}</mat-label>
+                <mat-select [value]="rolesFilter" [ngModel]="rolesFilter" multiple (ngModelChange)="onRolesFilterChange($event)">
+                    <mat-option value="">
+                        {{'Empty' | translate}}
+                    </mat-option>
+                    <mat-option value="Admins">
+                        {{'Admins' | translate}}
+                    </mat-option>
+                    <mat-option value="Magios">
+                        {{'Magios' | translate}}
+                    </mat-option>
+                    <mat-option value="NewJoiner">
+                        {{'NewJoiner' | translate}}
+                    </mat-option>
+                    <mat-option value="Limbo">
+                        {{'Limbo' | translate}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <button mat-flat-button (click)="onClearField('roles')"><mat-icon>delete</mat-icon></button>
+        </div>
+
     </div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">

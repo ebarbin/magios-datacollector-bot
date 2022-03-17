@@ -36,4 +36,8 @@ export class ShowUserServerEventTabsAction {
     constructor(public payload: { user: any}) {}
 }
 
+export class ClearFilterSelection {
+    static readonly type = '[User stats] Clear filter selection';
+    constructor(public payload: { filter: string }) {}
+}
 

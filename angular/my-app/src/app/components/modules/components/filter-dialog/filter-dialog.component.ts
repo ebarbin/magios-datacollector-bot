@@ -4,7 +4,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { Select, Store } from '@ngxs/store';
 import { Observable, Subscription } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { ApplyFilterModulesAction, ClearFiltersModulesAction, ClearCountriesSelectionAction, ClearModulesSelectionAction } from 'src/app/actions/module.action';
+import { ApplyFilterModulesAction, ClearFiltersModulesAction, ClearFilterSelection } from 'src/app/actions/module.action';
 import { CoreState } from 'src/app/states/core.state';
 import { ModuleState } from 'src/app/states/module.state';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -88,12 +88,8 @@ export class FilterDialogComponent implements OnInit, OnDestroy {
     this.dialogRef.close();
   }
 
-  onClearCountries() {
-    this.store.dispatch(new ClearCountriesSelectionAction());
-  }
-
-  onClearModules () {
-    this.store.dispatch(new ClearModulesSelectionAction());
+  onClearField(filter: string) {
+    this.store.dispatch(new ClearFilterSelection({filter:filter}));
   }
 
   onClear() {

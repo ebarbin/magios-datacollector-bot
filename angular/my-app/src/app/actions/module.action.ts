@@ -46,12 +46,9 @@ export class ClearFiltersModulesAction {
     static readonly type = '[Module] Clear filters modules';
 }
 
-export class ClearCountriesSelectionAction {
-    static readonly type = '[Module] Clear countries selection';
-}
-
-export class ClearModulesSelectionAction {
-    static readonly type = '[Module] Clear modules selection';
+export class ClearFilterSelection {
+    static readonly type = '[Module] Clear filter selection';
+    constructor(public payload: { filter: string }) {}
 }
 
 export class RegisterUserAction {

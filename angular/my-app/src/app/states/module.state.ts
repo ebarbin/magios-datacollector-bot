@@ -5,8 +5,8 @@ import { finalize, switchMap, tap } from "rxjs/operators";
 import { LogoutAction, MessageType, RedirectToDiscordWelcomeChannelAction, ShowMessageAction } from "../actions/core.action";
 import { ModulesService } from "../services/modules.service";
 import { CoreState } from "./core.state";
-import { ApplyFilterModulesAction, ClearFiltersModulesAction, FilterByUserModulesAction, InitModulesAction, ClearCountriesSelectionAction, ClearModulesSelectionAction,
-    RefreshElementModulesAction, RegisterUserAction, ShowHideModulesAction, SortUsersModuleAction, ToggleModuleValueAction, 
+import { ApplyFilterModulesAction, ClearFiltersModulesAction, FilterByUserModulesAction, InitModulesAction,
+    RefreshElementModulesAction, RegisterUserAction, ShowHideModulesAction, SortUsersModuleAction, ToggleModuleValueAction, ClearFilterSelection,
     ToggleUserStatusValueAction, UpdateCountryUserValueAction } from "../actions/module.action";
 import { includes, flattenDeep } from 'lodash';
 import { patch, updateItem } from '@ngxs/store/operators';
@@ -336,14 +336,14 @@ export class ModuleState {
         )
     }
 
-    @Action(ClearCountriesSelectionAction)
-    clearCountriesSelectionAction(ctx: StateContext<ModuleStateModel>) {
-        ctx.patchState({ countriesFilter: [] });
-    }
-
-    @Action(ClearModulesSelectionAction)
-    clearModulesSelectionAction(ctx: StateContext<ModuleStateModel>) {
-        ctx.patchState({ modulesFilter: [] });
+    @Action(ClearFilterSelection)
+    clearFilterSelection(ctx: StateContext<ModuleStateModel>, action: ClearFilterSelection) {
+        const { filter } = action.payload;
+        if (filter == 'modules') ctx.patchState({ modulesFilter: [] });
+        else if (filter == 'countries') ctx.patchState({ countriesFilter: [] });
+        else if (filter == 'roles') ctx.patchState({ rolesFilter: [] });
+        else if (filter == 'status') ctx.patchState({ statusFilter: [] });
+        else if (filter == 'users') ctx.patchState({ userFilter: '' });
     }
 
     @Selector()

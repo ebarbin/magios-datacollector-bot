@@ -4,7 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Select, Store } from '@ngxs/store';
 import { Observable, Subscription } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { ApplyFilterUserStatsAction, ClearFiltersUserStatsAction } from 'src/app/actions/user-stats.action';
+import { ApplyFilterUserStatsAction, ClearFiltersUserStatsAction, ClearFilterSelection } from 'src/app/actions/user-stats.action';
 import { UserStatsState } from 'src/app/states/user-stats.state';
 
 @Component({
@@ -76,4 +76,7 @@ export class FilterUserStatsDialogComponent implements OnInit {
     this.subs?.unsubscribe();
   }
 
+  onClearField(filter: string) {
+    this.store.dispatch(new ClearFilterSelection({filter: filter}));
+  }
 }

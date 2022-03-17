@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core";
 import { Action, Selector, State, StateContext, StateToken, Store } from "@ngxs/store";
 import { BlockUI, NgBlockUI } from "ng-block-ui";
-import { finalize, map, switchMap, tap } from "rxjs/operators";
-import { ApplyChangeUserStatsAction, ApplyFilterUserStatsAction, ClearFiltersUserStatsAction, FilterByUserUserStatsAction, InitServerEventsAction, InitUserStatsAction, ShowUserServerEventTabsAction, SortUserStatsAction } from "../actions/user-stats.action";
+import { finalize, switchMap, tap } from "rxjs/operators";
+import { ApplyChangeUserStatsAction, ApplyFilterUserStatsAction, ClearFiltersUserStatsAction, ClearFilterSelection,
+  FilterByUserUserStatsAction, InitServerEventsAction, InitUserStatsAction, ShowUserServerEventTabsAction, SortUserStatsAction } from "../actions/user-stats.action";
 import { UserStatsService } from "../services/user-stats.service";
 import * as moment from 'moment';
 import { patch, updateItem } from "@ngxs/store/operators";
@@ -30,10 +31,8 @@ const initialState: UserStatsStateModel = {
   user: null,
   events: null
 };
-  
-const CORE_STATE_TOKEN = new StateToken<UserStatsStateModel>('userStats');
   @State<UserStatsStateModel>({
-      name: CORE_STATE_TOKEN,
+      name: new StateToken<UserStatsStateModel>('userStats'),
       defaults: initialState
     })
   @Injectable()
@@ -178,6 +177,15 @@ const CORE_STATE_TOKEN = new StateToken<UserStatsStateModel>('userStats');
             users: allUsers,
             userFilter: ''
         });
+    }
+
+    @Action(ClearFilterSelection)
+    clearFilterSelection(ctx: StateContext<UserStatsStateModel>, action: ClearFilterSelection) {
+        
+        const { filter } =  action.payload;
+
+        if (filter == 'users') ctx.patchState( { userFilter: '' } );
+        else if (filter == 'roles') ctx.patchState( { rolesFilter: [] } );
     }
 
     @Action(ShowUserServerEventTabsAction)
