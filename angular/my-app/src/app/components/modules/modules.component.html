@@ -1,6 +1,9 @@
 <app-module-table
     [modules]="getModules$ |async"
     [users]="getUsersModules$ |async"
+    [countries]="getCountries$ |async"
     [allUsernames]="getAllUsernames$ | async"
-    [isNewUser]="isNewUser$ | async">
+    [isNewUser]="isNewUser$ | async"
+    [isAdmin]="isAdmin$ | async"
+    [isLock]="isLock$ | async">
 </app-module-table>

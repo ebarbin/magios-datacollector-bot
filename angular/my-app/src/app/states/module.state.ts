@@ -7,7 +7,7 @@ import { ModulesService } from "../services/modules.service";
 import { CoreState } from "./core.state";
 import { ApplyFilterModulesAction, ClearFiltersModulesAction, FilterByUserModulesAction, InitModulesAction,
     RefreshElementModulesAction, RegisterUserAction, ShowHideModulesAction, SortUsersModuleAction, ToggleModuleValueAction, ClearFilterSelection,
-    ToggleUserStatusValueAction, UpdateCountryUserValueAction } from "../actions/module.action";
+    ToggleUserStatusValueAction, UpdateCountryUserValueAction, ToggleLockStatusAction } from "../actions/module.action";
 import { includes, flattenDeep } from 'lodash';
 import { patch, updateItem } from '@ngxs/store/operators';
 import { of, zip } from "rxjs";
@@ -21,7 +21,8 @@ export interface ModuleStateModel {
     modules: any,
     usersModules: any[],
     modulesFilter: any[],
-    userModulesAll: any[]
+    userModulesAll: any[],
+    lock: boolean
 }
   
 const initialState: ModuleStateModel = {
@@ -32,7 +33,8 @@ const initialState: ModuleStateModel = {
     countriesFilter: [],
     modules: {},
     usersModules: [],
-    userModulesAll: []
+    userModulesAll: [],
+    lock: true
 };
 
 @State<ModuleStateModel>({ name: new StateToken<ModuleStateModel>('module'), defaults: initialState })
@@ -346,6 +348,12 @@ export class ModuleState {
         else if (filter == 'users') ctx.patchState({ userFilter: '' });
     }
 
+    @Action(ToggleLockStatusAction)
+    toggleLockStatusAction(ctx: StateContext<ModuleStateModel>) {
+        const { lock } = ctx.getState()
+        ctx.patchState({ lock: !lock });
+    }
+
     @Selector()
     static getTableHeader() {
         return [
@@ -367,6 +375,11 @@ export class ModuleState {
     @Selector()
     static getModules(state: ModuleStateModel) {
       return state.modules;
+    }
+
+    @Selector()
+    static isLock(state: ModuleStateModel) {
+      return state.lock;
     }
 
     @Selector([ModuleState.getModules])

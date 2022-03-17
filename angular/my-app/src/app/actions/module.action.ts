@@ -54,3 +54,7 @@ export class ClearFilterSelection {
 export class RegisterUserAction {
     static readonly type = '[Module] Register user';
 }
+
+export class ToggleLockStatusAction {
+    static readonly type = '[Module] Toggle lock status';
+}

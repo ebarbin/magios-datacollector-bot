@@ -69,34 +69,40 @@ td.terrains, td.jets, td.warbirds, td.helis, td.others {
 }
 
 .clear-filter-btn {
-    z-index: 1000 !important;
     bottom:330px;	
 	background-color:#980923;
 }
 
 .filter-user-btn {
-    z-index: 1000 !important;
     bottom:250px;	
 	background-color:#099872;
 }
 
 .filter-btn {
-    z-index: 1000 !important;
     bottom:120px;	
 	background-color:#910998;
 }
 
 .show-hide-btn {
-    z-index: 1000 !important;
 	bottom:40px;
 	background-color:#094998;
 }
 
+.lock-btn {
+	bottom:440px;
+	background-color:#011022;
+}
+
 .float-btn-icon {
+  z-index: 1000 !important;
   line-height: 60px;
   font-size: 30px;
 }
 
 .normal img {
     border: solid 2px gold;
+}
+
+.module-disabled {
+    filter: grayscale(80%);
 }

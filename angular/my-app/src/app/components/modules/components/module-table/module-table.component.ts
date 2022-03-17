@@ -1,9 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { RegisterUserAction, SortUsersModuleAction, ToggleModuleValueAction, ToggleUserStatusValueAction, UpdateCountryUserValueAction, FilterByUserModulesAction, ClearFiltersModulesAction } from 'src/app/actions/module.action';
-import { CoreState } from 'src/app/states/core.state';
-import { faFilter, faCheck, faUser, faEraser, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { Store } from '@ngxs/store';
+import { RegisterUserAction, SortUsersModuleAction, ToggleModuleValueAction, ToggleUserStatusValueAction, ToggleLockStatusAction,
+  UpdateCountryUserValueAction, FilterByUserModulesAction, ClearFiltersModulesAction } from 'src/app/actions/module.action';
+import { faFilter, faCheck, faUser, faEraser, faEyeSlash, faLock, faUnlock } from '@fortawesome/free-solid-svg-icons';
 import { MatDialog } from '@angular/material/dialog';
 import { FilterDialogComponent } from '../filter-dialog/filter-dialog.component';
 import { ShowHideDialogComponent } from '../show-hide-dialog/show-hide-dialog.component';
@@ -21,27 +20,33 @@ export class ModuleTableComponent implements OnInit {
   faFilter = faFilter;
   faUser = faUser;
   faEraser = faEraser;
-  
-  @Select(CoreState.getCountries) getCountries$: Observable<any> | undefined;
+  faLock = faLock;
+  faUnlock = faUnlock;
 
+  @Input() isLock: any;
   @Input() modules: any;
+  @Input() countries: any;
   @Input() users: any;
-  @Input() allUsernames :string[] | undefined;
-  @Input() isNewUser: boolean | false = false;
+  @Input() allUsernames: any;
+  @Input() isNewUser: any;
+  @Input() isAdmin: any;
 
   constructor(private store: Store, private dialog: MatDialog) { }
 
   ngOnInit(): void {}
 
   onToggleValue(user:any, field: string) {
+    if (this.isLock) return;
     this.store.dispatch(new ToggleModuleValueAction({user, field}))
   }
 
   onToogleStatus(user:any){
+    if (this.isLock) return;
     this.store.dispatch(new ToggleUserStatusValueAction({user}))
   }
 
   onChangeCountry(country:any, user:any) {
+    if (this.isLock) return;
     this.store.dispatch(new UpdateCountryUserValueAction({user, country}));
   }
 
@@ -67,5 +72,9 @@ export class ModuleTableComponent implements OnInit {
   
   onRegister() {
     this.store.dispatch(new RegisterUserAction());
+  }
+
+  onToggleLock() {
+    this.store.dispatch(new ToggleLockStatusAction());
   }
 }

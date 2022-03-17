@@ -31,8 +31,8 @@
                 <td class="normal"><b>{{user.username}}</b></td>
                 <td class="normal"><app-role [user]="user"></app-role></td>
                 <td class="normal">
-                    <mat-select [value]="user.country" [ngModel]="user.country" (ngModelChange)="onChangeCountry($event, user)">
-                      <mat-option *ngFor="let country of getCountries$ | async" [value]="country.name">
+                    <mat-select [value]="user.country" [ngModel]="user.country" [disabled]="isLock" (ngModelChange)="onChangeCountry($event, user)">
+                      <mat-option *ngFor="let country of countries" [value]="country.name">
                           <ng-container *ngIf="country.code == ''">
                             --{{'Empty' | translate}}--
                           </ng-container>
@@ -43,27 +43,27 @@
                     </mat-select>
                 </td>
                 <td class="normal" (click)="onToogleStatus(user)">
-                    <mat-slide-toggle color="primary" [checked]="user.status"  placement="top" [ngbTooltip]="user.status ? 'Activo' : 'Inactivo'"></mat-slide-toggle>
+                    <mat-slide-toggle color="primary" [checked]="user.status" [disabled]="isLock" placement="top" [ngbTooltip]="user.status ? 'Activo' : 'Inactivo'"></mat-slide-toggle>
                 </td>
 
                 <ng-container *ngFor="let t of modules.terrains; let i = index">
-                    <td *ngIf="t.visible" class="terrains" (click)="onToggleValue(user, 'terrains_' + i)"><img width="20" [src]="user['terrains_'+i] ? '/assets/images/green.png': '/assets/images/red.png' "></td>
+                    <td *ngIf="t.visible" class="terrains" (click)="onToggleValue(user, 'terrains_' + i)"><img width="20" [ngClass]="{'module-disabled': isLock}" [src]="user['terrains_'+i] ? '/assets/images/green.png': '/assets/images/red.png' "></td>
                 </ng-container>
 
                 <ng-container *ngFor="let j of modules.jets; let i = index">
-                    <td *ngIf="j.visible" class="jets" (click)="onToggleValue(user, 'jets_' + i)"><img width="20" [src]="user['jets_'+i] ? '/assets/images/green.png': '/assets/images/red.png' "></td>
+                    <td *ngIf="j.visible" class="jets" (click)="onToggleValue(user, 'jets_' + i)"><img width="20" [ngClass]="{'module-disabled': isLock}" [src]="user['jets_'+i] ? '/assets/images/green.png': '/assets/images/red.png' "></td>
                 </ng-container>
 
                 <ng-container *ngFor="let w of modules.warbirds; let i = index">
-                    <td *ngIf="w.visible" class="warbirds" (click)="onToggleValue(user, 'warbirds_' + i)"><img width="20" [src]="user['warbirds_'+i] ? '/assets/images/green.png': '/assets/images/red.png' "></td>
+                    <td *ngIf="w.visible" class="warbirds" (click)="onToggleValue(user, 'warbirds_' + i)"><img width="20" [ngClass]="{'module-disabled': isLock}" [src]="user['warbirds_'+i] ? '/assets/images/green.png': '/assets/images/red.png' "></td>
                 </ng-container>
 
                 <ng-container *ngFor="let h of modules.helis; let i = index">
-                    <td *ngIf="h.visible" class="helis" (click)="onToggleValue(user, 'helis_' + i)"><img width="20" [src]="user['helis_'+i] ? '/assets/images/green.png': '/assets/images/red.png' "></td>
+                    <td *ngIf="h.visible" class="helis" (click)="onToggleValue(user, 'helis_' + i)"><img width="20" [ngClass]="{'module-disabled': isLock}" [src]="user['helis_'+i] ? '/assets/images/green.png': '/assets/images/red.png' "></td>
                 </ng-container>
 
                 <ng-container *ngFor="let o of modules.others; let i = index">
-                    <td *ngIf="o.visible" class="others" (click)="onToggleValue(user, 'others_' + i)"><img width="20" [src]="user['others_'+i] ? '/assets/images/green.png': '/assets/images/red.png' "></td>
+                    <td *ngIf="o.visible" class="others" (click)="onToggleValue(user, 'others_' + i)"><img width="20" [ngClass]="{'module-disabled': isLock}" [src]="user['others_'+i] ? '/assets/images/green.png': '/assets/images/red.png' "></td>
                 </ng-container>
 
                 <td class="normal"><b>{{user.username}}</b></td>
@@ -71,6 +71,11 @@
             </tr>
         </tbody>
     </table>
+
+    <button mat-button matBadgePosition="before" matBadgeColor="warn" class="float-btn lock-btn" (click)="onToggleLock()" *ngIf="isAdmin">
+        <fa-icon *ngIf="isLock" [icon]="faLock" class="float-btn-icon"></fa-icon>
+        <fa-icon *ngIf="!isLock" [icon]="faUnlock" class="float-btn-icon"></fa-icon>
+    </button>
 
     <button mat-button matBadgePosition="before" matBadgeColor="warn" class="float-btn clear-filter-btn" (click)="onClearFilters()" *ngIf="!isNewUser">
         <fa-icon [icon]="faEraser" class="float-btn-icon"></fa-icon>
