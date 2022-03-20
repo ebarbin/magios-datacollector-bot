@@ -3,7 +3,7 @@ require('dotenv').config();
 const cron = require('./cron');
 const express = require('express');
 const jwt = require('jsonwebtoken');
-const cors = require('cors');
+const cors = require('cors'); 
 const bodyParser = require('body-parser');
 const _ = require('lodash');
 const btoa = require('btoa');
