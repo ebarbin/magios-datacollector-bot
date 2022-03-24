@@ -299,6 +299,8 @@ export class ModuleState {
         let result: any;
         let i: number;
 
+        ctx.patchState({lock: false});
+
         return this.modulesService.getModules().pipe(
             tap(modules => ctx.patchState({modules}) ),
             switchMap(modules => {
@@ -330,6 +332,7 @@ export class ModuleState {
                 const listModules = this.store.selectSnapshot(ModuleState.getListModules);
 
                 ctx.patchState({ 
+                    lock: isNewUser ? false : true,
                     countriesFilter: countries.map(c => c.name), usersModules: results.filter(u => u.status), 
                     userModulesAll: results, modulesFilter: listModules
                 });
