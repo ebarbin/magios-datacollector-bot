@@ -72,7 +72,7 @@
         </tbody>
     </table>
 
-    <button mat-button matBadgePosition="before" matBadgeColor="warn" class="float-btn lock-btn" (click)="onToggleLock()" *ngIf="isAdmin">
+    <button mat-button matBadgePosition="before" matBadgeColor="warn" class="float-btn lock-btn" (click)="onToggleLock()" *ngIf="!isNewUser">
         <fa-icon *ngIf="isLock" [icon]="faLock" class="float-btn-icon"></fa-icon>
         <fa-icon *ngIf="!isLock" [icon]="faUnlock" class="float-btn-icon"></fa-icon>
     </button>
