@@ -38,7 +38,8 @@ export class ServerFormComponent implements OnInit {
       srs: [false],
       atis: [false],
       skipnotification: [false],
-      owner: ['', [Validators.required, this.customValidation]]
+      owner: ['', [Validators.required, this.customValidation]],
+      hide: [false],
     });
 
     const sv = {...this.server};

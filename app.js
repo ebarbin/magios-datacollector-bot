@@ -69,7 +69,7 @@ app.put('/api/servers/:serverId', checkUserAuth, async (req, res) => {
         await datasource.updateServerInfo(updatedServer);
         await discordModule.cleanServerStatus();
         const servers = await datasource.getServerStatus();
-        servers.forEach(async sv => await discordModule.sendServerStatus(sv) )
+        servers.forEach(async sv => await discordModule.sendServerStatus(sv));
         return res.status(200).send();
     }
 });

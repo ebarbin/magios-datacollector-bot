@@ -774,53 +774,58 @@ notifyOwner = (server) => {
 
 sendServerStatus = (server) => {
     return new Promise(async (resolve, reject) => {
-        const embed = new MessageEmbed().setTimestamp();
 
-        const lastOnline = moment(server.updated, 'YYYY-MM-DD HH:mm:ss.SSS').format('DD/MM/YYYY HH:mm:ss')
+        if (server.hide) {
+            resolve();
+        } else {
+            const embed = new MessageEmbed().setTimestamp();
 
-        if (server.status) embed.setTitle('Servidor ' + server.id +': ONLINE').setColor('#00830b');
-        else embed.setTitle('Servidor ' + server.id +': OFFLINE (' + lastOnline + ')').setColor('#c90000');
-
-        if (server.name && server.name != '') {
-            embed.addFields({ name: 'Nombre', value: server.name, inline: false })
+            const lastOnline = moment(server.updated, 'YYYY-MM-DD HH:mm:ss.SSS').format('DD/MM/YYYY HH:mm:ss')
+    
+            if (server.status) embed.setTitle('Servidor ' + server.id +': ONLINE').setColor('#00830b');
+            else embed.setTitle('Servidor ' + server.id +': OFFLINE (' + lastOnline + ')').setColor('#c90000');
+    
+            if (server.name && server.name != '') {
+                embed.addFields({ name: 'Nombre', value: server.name, inline: false })
+            }
+            if (server.ip && server.ip != '') {
+                embed.addFields({ name: 'Dirección IP', value: server.ip, inline: true })
+            }
+            if (server.password && server.password != '') {
+                embed.addFields({ name: 'Contraseña', value: server.password, inline: true })
+            }
+            if (server.map && server.map != '') {
+                embed.addFields({ name: 'Mapa', value: server.map, inline: true })
+            }
+            if (server.description && server.description != '') {
+                embed.addFields({ name: 'Descripción', value: server.description, inline: false })
+            }
+            if (server.tacview && server.tacview != '') {
+                embed.addFields({ name: 'Tacview link', value: server.tacview, inline: false })
+            }
+            if (server.others && server.others != '') {
+                embed.addFields({ name: 'Otros', value: server.others, inline: false })
+            }
+            if (server.hours && server.hours != '') {
+                embed.addFields({ name: 'Horarios', value: server.hours, inline: true })
+            }
+            if (server.srs != null) {
+                embed.addFields({ name: 'SRS', value: server.srs ? 'Si': 'No', inline: true })
+            }
+            if (server.atis != null) {
+                embed.addFields({ name: 'ATIS', value: server.atis ? 'Si': 'No', inline: true })
+            }
+            if (server.owner != null) {
+                const owner = await datasource.getUser(server.owner);
+                embed.addFields({ name: 'Dueño', value: owner.username, inline: true })
+            }
+            
+            embed.addFields({ name: 'Evitar notificación', value: server.skipnotification ? 'Si': 'No', inline: true })
+    
+            await getServerStatusChannel().send(embed);
+            console.log(TAG + ' - Server ' + server.id + ' status was reported to discord as ' + (server.status ? 'ONLINE.' : 'OFFLINE.'));
+            resolve();
         }
-        if (server.ip && server.ip != '') {
-            embed.addFields({ name: 'Dirección IP', value: server.ip, inline: true })
-        }
-        if (server.password && server.password != '') {
-            embed.addFields({ name: 'Contraseña', value: server.password, inline: true })
-        }
-        if (server.map && server.map != '') {
-            embed.addFields({ name: 'Mapa', value: server.map, inline: true })
-        }
-        if (server.description && server.description != '') {
-            embed.addFields({ name: 'Descripción', value: server.description, inline: false })
-        }
-        if (server.tacview && server.tacview != '') {
-            embed.addFields({ name: 'Tacview link', value: server.tacview, inline: false })
-        }
-        if (server.others && server.others != '') {
-            embed.addFields({ name: 'Otros', value: server.others, inline: false })
-        }
-        if (server.hours && server.hours != '') {
-            embed.addFields({ name: 'Horarios', value: server.hours, inline: true })
-        }
-        if (server.srs != null) {
-            embed.addFields({ name: 'SRS', value: server.srs ? 'Si': 'No', inline: true })
-        }
-        if (server.atis != null) {
-            embed.addFields({ name: 'ATIS', value: server.atis ? 'Si': 'No', inline: true })
-        }
-        if (server.owner != null) {
-            const owner = await datasource.getUser(server.owner);
-            embed.addFields({ name: 'Dueño', value: owner.username, inline: true })
-        }
-        
-        embed.addFields({ name: 'Evitar notificación', value: server.skipnotification ? 'Si': 'No', inline: true })
-
-        await getServerStatusChannel().send(embed);
-        console.log(TAG + ' - Server ' + server.id + ' status was reported to discord as ' + (server.status ? 'ONLINE.' : 'OFFLINE.'));
-        resolve();
     })
 }
 

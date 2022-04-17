@@ -34,6 +34,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatStepperModule } from '@angular/material/stepper';
 import { OrderModule } from 'ngx-order-pipe';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 export const MOMENTJS_DATE_FORMAT = {
   parse: {
@@ -75,6 +76,7 @@ export const MOMENTJS_DATE_FORMAT = {
         MatCheckboxModule,
         MatGridListModule,
         MatDividerModule,
+        MatTooltipModule,
         MatInputModule,
         MatSortModule,
         MatTabsModule,
@@ -98,6 +100,7 @@ export const MOMENTJS_DATE_FORMAT = {
         MatIconModule,
         MatButtonModule,
         MatSidenavModule,
+        MatTooltipModule,
         NgxChartsModule,
         MatTableModule,
         MatInputModule,

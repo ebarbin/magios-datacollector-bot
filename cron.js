@@ -58,7 +58,7 @@ executeTask2 = async () => {
 
         await datasource.updateServer(server);
 
-        await discordModule.sendServerStatus(server);
+        await discordModule.sendServerStatus(server);        
     });
 }
 

@@ -71,8 +71,12 @@
             {{'ATIS' | translate}}
         </mat-slide-toggle>
 
-        <mat-slide-toggle class="toggle-field" formControlName="skipnotification" color="primary">
+        <mat-slide-toggle class="toggle-field" formControlName="skipnotification" color="primary" matTooltip="{{'Skip notification to owner when server is offline' | translate}}">
             {{'Skip notification when offline' | translate}}
+        </mat-slide-toggle>
+
+        <mat-slide-toggle class="toggle-field" formControlName="disabled" color="primary" matTooltip="{{'Hide server for discord notification' | translate}}">
+            {{'Hide' | translate}}
         </mat-slide-toggle>
 
         <mat-card-actions align="end">

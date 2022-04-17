@@ -128,5 +128,8 @@
     "Warbirds":"Warbirds",
     "Helis":"Helicópteros",
     "Clear countries":"Clear countries",
-    "Clear modules":"Clear modules"
+    "Clear modules":"Clear modules",
+    "Hide":"Hide",
+    "Hide server for discord notification":"Hide server for discord notification",
+    "Skip notification to owner when server is offline":"Skip notification to owner when server is offline"
 }
